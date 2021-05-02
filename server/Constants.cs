@@ -2,11 +2,23 @@ namespace ldam.co.za.server
 {
     public static class Constants
     {
-        public static class Configuration
+        public static class AdobeConfiguration
         {
-            public const string CCBaseUrl = "CCBaseUrl";
-            public const string CCLibraryId = "CCLibraryId";
-            public const string CCApiKey = "CCApiKey";
+            private const string BasePath = "Adobe";
+            public const string CreativeCloudBaseUrl = BasePath + ":CreativeCloudBaseUrl";
+            public const string LibraryId = BasePath + ":LibraryId";
+            public static class Auth
+            {
+                private const string BasePath = AdobeConfiguration.BasePath + ":Auth";
+                public const string Scopes = BasePath + ":Scopes";
+                public const string AuthorizationEndpoint = BasePath + ":AuthorizationEndpoint";
+                public const string TokenEndpoint = BasePath + ":TokenEndpoint";
+                public const string UserInformationEndpoint = BasePath + ":UserInformationEndpoint";
+                public const string CallbackPath = BasePath + ":CallbackPath";
+                public const string ClientId = BasePath + ":ClientId";
+                public const string ClientSecret = BasePath + ":ClientSecret";
+            }
+
         }
     }
 }

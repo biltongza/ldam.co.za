@@ -6,11 +6,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
-namespace ldam.co.za
+namespace ldam.co.za.server
 {
     [Route("{controller}")]
     public class AuthController : Controller
     {
+        private readonly AccessTokenProvider accessTokenProvider;
+        public AuthController(AccessTokenProvider accessTokenProvider)
+        {
+            this.accessTokenProvider = accessTokenProvider;
+        }
+        
         [HttpGet("login")]
         public IActionResult Login()
         {
@@ -26,7 +32,7 @@ namespace ldam.co.za
         [Authorize]
         public IActionResult UserDetails()
         {
-            return Json(this.User);
+            return Json(this.accessTokenProvider.AccessToken);
         }
     }
 }

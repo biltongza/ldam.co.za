@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -36,15 +37,15 @@ namespace ldam.co.za.server
                 .AddCookie()
                 .AddOAuth("adobe", options =>
                 {
-                    options.ClientId = Configuration["AdobeAuth:ClientId"];
-                    options.ClientSecret = Configuration["AdobeAuth:ClientSecret"];
-                    options.CallbackPath = new Microsoft.AspNetCore.Http.PathString(Configuration["AdobeAuth:CallbackPath"]);
-                    options.AuthorizationEndpoint = Configuration["AdobeAuth:AuthorizationEndpoint"];
-                    options.TokenEndpoint = Configuration["AdobeAuth:TokenEndpoint"];
-                    options.UserInformationEndpoint = Configuration["AdobeAuth:UserInformationEndpoint"];
-                    options.SaveTokens = false;
+                    options.ClientId = Configuration[Constants.AdobeConfiguration.Auth.ClientId];
+                    options.ClientSecret = Configuration[Constants.AdobeConfiguration.Auth.ClientSecret];
+                    options.CallbackPath = new PathString(Configuration[Constants.AdobeConfiguration.Auth.CallbackPath]);
+                    options.AuthorizationEndpoint = Configuration[Constants.AdobeConfiguration.Auth.AuthorizationEndpoint];
+                    options.TokenEndpoint = Configuration[Constants.AdobeConfiguration.Auth.TokenEndpoint];
+                    options.UserInformationEndpoint = Configuration[Constants.AdobeConfiguration.Auth.UserInformationEndpoint];
+                    options.SaveTokens = true;
                     options.Scope.Clear();
-                    options.Scope.Add(Configuration["AdobeAuth:Scopes"]);
+                    options.Scope.Add(Configuration[Constants.AdobeConfiguration.Auth.Scopes]);
                     options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "name");
                     options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
                     options.ClaimActions.MapJsonKey(ClaimTypes.Country, "address");
@@ -52,6 +53,10 @@ namespace ldam.co.za.server
                     options.ClaimActions.MapJsonKey("urn:adobeio:accounttype", "account_type");
                     options.ClaimActions.MapJsonKey("urn:adobeio:emailverified", "email_verified");
                 });
+
+            services.AddMemoryCache();
+            services.AddHttpContextAccessor();
+            services.AddScoped<AccessTokenProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,7 +73,6 @@ namespace ldam.co.za.server
 
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

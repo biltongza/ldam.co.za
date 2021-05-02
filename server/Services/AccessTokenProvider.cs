@@ -1,5 +1,11 @@
 using System;
+using System.Linq;
 using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 
@@ -7,30 +13,31 @@ namespace ldam.co.za.server
 {
     public class AccessTokenProvider
     {
+        private const string AccessTokenKey = "ACCESS_TOKEN";
         private readonly IMemoryCache memoryCache;
-        private readonly IConfiguration configuration;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        // public string AccessToken
-        // {
-        //     get
-        //     {
-                
-        //     }
-        // }
-        public AccessTokenProvider(IMemoryCache memoryCache, IConfiguration configuration)
+        public string AccessToken
         {
-            this.memoryCache = memoryCache;
-            this.configuration = configuration;
-            
+            get => GetAccessToken().Result;
         }
 
-        // private string GetAccessToken()
-        // {
-        //     using(var httpClient = new HttpClient())
-        //     {
-        //         httpClient.BaseAddress = new Uri(configuration.GetValue<string>(Constants.Configuration.CCBaseUrl));
+        public AccessTokenProvider(IMemoryCache memoryCache, IHttpContextAccessor httpContextAccessor)
+        {
+            this.memoryCache = memoryCache;
+            this.httpContextAccessor = httpContextAccessor;
+        }
+
+        private async Task<string> GetAccessToken()
+        {
+            if (!this.memoryCache.TryGetValue<string>(AccessTokenKey, out string accessToken))
+            {
+                var result = await this.httpContextAccessor.HttpContext.AuthenticateAsync();
+                accessToken = result.Properties.GetTokens()?.FirstOrDefault(t => t.Name == "access_token")?.Value;
+                this.memoryCache.Set(AccessTokenKey, accessToken);
                 
-        //     }
-        // }
+            }
+            return accessToken;
+        }
     }
 }

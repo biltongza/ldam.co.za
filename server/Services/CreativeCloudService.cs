@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
 namespace ldam.co.za.server
@@ -10,14 +11,14 @@ namespace ldam.co.za.server
         private readonly HttpClient httpClient;
         private readonly string libraryId;
         private readonly string apiKey;
-        private readonly string accessToken;
+        private readonly AccessTokenProvider accessTokenProvider;
 
-        public CreativeCloudService(IConfiguration configuration)
+        public CreativeCloudService(IConfiguration configuration, AccessTokenProvider accessTokenProvider)
         {
-            var ccAddress = configuration.GetValue<string>(Constants.Configuration.CCBaseUrl);
-            this.libraryId = configuration.GetValue<string>(Constants.Configuration.CCLibraryId);
-            this.apiKey = configuration.GetValue<string>(Constants.Configuration.CCApiKey);
-            this.httpClient = new HttpClient
+            var ccAddress = configuration.GetValue<string>(Constants.AdobeConfiguration.CreativeCloudBaseUrl);
+            this.libraryId = configuration.GetValue<string>(Constants.AdobeConfiguration.LibraryId);
+            this.apiKey = configuration.GetValue<string>(Constants.AdobeConfiguration.Auth.ClientId);
+            this.httpClient = new HttpClient()
             {
                 BaseAddress = new Uri(ccAddress),
             };
