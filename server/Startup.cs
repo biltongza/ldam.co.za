@@ -1,12 +1,16 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Net.Security;
+using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,53 +31,26 @@ namespace ldam.co.za.server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddTransient<CreativeCloudService>();
             services
-                .AddAuthentication()
+                .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie()
                 .AddOAuth("adobe", options =>
                 {
-                    var handler = new HttpClientHandler();
-                    handler.ServerCertificateCustomValidationCallback = (HttpRequestMessage req, X509Certificate2 cert, X509Chain chain, SslPolicyErrors errors) => {
-                        Console.WriteLine("HELLO");
-                        return true;
-                    };
-                    var httpClient = new HttpClient(handler);
                     options.ClientId = Configuration["AdobeAuth:ClientId"];
                     options.ClientSecret = Configuration["AdobeAuth:ClientSecret"];
                     options.CallbackPath = new Microsoft.AspNetCore.Http.PathString(Configuration["AdobeAuth:CallbackPath"]);
                     options.AuthorizationEndpoint = Configuration["AdobeAuth:AuthorizationEndpoint"];
-                    options.TokenEndpoint = Configuration["AdobeAuth:AuthorizationEndpoint"];
-                    options.Backchannel = httpClient;
+                    options.TokenEndpoint = Configuration["AdobeAuth:TokenEndpoint"];
+                    options.UserInformationEndpoint = Configuration["AdobeAuth:UserInformationEndpoint"];
                     options.SaveTokens = false;
-                    options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-
                     options.Scope.Clear();
-
-                    var scopes = Configuration["AdobeAuth:Scopes"].Split(',');
-                    foreach(var scope in scopes)
-                    {
-                        options.Scope.Add(scope);
-                    }
-                    options.Events.OnAccessDenied += (context) => {
-                        Console.WriteLine("access denied");
-                        return Task.CompletedTask;
-                    };
-                    options.Events.OnTicketReceived += (context) => {
-                        Console.WriteLine("ticket received");
-                        return Task.CompletedTask;
-                    };
-                    options.Events.OnCreatingTicket += (context) => {
-                        Console.WriteLine("creating ticket");
-                        return Task.CompletedTask;
-                    };
-                    options.Events.OnRedirectToAuthorizationEndpoint += (RedirectContext<OAuthOptions> context) => {
-                        Console.WriteLine("redirecting to auth endpoint");
-                        return Task.CompletedTask;
-                    };
-                    options.Events.OnRemoteFailure += (context) => {
-                        Console.WriteLine("remote failure");
-                        return Task.CompletedTask;
-                    };
+                    options.Scope.Add(Configuration["AdobeAuth:Scopes"]);
+                    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "name");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.Country, "address");
+                    options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
+                    options.ClaimActions.MapJsonKey("urn:adobeio:accounttype", "account_type");
+                    options.ClaimActions.MapJsonKey("urn:adobeio:emailverified", "email_verified");
                 });
         }
 
@@ -99,3 +76,4 @@ namespace ldam.co.za.server
         }
     }
 }
+

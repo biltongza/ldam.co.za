@@ -11,27 +11,22 @@ namespace ldam.co.za
     [Route("{controller}")]
     public class AuthController : Controller
     {
-        private readonly IConfiguration configuration;
-        public AuthController(IConfiguration configuration)
-        {
-            this.configuration = configuration;
-        }
-
         [HttpGet("login")]
         public IActionResult Login()
         {
             var properties = new OAuthChallengeProperties()
             {
-                RedirectUri = new PathString(this.configuration["AdobeAuth:CallbackPath"]),
+                RedirectUri = new PathString("/auth/user"),
             };
 
             return Challenge(properties, "adobe");
         }
 
-        [HttpGet("callback")]
-        public IActionResult Callback()
+        [HttpGet("user")]
+        [Authorize]
+        public IActionResult UserDetails()
         {
-            return Ok();
+            return Json(this.User);
         }
     }
 }

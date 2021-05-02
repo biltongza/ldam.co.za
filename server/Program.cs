@@ -21,6 +21,10 @@ namespace ldam.co.za.server
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseKestrel(options => 
+                    {
+                        options.ListenAnyIP(5001, opts => opts.UseHttps());
+                    });
                 });
     }
 }
