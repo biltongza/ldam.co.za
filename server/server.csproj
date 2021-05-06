@@ -1,14 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>32de766e-0589-4a13-8b88-f04d4faa8c58</UserSecretsId>
   </PropertyGroup>
-  <ItemGroup>&#xD;
-  </ItemGroup>
-  <ItemGroup>&#xD;
-  </ItemGroup>
+  <Import Project="server.targets"></Import>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.5"/>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+    <PackageReference Include="NSwag.MSBuild" Version="13.10.9"/>
   </ItemGroup>
 </Project>
