@@ -1,4 +1,6 @@
 using System;
+using System.Threading.Tasks;
+using ldam.co.za.server.Clients.Lightroom;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authorization;
@@ -11,10 +13,10 @@ namespace ldam.co.za.server
     [Route("{controller}")]
     public class AuthController : Controller
     {
-        private readonly AccessTokenProvider accessTokenProvider;
-        public AuthController(AccessTokenProvider accessTokenProvider)
+        private ILightroomClient lightroomClient;
+        public AuthController(ILightroomClient lightroomClient)
         {
-            this.accessTokenProvider = accessTokenProvider;
+            this.lightroomClient = lightroomClient;
         }
         
         [HttpGet("login")]
@@ -30,9 +32,10 @@ namespace ldam.co.za.server
 
         [HttpGet("user")]
         [Authorize]
-        public IActionResult UserDetails()
+        public async Task<IActionResult> UserDetails()
         {
-            return Json(this.accessTokenProvider.AccessToken);
+            var catalog = await lightroomClient.GetCatalog();
+            return Json(catalog);
         }
     }
 }

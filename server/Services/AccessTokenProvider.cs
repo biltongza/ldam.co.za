@@ -35,7 +35,6 @@ namespace ldam.co.za.server
                 var result = await this.httpContextAccessor.HttpContext.AuthenticateAsync();
                 accessToken = result.Properties.GetTokens()?.FirstOrDefault(t => t.Name == "access_token")?.Value;
                 this.memoryCache.Set(AccessTokenKey, accessToken);
-                
             }
             return accessToken;
         }
