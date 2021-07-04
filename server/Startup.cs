@@ -1,18 +1,7 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
-using System.Net.Security;
-using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -41,6 +30,7 @@ namespace ldam.co.za.server
                     options.ClientId = Configuration[Constants.AdobeConfiguration.Auth.ClientId];
                     options.ClientSecret = Configuration[Constants.AdobeConfiguration.Auth.ClientSecret];
                     options.Scope.Add("lr_partner_apis");
+                    options.SaveTokens = true;
                 });
 
             services.AddMemoryCache();
