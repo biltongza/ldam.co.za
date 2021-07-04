@@ -36,23 +36,11 @@ namespace ldam.co.za.server
             services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie()
-                .AddOAuth("adobe", options =>
+                .AddAdobeIO("adobe", options =>
                 {
                     options.ClientId = Configuration[Constants.AdobeConfiguration.Auth.ClientId];
                     options.ClientSecret = Configuration[Constants.AdobeConfiguration.Auth.ClientSecret];
-                    options.CallbackPath = new PathString(Configuration[Constants.AdobeConfiguration.Auth.CallbackPath]);
-                    options.AuthorizationEndpoint = Configuration[Constants.AdobeConfiguration.Auth.AuthorizationEndpoint];
-                    options.TokenEndpoint = Configuration[Constants.AdobeConfiguration.Auth.TokenEndpoint];
-                    options.UserInformationEndpoint = Configuration[Constants.AdobeConfiguration.Auth.UserInformationEndpoint];
-                    options.SaveTokens = true;
-                    options.Scope.Clear();
-                    options.Scope.Add(Configuration[Constants.AdobeConfiguration.Auth.Scopes]);
-                    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "name");
-                    options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
-                    options.ClaimActions.MapJsonKey(ClaimTypes.Country, "address");
-                    options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
-                    options.ClaimActions.MapJsonKey("urn:adobeio:accounttype", "account_type");
-                    options.ClaimActions.MapJsonKey("urn:adobeio:emailverified", "email_verified");
+                    options.Scope.Add("lr_partner_apis");
                 });
 
             services.AddMemoryCache();

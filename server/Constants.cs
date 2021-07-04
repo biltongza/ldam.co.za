@@ -10,11 +10,6 @@ namespace ldam.co.za.server
             public static class Auth
             {
                 private const string BasePath = AdobeConfiguration.BasePath + ":Auth";
-                public const string Scopes = BasePath + ":Scopes";
-                public const string AuthorizationEndpoint = BasePath + ":AuthorizationEndpoint";
-                public const string TokenEndpoint = BasePath + ":TokenEndpoint";
-                public const string UserInformationEndpoint = BasePath + ":UserInformationEndpoint";
-                public const string CallbackPath = BasePath + ":CallbackPath";
                 public const string ClientId = BasePath + ":ClientId";
                 public const string ClientSecret = BasePath + ":ClientSecret";
             }
