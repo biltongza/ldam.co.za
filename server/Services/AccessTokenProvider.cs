@@ -30,7 +30,7 @@ namespace ldam.co.za.server
 
         private async Task<string> GetAccessToken()
         {
-            if (!this.memoryCache.TryGetValue<string>(AccessTokenKey, out string accessToken))
+            if (!this.memoryCache.TryGetValue<string>(AccessTokenKey, out string accessToken) || string.IsNullOrEmpty(accessToken))
             {
                 var result = await this.httpContextAccessor.HttpContext.AuthenticateAsync();
                 accessToken = result.Properties.GetTokens()?.FirstOrDefault(t => t.Name == "access_token")?.Value;
