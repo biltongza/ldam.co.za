@@ -1,6 +1,8 @@
 using System;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace ldam.co.za.server.Clients.Lightroom
 {
@@ -9,11 +11,13 @@ namespace ldam.co.za.server.Clients.Lightroom
         private HttpClient httpClient;
         private AccessTokenProvider accessTokenProvider;
         private string baseUrl;
+        //"while (1) {}\n"
+        private static readonly Regex WhileRegex = new Regex(@"^while\s*\(\s*1\s*\)\s*{\s*}\s*", RegexOptions.Compiled);
         public LightroomClient(IHttpClientFactory httpClientFactory, AccessTokenProvider accessTokenProvider, string baseUrl, string apiKey)
         {
             this.accessTokenProvider = accessTokenProvider;
             httpClient = httpClientFactory.CreateClient();
-            httpClient.DefaultRequestHeaders.Add("X_API_KEY", apiKey);
+            httpClient.DefaultRequestHeaders.Add("X-API-KEY", apiKey);
             this.baseUrl = baseUrl;
         }
 
@@ -26,10 +30,14 @@ namespace ldam.co.za.server.Clients.Lightroom
             return request;
         }
 
-        protected async Task<T> HandleResponse<T>(HttpResponseMessage response)
+        protected async Task<T> HandleResponse<T>(HttpResponseMessage response, bool stripWhile = true)
         {
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
+            if(stripWhile)
+            {
+                content = WhileRegex.Replace(content, "");
+            }
             var result = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(content);
             return result;
         }
@@ -44,6 +52,14 @@ namespace ldam.co.za.server.Clients.Lightroom
             var request = PrepareRequest(HttpMethod.Get, "/v2/catalog");
             var response = await httpClient.SendAsync(request);
             var result = await HandleResponse<CatalogResponse>(response);
+            return result;
+        }
+
+        public async Task<object> GetHealth()
+        {
+            var request = PrepareRequest(HttpMethod.Get, "/v2/health");
+            var response = await httpClient.SendAsync(request);
+            var result = await HandleResponse<object>(response);
             return result;
         }
     }
