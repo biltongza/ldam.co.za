@@ -1,8 +1,10 @@
 using System;
 using System.Net.Http;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using ldam.co.za.server.Services;
 
 namespace ldam.co.za.server.Clients.Lightroom
 {
@@ -11,12 +13,11 @@ namespace ldam.co.za.server.Clients.Lightroom
         private HttpClient httpClient;
         private AccessTokenProvider accessTokenProvider;
         private string baseUrl;
-        //"while (1) {}\n"
         private static readonly Regex WhileRegex = new Regex(@"^while\s*\(\s*1\s*\)\s*{\s*}\s*", RegexOptions.Compiled);
         public LightroomClient(IHttpClientFactory httpClientFactory, AccessTokenProvider accessTokenProvider, string baseUrl, string apiKey)
         {
             this.accessTokenProvider = accessTokenProvider;
-            httpClient = httpClientFactory.CreateClient();
+            httpClient = httpClientFactory.CreateClient("lightroom");
             httpClient.DefaultRequestHeaders.Add("X-API-KEY", apiKey);
             this.baseUrl = baseUrl;
         }
@@ -30,11 +31,11 @@ namespace ldam.co.za.server.Clients.Lightroom
             return request;
         }
 
-        protected async Task<T> HandleResponse<T>(HttpResponseMessage response, bool stripWhile = true)
+        protected async Task<T> HandleResponse<T>(HttpResponseMessage response, bool stripWhile = true, bool )
         {
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
-            if(stripWhile)
+            if (stripWhile)
             {
                 content = WhileRegex.Replace(content, "");
             }
@@ -55,11 +56,55 @@ namespace ldam.co.za.server.Clients.Lightroom
             return result;
         }
 
-        public async Task<object> GetHealth()
+        public async Task<HealthResponse> GetHealth()
         {
             var request = PrepareRequest(HttpMethod.Get, "/v2/health");
             var response = await httpClient.SendAsync(request);
-            var result = await HandleResponse<object>(response);
+            var result = await HandleResponse<HealthResponse>(response);
+            return result;
+        }
+
+        public async Task<AlbumsResponse> GetAlbums(string catalogId, string after = null)
+        {
+            var builder = new StringBuilder();
+            builder.Append("/v2/catalogs/");
+            builder.Append(catalogId);
+            builder.Append("/albums");
+            if (!string.IsNullOrWhiteSpace(after))
+            {
+                builder.Append("?name_after=");
+                builder.Append(after);
+            }
+            var request = PrepareRequest(HttpMethod.Get, builder.ToString());
+            var response = await httpClient.SendAsync(request);
+            var result = await HandleResponse<AlbumsResponse>(response);
+            return result;
+        }
+
+        public async Task<AlbumAssetResponse> GetAlbumAssets(string catalogId, string albumId, string after = null)
+        {
+            var builder = new StringBuilder();
+            builder.Append("/v2/catalogs/");
+            builder.Append(catalogId);
+            builder.Append("/albums/");
+            builder.Append(albumId);
+            builder.Append("/assets");
+            if (!string.IsNullOrWhiteSpace(after))
+            {
+                builder.Append("?captured_after=");
+                builder.Append(after);
+            }
+            var request = PrepareRequest(HttpMethod.Get, builder.ToString());
+            var response = await httpClient.SendAsync(request);
+            var result = await HandleResponse<AlbumAssetResponse>(response);
+            return result;
+        }
+
+        public async Task<AssetResponse> GetAsset(string catalogId, string assetId)
+        {
+            var request = PrepareRequest(HttpMethod.Get, $"v2/catalogs/{catalogId}/assets/{assetId}");
+            var response = await httpClient.SendAsync(request);
+            var result = await HandleResponse<AssetResponse>(response);
             return result;
         }
     }

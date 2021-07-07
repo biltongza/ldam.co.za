@@ -1,15 +1,10 @@
-using System;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
 
-namespace ldam.co.za.server
+namespace ldam.co.za.server.Services
 {
     public class AccessTokenProvider
     {
