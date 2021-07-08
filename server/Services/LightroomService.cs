@@ -38,7 +38,6 @@ namespace ldam.co.za.server.Services
         }
         public async IAsyncEnumerable<ImageInfo> GetImageList(string albumId)
         {
-            var albums = await lightroomClient.GetAlbumAssets(this.catalog.Value.Id, albumId);
             string after = null;
             do
             {
@@ -47,20 +46,13 @@ namespace ldam.co.za.server.Services
                 albumAssetResponse.Links?.TryGetValue("next", out next);
                 var afterHref = next?.Href;
                 after = !string.IsNullOrWhiteSpace(afterHref) ? afterHref.Substring(afterHref.IndexOf('=')) : null;
-                var tasks = albumAssetResponse.Resources.Select(async x => 
+                foreach(var asset in albumAssetResponse.Resources)
                 {
-                    var assetResponse = await lightroomClient.GetAsset(this.catalog.Value.Id, x.Asset.Id);
-                    return assetResponse;
-                });
-                await Task.WhenAll(tasks);
-                foreach(var task in tasks)
-                {
-                    var result = task.Result;
                     yield return new ImageInfo
                     {
-                        FileName = (string)result.Payload["importSource"]["fileName"],
-                        CaptureDate = DateTime.Parse((string)result.Payload["captureDate"]),
-                        FileSize = (long)result.Payload["importSource"]["fileSize"],
+                        FileName = (string)asset.Asset.Payload["importSource"]["fileName"],
+                        CaptureDate = DateTime.Parse((string)asset.Asset.Payload["captureDate"]),
+                        FileSize = (long)asset.Asset.Payload["importSource"]["fileSize"],
                     };
                 }
             }

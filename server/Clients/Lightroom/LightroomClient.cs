@@ -31,7 +31,7 @@ namespace ldam.co.za.server.Clients.Lightroom
             return request;
         }
 
-        protected async Task<T> HandleResponse<T>(HttpResponseMessage response, bool stripWhile = true, bool )
+        protected async Task<T> HandleResponse<T>(HttpResponseMessage response, bool stripWhile = true)
         {
             response.EnsureSuccessStatusCode();
             var content = await response.Content.ReadAsStringAsync();
@@ -88,10 +88,10 @@ namespace ldam.co.za.server.Clients.Lightroom
             builder.Append(catalogId);
             builder.Append("/albums/");
             builder.Append(albumId);
-            builder.Append("/assets");
+            builder.Append("/assets?embed=asset;spaces;user&subtype=image");
             if (!string.IsNullOrWhiteSpace(after))
             {
-                builder.Append("?captured_after=");
+                builder.Append("captured_after=");
                 builder.Append(after);
             }
             var request = PrepareRequest(HttpMethod.Get, builder.ToString());
