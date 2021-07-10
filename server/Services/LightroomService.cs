@@ -48,11 +48,29 @@ namespace ldam.co.za.server.Services
                 after = !string.IsNullOrWhiteSpace(afterHref) ? afterHref.Substring(afterHref.IndexOf('=')) : null;
                 foreach(var asset in albumAssetResponse.Resources)
                 {
+                    var exposureTimeArray = asset.Asset.Payload["xmp"]["exif"]["ExposureTime"];
+                    var exposureNumerator = (decimal)exposureTimeArray[0];
+                    var exposureDivisor = (decimal)exposureTimeArray[1]; 
+                    var exposureTime = exposureNumerator == 1 && exposureDivisor > 1 ? $"1/{exposureDivisor}s" : $"{exposureNumerator/exposureDivisor}s";
+                    var apertureArray = asset.Asset.Payload["xmp"]["exif"]["FNumber"];
+                    var aperture = (decimal)apertureArray[0]/(decimal)apertureArray[1];
+                    var make = (string)asset.Asset.Payload["xmp"]["tiff"]["Make"];
+                    var model = (string)asset.Asset.Payload["xmp"]["tiff"]["Model"];
                     yield return new ImageInfo
                     {
+                        AssetId = asset.Asset.Id,
                         FileName = (string)asset.Asset.Payload["importSource"]["fileName"],
                         CaptureDate = DateTime.Parse((string)asset.Asset.Payload["captureDate"]),
                         FileSize = (long)asset.Asset.Payload["importSource"]["fileSize"],
+                        ShutterSpeed = exposureTime.ToString(),
+                        FNumber = $"f/{aperture}",
+                        FocalLength = $"{(int)asset.Asset.Payload["xmp"]["exif"]["FocalLength"].First}mm",
+                        ISO = (string)asset.Asset.Payload["xmp"]["exif"]["ISOSpeedRatings"],
+                        Lens = (string)asset.Asset.Payload["xmp"]["aux"]["Lens"],
+                        Make = make,
+                        Model = model,
+                        Title = (string)asset.Asset.Payload["xmp"]["dc"]["title"],
+                        Caption = (string)asset.Asset.Payload["xmp"]["dc"]["description"],
                     };
                 }
             }
