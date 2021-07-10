@@ -1,9 +1,9 @@
 using System;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using ldam.co.za.server.Services;
 
 namespace ldam.co.za.server.Clients.Lightroom
@@ -39,7 +39,7 @@ namespace ldam.co.za.server.Clients.Lightroom
             {
                 content = WhileRegex.Replace(content, "");
             }
-            var result = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(content);
+            var result = JsonSerializer.Deserialize<T>(content);
             return result;
         }
 

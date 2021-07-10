@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using ldam.co.za.server.Services;
+using System.Text.Json;
 
 namespace ldam.co.za.server
 {
@@ -20,15 +21,16 @@ namespace ldam.co.za.server
         [HttpGet("albums")]
         public async Task<IActionResult> GetAlbums()
         {
-            var result = await _lightroomClient.GetAlbums().ToDictionaryAsync(k => k.Key, k => k.Value);
-            return Ok(result);
+            var result = _lightroomClient.GetAlbums();
+            return Json(result);
         }
 
         [HttpGet("albums/{albumId}")]
         public async Task<IActionResult> GetAlbumImageInfo(string albumId)
         {
-            var result = await _lightroomClient.GetImageList(albumId).ToListAsync();
-            return Ok(result);
+            var result = _lightroomClient.GetImageList(albumId);
+
+            return Json(result);
         }
     }
 }
