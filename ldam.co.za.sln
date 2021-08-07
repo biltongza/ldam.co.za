@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "client", "client\client.csproj", "{92D7B6D3-4C2A-4E88-91E7-AB057E0B0861}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "server", "server\server.csproj", "{4687F115-07E0-4873-9408-A4844711A437}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "backend", "backend\backend.csproj", "{4687F115-07E0-4873-9408-A4844711A437}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fnapp", "fnapp\fnapp.csproj", "{0D94FED7-8C5B-437B-B94B-5659AE64F855}"
 EndProject
