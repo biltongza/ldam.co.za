@@ -43,7 +43,6 @@ namespace ldam.co.za.fnapp.Functions
                 if(manifestStream == Stream.Null)
                 {
                     manifest = new Manifest();
-                    manifest.Images = new Dictionary<string, ImageInfo>();
                     manifestModified = true;
                 }
                 else
