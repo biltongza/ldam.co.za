@@ -1,0 +1,27 @@
+{
+  "folders": [
+    {
+      "path": "client"
+    },
+    {
+      "path": "fnapp"
+    },
+    {
+      "path": "server"
+    },
+    {
+      "path": "lib"
+    }
+  ],
+  "settings": {
+    "debug.internalConsoleOptions": "neverOpen"
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-azuretools.vscode-azurefunctions",
+      "ms-dotnettools.csharp",
+      "editorconfig.editorconfig",
+      "visualstudioexptteam.vscodeintellicode"
+    ]
+  }
+}
