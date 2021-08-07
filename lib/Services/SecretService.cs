@@ -3,7 +3,7 @@ using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.Extensions.Configuration;
 
-namespace ldam.co.za.fnapp.Services
+namespace ldam.co.za.lib.Services
 {
     public class SecretService : ISecretService
     {

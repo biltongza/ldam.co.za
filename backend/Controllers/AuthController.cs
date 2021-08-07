@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
-namespace ldam.co.za.server
+namespace ldam.co.za.backend
 {
     [Route("{controller}")]
     public class AuthController : Controller

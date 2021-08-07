@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace ldam.co.za.server
+namespace ldam.co.za.backend
 {
     public class Program
     {

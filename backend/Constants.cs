@@ -1,4 +1,4 @@
-namespace ldam.co.za.server
+namespace ldam.co.za.backend
 {
     public static class Constants
     {
