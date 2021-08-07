@@ -10,7 +10,7 @@ namespace ldam.co.za.lib.Services
         private readonly SecretClient secretClient;
         public SecretService(string keyVaultUri)
         {
-            this.secretClient = new SecretClient(new Uri(keyVaultUri), new DefaultAzureCredential());
+            this.secretClient = new SecretClient(new Uri(keyVaultUri), new ChainedTokenCredential(new ManagedIdentityCredential(), new AzureCliCredential()));
         }
 
         public string GetSecret(string key)
