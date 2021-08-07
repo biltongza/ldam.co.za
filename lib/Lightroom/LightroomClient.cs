@@ -14,6 +14,7 @@ namespace ldam.co.za.lib.Lightroom
         private IAccessTokenProvider accessTokenProvider;
         private string baseUrl;
         private static readonly Regex WhileRegex = new Regex(@"^while\s*\(\s*1\s*\)\s*{\s*}\s*", RegexOptions.Compiled);
+        private readonly JsonSerializerOptions defaultSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web); 
         public LightroomClient(IHttpClientFactory httpClientFactory, IAccessTokenProvider accessTokenProvider, string baseUrl, string apiKey)
         {
             this.accessTokenProvider = accessTokenProvider;
@@ -40,7 +41,7 @@ namespace ldam.co.za.lib.Lightroom
             {
                 content = WhileRegex.Replace(content, "");
             }
-            var result = JsonSerializer.Deserialize<T>(content);
+            var result = JsonSerializer.Deserialize<T>(content, defaultSerializerOptions);
             return result;
         }
 
@@ -113,7 +114,7 @@ namespace ldam.co.za.lib.Lightroom
         {
             var asset = await GetAsset(catalogId, assetId);
             
-            var href = asset.Links[$"rels/rendition_type/{size}"]?.Href;
+            var href = asset.Links[$"/rels/rendition_type/{size}"]?.Href;
             if(string.IsNullOrWhiteSpace(href))
             {
                 throw new InvalidOperationException($"Size {size} is not available");

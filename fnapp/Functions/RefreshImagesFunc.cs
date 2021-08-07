@@ -8,6 +8,7 @@ using ldam.co.za.fnapp.Models;
 using System;
 using System.Text.Json;
 using Microsoft.Azure.Functions.Worker;
+using System.Collections.Generic;
 
 namespace ldam.co.za.fnapp.Functions
 {
@@ -42,6 +43,7 @@ namespace ldam.co.za.fnapp.Functions
                 if(manifestStream == Stream.Null)
                 {
                     manifest = new Manifest();
+                    manifest.Images = new Dictionary<string, ImageInfo>();
                     manifestModified = true;
                 }
                 else

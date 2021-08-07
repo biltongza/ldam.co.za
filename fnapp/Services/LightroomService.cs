@@ -49,29 +49,29 @@ namespace ldam.co.za.fnapp.Services
                 after = !string.IsNullOrWhiteSpace(afterHref) ? afterHref.Substring(afterHref.IndexOf('=')) : null;
                 foreach(var asset in albumAssetResponse.Resources)
                 {
-                    var exposureTimeArray = asset.Asset.Payload["xmp"]["exif"]["ExposureTime"];
-                    var exposureNumerator = (decimal)exposureTimeArray[0];
-                    var exposureDivisor = (decimal)exposureTimeArray[1]; 
+                    var exposureTimeArray = asset.Asset.Payload.Xmp.Exif.ExposureTime;
+                    var exposureNumerator = exposureTimeArray[0];
+                    var exposureDivisor = exposureTimeArray[1]; 
                     var exposureTime = exposureNumerator == 1 && exposureDivisor > 1 ? $"1/{exposureDivisor}s" : $"{exposureNumerator/exposureDivisor}s";
-                    var apertureArray = asset.Asset.Payload["xmp"]["exif"]["FNumber"];
-                    var aperture = (decimal)apertureArray[0]/(decimal)apertureArray[1];
-                    var make = (string)asset.Asset.Payload["xmp"]["tiff"]["Make"];
-                    var model = (string)asset.Asset.Payload["xmp"]["tiff"]["Model"];
+                    var apertureArray = asset.Asset.Payload.Xmp.Exif.FNumber;
+                    var aperture = apertureArray[0]/apertureArray[1];
+                    var make = asset.Asset.Payload.Xmp.Tiff.Make;
+                    var model = asset.Asset.Payload.Xmp.Tiff.Model;
                     yield return new ImageInfo
                     {
                         AssetId = asset.Asset.Id,
-                        FileName = (string)asset.Asset.Payload["importSource"]["fileName"],
-                        CaptureDate = DateTime.Parse((string)asset.Asset.Payload["captureDate"]),
-                        FileSize = (long)asset.Asset.Payload["importSource"]["fileSize"],
+                        FileName = asset.Asset.Payload.ImportSource.FileName,
+                        CaptureDate = asset.Asset.Payload.CaptureDate,
+                        FileSize = asset.Asset.Payload.ImportSource.FileSize,
                         ShutterSpeed = exposureTime.ToString(),
                         FNumber = $"f/{aperture}",
-                        FocalLength = $"{(int)asset.Asset.Payload["xmp"]["exif"]["FocalLength"].First}mm",
-                        ISO = (string)asset.Asset.Payload["xmp"]["exif"]["ISOSpeedRatings"],
-                        Lens = (string)asset.Asset.Payload["xmp"]["aux"]["Lens"],
+                        FocalLength = $"{asset.Asset.Payload.Xmp.Exif.FocalLength.First()}mm",
+                        ISO = asset.Asset.Payload.Xmp.Exif.ISOSpeedRatings.ToString(),
+                        Lens = asset.Asset.Payload.Xmp.Aux.Lens,
                         Make = make,
                         Model = model,
-                        Title = (string)asset.Asset.Payload["xmp"]["dc"]["title"],
-                        Caption = (string)asset.Asset.Payload["xmp"]["dc"]["description"],
+                        Title = asset.Asset.Payload.Xmp.Dc.Title,
+                        Caption = asset.Asset.Payload.Xmp.Dc.Description,
                     };
                 }
             }

@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using System.Threading.Tasks;
+using Azure.Identity;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace ldam.co.za.fnapp.Services
 {
@@ -13,7 +13,7 @@ namespace ldam.co.za.fnapp.Services
         public StorageService(IConfiguration configuration)
         {
             var storageUri = configuration[Constants.Configuration.Azure.BlobStorageUri];
-            var blobServiceClient = new BlobServiceClient(new Uri(storageUri));
+            var blobServiceClient = new BlobServiceClient(new Uri(storageUri), new ChainedTokenCredential(new ManagedIdentityCredential(), new AzureCliCredential()));
             blobContainerClient = blobServiceClient.GetBlobContainerClient(configuration[Constants.Configuration.Azure.BlobContainer]);
         }
 

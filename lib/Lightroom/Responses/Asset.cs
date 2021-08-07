@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace ldam.co.za.lib.Lightroom
 {
@@ -10,6 +11,6 @@ namespace ldam.co.za.lib.Lightroom
         public string Updated { get; set; }
         public string Created { get; set; }
         public IDictionary<string, Link> Links { get; set; }
-        public dynamic Payload { get; set; }
+        public AssetPayload Payload { get; set; }
     }
 }
