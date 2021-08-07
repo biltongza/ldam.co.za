@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace ldam.co.za.server.Clients.Lightroom
+namespace ldam.co.za.lib.Lightroom
 {
     public interface ILightroomClient
     {

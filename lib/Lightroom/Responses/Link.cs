@@ -1,4 +1,4 @@
-namespace ldam.co.za.server.Clients.Lightroom
+namespace ldam.co.za.lib.Lightroom
 {
     public class Link
     {

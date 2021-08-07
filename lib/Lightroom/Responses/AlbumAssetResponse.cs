@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ldam.co.za.server.Clients.Lightroom
+namespace ldam.co.za.lib.Lightroom
 {
     public class AlbumAssetResponse : BaseResponse
     {
