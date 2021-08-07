@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace ldam.co.za.fnapp.Services
+namespace ldam.co.za.backend
 {
     public class AccessTokenProvider : IAccessTokenProvider
     {
         private readonly IHttpContextAccessor httpContextAccessor;
 
-        public AccessTokenProvider(IMemoryCache memoryCache, IHttpContextAccessor httpContextAccessor)
+        public AccessTokenProvider(IHttpContextAccessor httpContextAccessor)
         {
             this.httpContextAccessor = httpContextAccessor;
         }
