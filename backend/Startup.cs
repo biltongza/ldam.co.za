@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ldam.co.za.lib.Services;
+using ldam.co.za.lib.Lightroom;
 
 namespace ldam.co.za.backend
 {
@@ -23,7 +24,7 @@ namespace ldam.co.za.backend
             services.AddControllers();
             services
                 .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie()
+                .AddCookie(cfg => cfg.ForwardChallenge = "adobe")
                 .AddAdobeIO("adobe", options =>
                 {
                     options.ClientId = Configuration[Constants.AdobeConfiguration.Auth.ClientId];
@@ -34,6 +35,7 @@ namespace ldam.co.za.backend
 
             services.AddHttpContextAccessor();
 
+            services.AddTransient<IAccessTokenProvider, AccessTokenProvider>();
             services.AddSingleton<ISecretService, SecretService>((_) => new SecretService(Configuration[Constants.AzureConfiguration.KeyVaultUri]));
         }
 
