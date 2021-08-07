@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ldam.co.za.server.Clients.Lightroom;
-using ldam.co.za.server.Models;
+using ldam.co.za.lib.Lightroom;
+using ldam.co.za.fnapp.Models;
 
-namespace ldam.co.za.server.Services
+namespace ldam.co.za.fnapp.Services
 {
     public class LightroomService
     {

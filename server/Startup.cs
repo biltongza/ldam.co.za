@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ldam.co.za.server.Clients.Lightroom;
 using ldam.co.za.server.Services;
+using ldam.co.za.fnapp.Services;
 
 namespace ldam.co.za.server
 {
@@ -34,20 +35,9 @@ namespace ldam.co.za.server
                     options.SaveTokens = true;
                 });
 
-            services.AddMemoryCache();
             services.AddHttpContextAccessor();
-            services.AddScoped<AccessTokenProvider>();
-            services.AddHttpClient("lightroom").ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
-            {
-                AllowAutoRedirect = true,
-            });
-            services.AddTransient<ILightroomClient, LightroomClient>(
-                svp => new LightroomClient(
-                    svp.GetRequiredService<IHttpClientFactory>(),
-                    svp.GetRequiredService<AccessTokenProvider>(), 
-                    Configuration[Constants.AdobeConfiguration.CreativeCloudBaseUrl], 
-                    Configuration[Constants.AdobeConfiguration.Auth.ClientId]));
-            services.AddTransient<LightroomService>();
+
+            services.AddSingleton<ISecretService, SecretService>((_) => new SecretService(Configuration[Constants.AzureConfiguration.KeyVaultUri]));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

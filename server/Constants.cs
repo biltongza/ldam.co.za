@@ -15,5 +15,10 @@ namespace ldam.co.za.server
             }
 
         }
+        public static class AzureConfiguration
+        {
+            private const string BasePath = "Azure";
+            public const string KeyVaultUri = BasePath + ":KeyVaultUri";
+        }
     }
 }

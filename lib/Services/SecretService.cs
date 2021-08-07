@@ -8,9 +8,9 @@ namespace ldam.co.za.fnapp.Services
     public class SecretService : ISecretService
     {
         private readonly SecretClient secretClient;
-        public SecretService(IConfiguration configuration)
+        public SecretService(string keyVaultUri)
         {
-            this.secretClient = new SecretClient(new Uri(configuration.GetValue<string>("KeyVaultUri")), new DefaultAzureCredential());
+            this.secretClient = new SecretClient(new Uri(keyVaultUri), new DefaultAzureCredential());
         }
 
         public string GetSecret(string key)

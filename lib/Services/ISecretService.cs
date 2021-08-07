@@ -1,4 +1,4 @@
-namespace ldam.co.za.fnapp.Services
+namespace ldam.co.za.lib.Services
 {
     public interface ISecretService
     {
