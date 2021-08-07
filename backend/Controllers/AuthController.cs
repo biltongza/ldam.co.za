@@ -1,11 +1,8 @@
 using System.Threading.Tasks;
 using ldam.co.za.lib.Lightroom;
 using ldam.co.za.lib.Services;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 namespace ldam.co.za.backend
 {
