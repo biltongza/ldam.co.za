@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ldam.co.za.fnapp.Services;
 using ldam.co.za.lib.Services;
 
 namespace ldam.co.za.backend
