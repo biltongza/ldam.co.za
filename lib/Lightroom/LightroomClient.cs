@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -106,6 +107,28 @@ namespace ldam.co.za.lib.Lightroom
             var response = await httpClient.SendAsync(request);
             var result = await HandleResponse<AssetResponse>(response);
             return result;
+        }
+
+        public async Task<Stream> GetImageStream(string catalogId, string assetId, string size)
+        {
+            var asset = await GetAsset(catalogId, assetId);
+            
+            var href = asset.Links[$"rels/rendition_type/{size}"]?.Href;
+            if(string.IsNullOrWhiteSpace(href))
+            {
+                throw new InvalidOperationException($"Size {size} is not available");
+            }
+
+            var builder = new StringBuilder();
+            builder.Append("/v2/catalogs/");
+            builder.Append(catalogId);
+            builder.Append("/");
+            builder.Append(href);
+
+            var request = await PrepareRequest(HttpMethod.Get, builder.ToString());
+            var response = await httpClient.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStreamAsync();
         }
     }
 }

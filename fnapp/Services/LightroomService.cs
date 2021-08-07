@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ldam.co.za.lib.Lightroom;
 using ldam.co.za.fnapp.Models;
+using System.IO;
 
 namespace ldam.co.za.fnapp.Services
 {
@@ -75,6 +76,13 @@ namespace ldam.co.za.fnapp.Services
                 }
             }
             while(!string.IsNullOrEmpty(after));
+        }
+
+        public async Task<Stream> GetImageStream(string assetId, string size)
+        {
+            var stream = await lightroomClient.GetImageStream(this.catalog.Value.Id, assetId, size);
+
+            return stream;
         }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 
-namespace ldam.co.za.server.Models
+namespace ldam.co.za.fnapp.Models
 {
     public class ImageInfo
     {
@@ -17,5 +17,6 @@ namespace ldam.co.za.server.Models
         public string Lens { get; set; }
         public string Title { get; set; }
         public string Caption { get; set; }
+        public DateTime LastModified { get; set; }
     }
 }
