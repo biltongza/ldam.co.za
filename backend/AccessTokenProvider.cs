@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using ldam.co.za.lib.Lightroom;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace ldam.co.za.backend
 {
@@ -18,8 +17,19 @@ namespace ldam.co.za.backend
 
         public async Task<string> GetAccessToken()
         {
-            var result = await this.httpContextAccessor.HttpContext.AuthenticateAsync();
-            var accessToken = result.Properties.GetTokens()?.FirstOrDefault(t => t.Name == "access_token")?.Value;
+            return await GetToken("access_token");
+        }
+
+        public async Task<string> GetRefreshToken()
+        {
+            return await GetToken("refresh_token");
+        }
+
+        private async Task<string> GetToken(string name)
+        {
+            var result = await httpContextAccessor.HttpContext.AuthenticateAsync();
+            var accessTokens = result.Properties.GetTokens(); 
+            var accessToken = accessTokens?.FirstOrDefault(t => t.Name == name)?.Value;
             return accessToken;
         }
     }

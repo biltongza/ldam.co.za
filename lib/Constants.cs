@@ -5,6 +5,7 @@ namespace ldam.co.za.lib
         public static class KeyVault
         {
             public const string LightroomAccessToken = "LightroomAccessToken";
+            public const string LightroomRefreshToken = "LightroomRefreshToken";
         }
     }
 }

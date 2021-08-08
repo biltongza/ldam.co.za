@@ -1,3 +1,4 @@
+using System.Net;
 using System.Threading.Tasks;
 using ldam.co.za.lib.Lightroom;
 using ldam.co.za.lib.Services;
@@ -25,10 +26,17 @@ namespace ldam.co.za.backend
             var accessToken = await accessTokenProvider.GetAccessToken();
             if(string.IsNullOrWhiteSpace(accessToken))
             {
-                return Forbid();
+                return StatusCode((int)HttpStatusCode.InternalServerError, "no access_token");
+            }
+
+            var refreshToken = await accessTokenProvider.GetRefreshToken();
+            if(string.IsNullOrWhiteSpace(refreshToken))
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, "no refresh_token");
             }
             
             secretService.SetSecret(lib.Constants.KeyVault.LightroomAccessToken, accessToken);
+            secretService.SetSecret(lib.Constants.KeyVault.LightroomRefreshToken, refreshToken);
             
             return NoContent();
         }

@@ -30,6 +30,7 @@ namespace ldam.co.za.backend
                     options.ClientId = Configuration[Constants.AdobeConfiguration.Auth.ClientId];
                     options.ClientSecret = Configuration[Constants.AdobeConfiguration.Auth.ClientSecret];
                     options.Scope.Add("lr_partner_apis");
+                    options.Scope.Add("offline_access");
                     options.SaveTokens = true;
                 });
 
