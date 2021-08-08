@@ -1,11 +1,4 @@
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Azure.Functions.Worker.Configuration;
-using System.IO;
-using Azure.Identity;
-using System;
-using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.Extensions.DependencyInjection;
 using ldam.co.za.lib.Services;
 using ldam.co.za.lib.Lightroom;
@@ -41,8 +34,9 @@ namespace ldam.co.za.fnapp
                             config[Constants.Configuration.Adobe.AuthClientId]
                         );
                     });
-                    services.AddTransient<LightroomService>();
-                    services.AddTransient<StorageService>();
+                    services.AddTransient<ILightroomService, LightroomService>();
+                    services.AddTransient<IStorageService, StorageService>();
+                    services.AddTransient<SyncService>();
                 })
                 .Build();
 

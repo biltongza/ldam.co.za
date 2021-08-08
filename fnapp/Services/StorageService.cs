@@ -7,7 +7,13 @@ using Microsoft.Extensions.Configuration;
 
 namespace ldam.co.za.fnapp.Services
 {
-    public class StorageService
+    public interface IStorageService
+    {
+        Task Store(string name, Stream stream);
+        Task<Stream> Get(string name);
+    }
+    
+    public class StorageService : IStorageService
     {
         private readonly BlobContainerClient blobContainerClient;
         public StorageService(IConfiguration configuration)

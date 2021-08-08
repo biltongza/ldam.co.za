@@ -8,7 +8,14 @@ using System.IO;
 
 namespace ldam.co.za.fnapp.Services
 {
-    public class LightroomService
+    public interface ILightroomService
+    {
+        IAsyncEnumerable<KeyValuePair<string, string>> GetAlbums();
+        IAsyncEnumerable<ImageInfo> GetImageList(string albumId);
+        Task<Stream> GetImageStream(string assetId, string size);
+    }
+
+    public class LightroomService : ILightroomService
     {
         private readonly ILightroomClient lightroomClient;
         private readonly Lazy<CatalogResponse> catalog;
@@ -27,15 +34,15 @@ namespace ldam.co.za.fnapp.Services
                 Link next = null;
                 albumsResponse.Links?.TryGetValue("next", out next);
                 var afterHref = next?.Href;
-                
+
                 after = !string.IsNullOrWhiteSpace(afterHref) ? afterHref.Substring(afterHref.IndexOf('=')) : null;
 
-                foreach(var albumResponse in albumsResponse.Resources.Where(x => x.Subtype == "collection"))
+                foreach (var albumResponse in albumsResponse.Resources.Where(x => x.Subtype == "collection"))
                 {
                     yield return new KeyValuePair<string, string>(albumResponse.Id, albumResponse.Payload.Name);
                 }
             }
-            while(!string.IsNullOrEmpty(after));
+            while (!string.IsNullOrEmpty(after));
         }
         public async IAsyncEnumerable<ImageInfo> GetImageList(string albumId)
         {
@@ -47,14 +54,14 @@ namespace ldam.co.za.fnapp.Services
                 albumAssetResponse.Links?.TryGetValue("next", out next);
                 var afterHref = next?.Href;
                 after = !string.IsNullOrWhiteSpace(afterHref) ? afterHref.Substring(afterHref.IndexOf('=')) : null;
-                foreach(var asset in albumAssetResponse.Resources)
+                foreach (var asset in albumAssetResponse.Resources)
                 {
                     var exposureTimeArray = asset.Asset.Payload.Xmp.Exif.ExposureTime;
                     var exposureNumerator = exposureTimeArray[0];
-                    var exposureDivisor = exposureTimeArray[1]; 
-                    var exposureTime = exposureNumerator == 1 && exposureDivisor > 1 ? $"1/{exposureDivisor}s" : $"{exposureNumerator/exposureDivisor}s";
+                    var exposureDivisor = exposureTimeArray[1];
+                    var exposureTime = exposureNumerator == 1 && exposureDivisor > 1 ? $"1/{exposureDivisor}s" : $"{exposureNumerator / exposureDivisor}s";
                     var apertureArray = asset.Asset.Payload.Xmp.Exif.FNumber;
-                    var aperture = apertureArray[0]/apertureArray[1];
+                    var aperture = apertureArray[0] / apertureArray[1];
                     var make = asset.Asset.Payload.Xmp.Tiff.Make;
                     var model = asset.Asset.Payload.Xmp.Tiff.Model;
                     yield return new ImageInfo
@@ -75,7 +82,7 @@ namespace ldam.co.za.fnapp.Services
                     };
                 }
             }
-            while(!string.IsNullOrEmpty(after));
+            while (!string.IsNullOrEmpty(after));
         }
 
         public async Task<Stream> GetImageStream(string assetId, string size)
