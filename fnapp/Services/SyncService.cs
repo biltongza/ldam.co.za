@@ -112,18 +112,18 @@ namespace ldam.co.za.fnapp.Services
                         }
                     }
                 }
-
-                if (manifestModified)
-                {
-                    manifest.LastModified = DateTime.Now;
-                    var serializedManifest = JsonSerializer.SerializeToUtf8Bytes(manifest);
-                    using var serializedStream = new MemoryStream(serializedManifest);
-                    await storageService.Store(manifestName, serializedStream);
-                    logger.LogInformation("Manifest {manifestName} updated", manifestName);
-                }
             }).ToArray();
 
             await Task.WhenAll(tasks);
+
+            if (manifestModified)
+            {
+                manifest.LastModified = DateTime.Now;
+                var serializedManifest = JsonSerializer.SerializeToUtf8Bytes(manifest);
+                using var serializedStream = new MemoryStream(serializedManifest);
+                await storageService.Store(manifestName, serializedStream);
+                logger.LogInformation("Manifest {manifestName} updated", manifestName);
+            }
         }
     }
 }
