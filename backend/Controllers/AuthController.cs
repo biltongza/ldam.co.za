@@ -38,7 +38,7 @@ namespace ldam.co.za.backend
             await secretService.SetSecret(lib.Constants.KeyVault.LightroomAccessToken, accessToken);
             await secretService.SetSecret(lib.Constants.KeyVault.LightroomRefreshToken, refreshToken);
             
-            return NoContent();
+            return Ok();
         }
     }
 }
