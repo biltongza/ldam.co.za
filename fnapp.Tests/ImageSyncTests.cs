@@ -10,6 +10,7 @@ using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
 using ldam.co.za.fnapp.Models;
+using System.Text.Json;
 
 namespace fnapp.Tests
 {
@@ -43,8 +44,87 @@ namespace fnapp.Tests
             mockLightroomService
                 .Setup(x => x.GetImageList(It.IsAny<string>()))
                 .Returns(new List<ImageInfo>().ToAsyncEnumerable());
-            
+
             mockStorageService.Setup(x => x.Get(ManifestName)).Returns(Task.FromResult(Stream.Null));
+
+            await syncService.SyncImages();
+
+            mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task ShouldNotModifyManifestIfNoChangesToAlbum()
+        {
+            var manifestImages = new Dictionary<string, ImageMetadata>
+            {
+                { "image1",  new ImageMetadata { Id = "image1" } },
+            };
+
+            var adobeImages = new List<ImageInfo>
+            {
+                new ImageInfo { AssetId = "image1" }
+            };
+
+            var mockManifest = new Manifest
+            {
+                LastModified = new DateTime(2021, 8, 8),
+                Albums = new Dictionary<string, Album>
+                {
+                    { "testalbum1", new Album { Id = "testalbum1", Images = manifestImages}},
+                }
+            };
+
+            Stream serialisedManifest = new MemoryStream(JsonSerializer.SerializeToUtf8Bytes(mockManifest));
+
+            mockLightroomService
+                .Setup(x => x.GetAlbums())
+                .Returns(new Dictionary<string, string>() { { "testalbum1", "Test album 1" } }.ToAsyncEnumerable());
+
+            mockLightroomService
+                .Setup(x => x.GetImageList(It.IsAny<string>()))
+                .Returns(adobeImages.ToAsyncEnumerable());
+
+            mockStorageService.Setup(x => x.Get(ManifestName)).Returns(Task.FromResult(serialisedManifest));
+
+            await syncService.SyncImages();
+
+            mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task ShouldUpdateManifestWhenNewAdobeImagePresent()
+        {
+            var manifestImages = new Dictionary<string, ImageMetadata>
+            {
+                { "image1",  new ImageMetadata { Id = "image1" } },
+            };
+
+            var adobeImages = new List<ImageInfo>
+            {
+                new ImageInfo { AssetId = "image1" },
+                new ImageInfo { AssetId = "image2 "},
+            };
+
+            var mockManifest = new Manifest
+            {
+                LastModified = new DateTime(2021, 8, 8),
+                Albums = new Dictionary<string, Album>
+                {
+                    { "testalbum1", new Album { Id = "testalbum1", Images = manifestImages}},
+                }
+            };
+
+            Stream serialisedManifest = new MemoryStream(JsonSerializer.SerializeToUtf8Bytes(mockManifest));
+
+            mockLightroomService
+                .Setup(x => x.GetAlbums())
+                .Returns(new Dictionary<string, string>() { { "testalbum1", "Test album 1" } }.ToAsyncEnumerable());
+
+            mockLightroomService
+                .Setup(x => x.GetImageList(It.IsAny<string>()))
+                .Returns(adobeImages.ToAsyncEnumerable());
+
+            mockStorageService.Setup(x => x.Get(ManifestName)).Returns(Task.FromResult(serialisedManifest));
 
             await syncService.SyncImages();
 
