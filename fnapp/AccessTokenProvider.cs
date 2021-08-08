@@ -17,5 +17,10 @@ namespace ldam.co.za.fnapp
         {
             return Task.FromResult(secretService.GetSecret(lib.Constants.KeyVault.LightroomAccessToken));
         }
+
+        public Task<string> GetRefreshToken()
+        {
+            return Task.FromResult(secretService.GetSecret(lib.Constants.KeyVault.LightroomRefreshToken));
+        }
     }
 }
