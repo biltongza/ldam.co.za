@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 
@@ -12,14 +13,15 @@ namespace ldam.co.za.lib.Services
             this.secretClient = new SecretClient(new Uri(keyVaultUri), new ChainedTokenCredential(new ManagedIdentityCredential(), new AzureCliCredential()));
         }
 
-        public string GetSecret(string key)
+        public async Task<string> GetSecret(string key)
         {
-            return this.secretClient.GetSecret(key)?.Value?.Value;
+            var secretResponse = await secretClient.GetSecretAsync(key);
+            return secretResponse?.Value?.Value;
         }
 
-        public void SetSecret(string key, string value)
+        public async Task SetSecret(string key, string value)
         {
-            this.secretClient.SetSecret(key, value);
+            await secretClient.SetSecretAsync(key, value);
         }
     }
 }

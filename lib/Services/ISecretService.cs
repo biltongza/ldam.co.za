@@ -1,8 +1,10 @@
+using System.Threading.Tasks;
+
 namespace ldam.co.za.lib.Services
 {
     public interface ISecretService
     {
-        string GetSecret(string key);
-        void SetSecret(string key, string value);
+        Task<string> GetSecret(string key);
+        Task SetSecret(string key, string value);
     }
 }

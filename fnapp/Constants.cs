@@ -16,6 +16,7 @@ namespace ldam.co.za.fnapp
                 public const string AuthClientId = "AdobeAuthClientId";
                 public const string AlbumIds = "AdobeAlbumIds";
                 public const string SizesToSync = "AdobeSizesToSync";
+                public const string RefreshTokenWindowMinutes = "AdobeRefreshTokenWindowMinutes";
             }
         }
     }

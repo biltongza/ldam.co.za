@@ -35,8 +35,8 @@ namespace ldam.co.za.backend
                 return StatusCode((int)HttpStatusCode.InternalServerError, "no refresh_token");
             }
             
-            secretService.SetSecret(lib.Constants.KeyVault.LightroomAccessToken, accessToken);
-            secretService.SetSecret(lib.Constants.KeyVault.LightroomRefreshToken, refreshToken);
+            await secretService.SetSecret(lib.Constants.KeyVault.LightroomAccessToken, accessToken);
+            await secretService.SetSecret(lib.Constants.KeyVault.LightroomRefreshToken, refreshToken);
             
             return NoContent();
         }

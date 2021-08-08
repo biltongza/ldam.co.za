@@ -13,14 +13,14 @@ namespace ldam.co.za.fnapp
             this.secretService = secretService;
         }
         
-        public Task<string> GetAccessToken()
+        public async Task<string> GetAccessToken()
         {
-            return Task.FromResult(secretService.GetSecret(lib.Constants.KeyVault.LightroomAccessToken));
+            return await secretService.GetSecret(lib.Constants.KeyVault.LightroomAccessToken);
         }
 
-        public Task<string> GetRefreshToken()
+        public async Task<string> GetRefreshToken()
         {
-            return Task.FromResult(secretService.GetSecret(lib.Constants.KeyVault.LightroomRefreshToken));
+            return await secretService.GetSecret(lib.Constants.KeyVault.LightroomRefreshToken);
         }
     }
 }

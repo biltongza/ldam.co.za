@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using ldam.co.za.fnapp.Models;
 using System.Text.Json;
 
-namespace fnapp.Tests
+namespace ldam.co.za.fnapp.Tests
 {
     public class ImageSyncTests
     {
