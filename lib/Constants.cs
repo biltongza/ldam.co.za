@@ -6,6 +6,7 @@ namespace ldam.co.za.lib
         {
             public const string LightroomAccessToken = "LightroomAccessToken";
             public const string LightroomRefreshToken = "LightroomRefreshToken";
+            public const string LightroomClientSecret = "LightroomClientSecret";
         }
     }
 }

@@ -39,6 +39,7 @@ namespace ldam.co.za.fnapp
                     services.AddTransient<IClock, Clock>();
                     services.AddTransient<RefreshTokenService>();
                     services.AddTransient<SyncService>();
+                    services.AddTransient<ILightroomTokenService, LightroomTokenService>();
                 })
                 .Build();
 
