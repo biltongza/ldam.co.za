@@ -1,6 +1,6 @@
 using System;
 
-namespace ldam.co.za.fnapp.Models
+namespace ldam.co.za.lib.Models
 {
     public class ImageInfo
     {

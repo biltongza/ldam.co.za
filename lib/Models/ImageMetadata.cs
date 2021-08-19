@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ldam.co.za.fnapp.Models
+namespace ldam.co.za.lib.Models
 {
     public class ImageMetadata
     {
