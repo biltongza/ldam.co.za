@@ -3,8 +3,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:46673",
-      "sslPort": 44392
+      "applicationUrl": "http://localhost:23754",
+      "sslPort": 44328
     }
   },
   "profiles": {
@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "ldam.co.za": {
+    "client": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,
