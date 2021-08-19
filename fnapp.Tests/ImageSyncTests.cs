@@ -11,6 +11,7 @@ using System.IO;
 using System.Threading.Tasks;
 using ldam.co.za.fnapp.Models;
 using System.Text.Json;
+using ldam.co.za.lib.Services;
 
 namespace ldam.co.za.fnapp.Tests
 {
@@ -49,7 +50,7 @@ namespace ldam.co.za.fnapp.Tests
 
             await syncService.SyncImages();
 
-            mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>()), Times.Once);
+            mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<bool>()), Times.Once);
         }
 
         [Fact]
@@ -88,7 +89,7 @@ namespace ldam.co.za.fnapp.Tests
 
             await syncService.SyncImages();
 
-            mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>()), Times.Never);
+            mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<bool>()), Times.Never);
         }
 
         [Fact]
@@ -128,7 +129,7 @@ namespace ldam.co.za.fnapp.Tests
 
             await syncService.SyncImages();
 
-            mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>()), Times.Once);
+            mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<bool>()), Times.Once);
         }
     }
 }

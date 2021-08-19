@@ -16,7 +16,7 @@ namespace ldam.co.za.fnapp
                 .ConfigureServices((hostBuilder, services) =>
                 {
                     var config = hostBuilder.Configuration;
-                    services.AddTransient<ISecretService, SecretService>((_) => new SecretService(config[Constants.Configuration.Azure.KeyVaultUri]));
+                    services.AddTransient<ISecretService, SecretService>((_) => new SecretService(config[lib.Constants.Configuration.Azure.KeyVaultUri]));
 
                     services.AddTransient<IAccessTokenProvider, AccessTokenProvider>();
                     services.AddHttpClient("lightroom")

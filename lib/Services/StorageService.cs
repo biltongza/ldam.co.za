@@ -5,7 +5,7 @@ using Azure.Identity;
 using Azure.Storage.Blobs;
 using Microsoft.Extensions.Configuration;
 
-namespace ldam.co.za.fnapp.Services
+namespace ldam.co.za.lib.Services
 {
     public interface IStorageService
     {

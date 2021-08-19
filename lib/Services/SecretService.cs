@@ -5,6 +5,11 @@ using Azure.Security.KeyVault.Secrets;
 
 namespace ldam.co.za.lib.Services
 {
+    public interface ISecretService
+    {
+        Task<string> GetSecret(string key);
+        Task SetSecret(string key, string value);
+    }
     public class SecretService : ISecretService
     {
         private readonly SecretClient secretClient;
