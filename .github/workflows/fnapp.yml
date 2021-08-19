@@ -23,9 +23,24 @@ jobs:
       run: dotnet restore
       working-directory: ./fnapp
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore -c Release -o ${{env.RUNNER_TEMP}}/fnapp-build
       working-directory: ./fnapp
     - name: Test
       run: dotnet test --no-build --verbosity normal
       working-directory: ./fnapp.Tests
+    - uses: actions/upload-artifact@v2
+      if: ${{ github.event_name == 'push' }}
+      with:
+        name: fnapp
+        path: ${{env.RUNNER_TEMP}}/fnapp-build
+  # deploy:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   if: ${{ github.event_name == 'push' }}
+  #   steps:
+  #     - uses: actions/download-artifact@v2
+  #       with:
+  #         name: fnapp
+
+
       
