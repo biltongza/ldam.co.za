@@ -79,6 +79,7 @@ namespace ldam.co.za.fnapp.Services
                         Model = model,
                         Title = asset.Asset.Payload.Xmp.Dc.Title,
                         Caption = asset.Asset.Payload.Xmp.Dc.Description,
+                        LastModified = DateTime.Parse(asset.Asset.Updated),
                     };
                 }
             }
