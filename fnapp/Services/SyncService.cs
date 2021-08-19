@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -96,6 +97,7 @@ namespace ldam.co.za.fnapp.Services
                     if (manifestImageInfo.LastModified != imageInfo.LastModified)
                     {
                         logger.LogInformation("Timestamp of asset {assetId} does not match manifest, syncing", imageInfo.AssetId);
+                        manifestImageInfo.LastModified = imageInfo.LastModified;
                         syncImage = true;
                     }
 
@@ -106,7 +108,7 @@ namespace ldam.co.za.fnapp.Services
                             using var imageStream = await lightroomService.GetImageStream(imageInfo.AssetId, size);
                             var imageName = $"{imageInfo.AssetId}.{size}.jpg";
                             await storageService.Store(imageName, imageStream);
-                            manifestImageInfo.Hrefs.Add(size, imageName);
+                            manifestImageInfo.Hrefs.TryAdd(size, imageName);
                             manifestModified = true;
                             logger.LogInformation("Synced {imageName}", imageName);
                         }
