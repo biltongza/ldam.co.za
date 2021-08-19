@@ -3,6 +3,10 @@ name: fnapp
 on:
   push:
     branches: [ master ]
+    paths: 
+      - ./lib/**
+      - ./fnapp/**
+      - ./fnapp.Tests/**
   pull_request:
     branches: [ master ]
 
