@@ -33,14 +33,21 @@ jobs:
       with:
         name: fnapp
         path: ./fnapp/fnapp-build
-  # deploy:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   if: ${{ github.event_name == 'push' }}
-  #   steps:
-  #     - uses: actions/download-artifact@v2
-  #       with:
-  #         name: fnapp
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'push' }}
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: fnapp
+      - name: deploy fnapp
+        uses: Azure/functions-action@v1.4.0
+        with:
+          app-name: fnapp
+          package: fnapp
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+
 
 
       
