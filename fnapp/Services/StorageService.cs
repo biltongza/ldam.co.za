@@ -9,7 +9,7 @@ namespace ldam.co.za.fnapp.Services
 {
     public interface IStorageService
     {
-        Task Store(string name, Stream stream);
+        Task Store(string name, Stream stream, bool overwrite = true);
         Task<Stream> Get(string name);
     }
     
@@ -23,10 +23,10 @@ namespace ldam.co.za.fnapp.Services
             blobContainerClient = blobServiceClient.GetBlobContainerClient(configuration[Constants.Configuration.Azure.BlobContainer]);
         }
 
-        public async Task Store(string name, Stream stream)
+        public async Task Store(string name, Stream stream, bool overwrite = true)
         {
             var blobClient = blobContainerClient.GetBlobClient(name);
-            await blobClient.UploadAsync(stream);
+            await blobClient.UploadAsync(stream, overwrite: overwrite);
         }
 
         public async Task<Stream> Get(string name)
