@@ -1,7 +1,37 @@
 ﻿@page "/"
+@inject HttpClient HttpClient
+@inject IConfiguration Configuration
 
-<h1>Hello, world!</h1>
+@if(manifest == null)
+{
+    <div>Loading</div>
+}
+else
+{
+    foreach(var album in manifest.Albums)
+    {
+        <h2>@album.Value.Title</h2>
+        <div>
+            @foreach(var image in album.Value.Images)
+            {
+                <img src="@GetThumbnailFromMetadata(image.Value)" />
+            }
+        </div>
+    }
+}
 
-Welcome to your new app.
+@code {
+    protected Manifest manifest;
+    private string storageRoot;
+    protected override async Task OnInitializedAsync()
+    {
+        storageRoot = Configuration["storageUrl"];
+        manifest = await HttpClient.GetFromJsonAsync<Manifest>($"{storageRoot}/portfolio/manifest.json");
+    }
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+    protected string GetThumbnailFromMetadata(ImageMetadata metadata)
+    {
+        var thumbnail = metadata.Hrefs["thumbnail2x"];
+        return $"{storageRoot}/portfolio/{thumbnail}";
+    }
+}
