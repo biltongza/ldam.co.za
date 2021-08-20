@@ -4,12 +4,13 @@ using ldam.co.za.lib.Services;
 using ldam.co.za.lib.Lightroom;
 using System.Net.Http;
 using ldam.co.za.fnapp.Services;
+using System.Threading.Tasks;
 
 namespace ldam.co.za.fnapp
 {
     public class Program
     {
-        public static void Main()
+        public static async Task Main()
         {
             var host = new HostBuilder()
                 .ConfigureFunctionsWorkerDefaults()
@@ -43,7 +44,7 @@ namespace ldam.co.za.fnapp
                 })
                 .Build();
 
-            host.Run();
+            await host.RunAsync();
         }
     }
 }
