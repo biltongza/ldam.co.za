@@ -24,5 +24,10 @@ RUN apt-get install -y apt-transport-https && \
     apt-get update && \
     apt-get install -y dotnet-sdk-3.1
 
+RUN mkdir ~/dotnet_install && \ 
+    cd ~/dotnet_install && \
+    curl -L https://aka.ms/install-dotnet-preview -o install-dotnet-preview.sh && \
+    bash install-dotnet-preview.sh
+
 # [Optional] Uncomment this line to install global node packages.
 RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g azure-functions-core-tools@3 --unsafe-perm true" 2>&1
