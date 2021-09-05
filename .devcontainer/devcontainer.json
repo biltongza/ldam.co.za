@@ -25,7 +25,8 @@
 		"visualstudioexptteam.vscodeintellicode",
 		"ms-dotnettools.blazorwasm-companion",
 		"eamodio.gitlens",
-		"jmrog.vscode-nuget-package-manager"
+		"jmrog.vscode-nuget-package-manager",
+		"esbenp.prettier-vscode"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.

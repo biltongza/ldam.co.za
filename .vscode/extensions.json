@@ -1,8 +1,12 @@
 {
   "recommendations": [
-    "ms-azuretools.vscode-azurefunctions",
     "ms-dotnettools.csharp",
-    "editorconfig.editorconfig",
-    "visualstudioexptteam.vscodeintellicode"
+		"ms-azuretools.vscode-azurefunctions",
+		"editorconfig.editorconfig",
+		"visualstudioexptteam.vscodeintellicode",
+		"ms-dotnettools.blazorwasm-companion",
+		"eamodio.gitlens",
+		"jmrog.vscode-nuget-package-manager",
+		"esbenp.prettier-vscode"
   ]
 }
