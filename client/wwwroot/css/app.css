@@ -1,6 +1,6 @@
 html,
 body {
-  font-family: var(--sl-font-sans);
+  font-family: pt-sans-pro, sans-serif;
   margin-left: var(--sl-spacing-xx-large);
   margin-right: var(--sl-spacing-xx-large);
 }

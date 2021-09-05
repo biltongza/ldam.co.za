@@ -1,0 +1,14 @@
+@inject IConfiguration Configuration
+<img src="@ThumbnailUrl" />
+@code {
+    [Parameter]
+    public ImageMetadata Metadata { get; set; }
+    protected string ThumbnailUrl { get; private set; }
+    protected override Task OnInitializedAsync()
+    {
+        var storageRoot = Configuration[Constants.Configuration.StorageRoot];
+        var thumbnail = this.Metadata.Hrefs["thumbnail2x"];
+        this.ThumbnailUrl = $"{storageRoot}/portfolio/{thumbnail}";
+        return Task.CompletedTask;
+    }
+}

@@ -1,0 +1,24 @@
+@page "/album/{albumId}"
+@inject IManifestProvider ManifestProvider
+
+@if(!string.IsNullOrEmpty(AlbumId))
+{
+    <h2>@AlbumToDisplay.Title</h2>
+
+    @foreach (var image in AlbumToDisplay.Images)
+    {
+        <ImageThumbnail Metadata="@image.Value"></ImageThumbnail>
+    }
+}
+
+@code {
+    [Parameter]
+    public string AlbumId { get; set; }
+    protected lib.Models.Album AlbumToDisplay { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var manifest = await ManifestProvider.Manifest;
+        this.AlbumToDisplay = manifest.Albums[this.AlbumId];
+    }
+}

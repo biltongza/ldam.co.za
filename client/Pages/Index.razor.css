@@ -1,0 +1,13 @@
+.image-container {
+    display: grid;
+    column-gap: var(--sl-spacing-xx-large);
+    row-gap: var(--sl-spacing-large);
+    justify-items: center;
+    align-items: center;
+}
+
+@media only screen and (min-width : 1224px) {
+    .image-container {
+        grid-template-columns: repeat(3, 1fr);
+    }   
+}

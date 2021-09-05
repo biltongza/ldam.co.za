@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using BlazorApplicationInsights;
+using ldam.co.za.client.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,8 +18,13 @@ namespace ldam.co.za.client
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
-
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddHttpClient(Constants.HttpClients.Base, (client) => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress));
+            builder.Services.AddHttpClient(Constants.HttpClients.Cdn, (sp, client) => 
+            {
+                var config = sp.GetRequiredService<IConfiguration>();
+                client.BaseAddress = new Uri(config[Constants.Configuration.StorageRoot]);
+            });
+            builder.Services.AddSingleton<IManifestProvider, ManifestProvider>();
             builder.Services.AddBlazorApplicationInsights();
 
             await builder.Build().RunAsync();

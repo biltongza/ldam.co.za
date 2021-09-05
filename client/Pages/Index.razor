@@ -1,32 +1,29 @@
 ﻿@page "/"
-@inject HttpClient HttpClient
+@inject IManifestProvider ManifestProvider
 @inject IConfiguration Configuration
 
-@if(manifest == null)
+@if (Album == null)
 {
     <div>Loading</div>
 }
 else
 {
-    foreach(var album in manifest.Albums)
-    {
-        <h2>@album.Value.Title</h2>
-        <div>
-            @foreach(var image in album.Value.Images)
-            {
-                <img src="@GetThumbnailFromMetadata(image.Value)" />
-            }
-        </div>
-    }
+    <div class="image-container">
+        @foreach (var image in Album.Images.OrderByDescending(x => x.Value.CaptureDate))
+        {
+            <ImageThumbnail Metadata="@image.Value"></ImageThumbnail>
+        }
+    </div>   
 }
 
 @code {
-    protected Manifest manifest;
+    protected lib.Models.Album Album { get; private set; }
     private string storageRoot;
     protected override async Task OnInitializedAsync()
     {
-        storageRoot = Configuration["storageUrl"];
-        manifest = await HttpClient.GetFromJsonAsync<Manifest>($"{storageRoot}/portfolio/manifest.json");
+        this.storageRoot = this.Configuration[Constants.Configuration.StorageRoot];
+        var manifest = await this.ManifestProvider.Manifest;
+        this.Album = manifest.Albums[this.Configuration[Constants.Configuration.IndexAlbumId]];
     }
 
     protected string GetThumbnailFromMetadata(ImageMetadata metadata)
