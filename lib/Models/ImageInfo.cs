@@ -18,5 +18,7 @@ namespace ldam.co.za.lib.Models
         public string Title { get; set; }
         public string Caption { get; set; }
         public DateTime LastModified { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
     }
 }

@@ -73,7 +73,7 @@ namespace ldam.co.za.fnapp.Services
                     bool syncImage = false;
                     if (!manifestAlbum.Images.TryGetValue(imageInfo.AssetId, out var manifestImageInfo))
                     {
-                        logger.LogInformation("Asset {assetId} is not present in manifest, syncing");
+                        logger.LogInformation("Asset {assetId} is not present in manifest, syncing", imageInfo.AssetId);
                         var metadata = new ImageMetadata
                         {
                             CameraMake = imageInfo.Make,
@@ -88,6 +88,8 @@ namespace ldam.co.za.fnapp.Services
                             Lens = imageInfo.Lens,
                             ShutterSpeed = imageInfo.ShutterSpeed,
                             Title = imageInfo.Title,
+                            Width = imageInfo.Width,
+                            Height = imageInfo.Height,
                         };
                         manifestAlbum.Images.Add(imageInfo.AssetId, metadata);
                         manifestImageInfo = metadata;
