@@ -18,7 +18,7 @@ namespace ldam.co.za.client.Services
         public ManifestProvider(IHttpClientFactory httpClientFactory)
         {
             var cdnHttpClient = httpClientFactory.CreateClient(Constants.HttpClients.Cdn);
-            lazyManifest = new AsyncLazy<Manifest>(() => cdnHttpClient.GetFromJsonAsync<Manifest>("portfolio/manifest.json"));
+            lazyManifest = new AsyncLazy<Manifest>(() => cdnHttpClient.GetFromJsonAsync<Manifest>($"portfolio/manifest.json?t={System.DateTime.Now.Ticks}"));
         }
 
         public Task<Manifest> Manifest

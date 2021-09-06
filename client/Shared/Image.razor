@@ -1,10 +1,36 @@
 @page "/image/{imageId}"
-<sl-responsive-media>
-
+@inject IManifestProvider ManifestProvider
+@inject IConfiguration Configuration
+<sl-responsive-media aspectRatio="@AspectRatio" fit="contain">
+    <img src="@ImageUrl" />
 </sl-responsive-media>
 @code {
     [Parameter]
     public string ImageId { get; set; }
 
-    
+    protected lib.Models.ImageMetadata ImageToDisplay { get; private set; }
+    protected string ImageUrl { get; private set; }
+    protected string AspectRatio { get; private set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var manifest = await this.ManifestProvider.Manifest;
+        var allImages = manifest.Albums.SelectMany(x => x.Value.Images);
+        this.ImageToDisplay = allImages.FirstOrDefault(x => x.Key == this.ImageId).Value;
+        var href = this.ImageToDisplay.Hrefs["2048"];
+        this.ImageUrl = $"{Configuration[Constants.Configuration.StorageRoot]}/portfolio/{href}";
+        var gcd = GreatestCommonDenominator(this.ImageToDisplay.Width, this.ImageToDisplay.Height);
+        this.AspectRatio = $"{this.ImageToDisplay.Width / gcd}:{this.ImageToDisplay.Height / gcd}";
+
+
+        int GreatestCommonDenominator(int a, int b)
+        {
+            if (b == 0)
+            {
+                return a;
+            }
+            return GreatestCommonDenominator(b, a % b);
+        }
+
+    }
 }
