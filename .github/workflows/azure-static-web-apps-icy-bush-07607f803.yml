@@ -22,7 +22,7 @@ jobs:
         with:
           dotnet-version: 6.0.x
       - name: Build App
-          run: dotnet publish -c Release -o published
+        run: dotnet publish -c Release -o published
       - name: Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
