@@ -31,3 +31,10 @@ RUN mkdir ~/dotnet_install && \
 
 # [Optional] Uncomment this line to install global node packages.
 RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g azure-functions-core-tools@3 --unsafe-perm true" 2>&1
+
+# keep extensions installed because it sucks waiting for omnisharp to install every time
+ARG USERNAME=vscode
+
+RUN mkdir -p /home/$USERNAME/.vscode-server/extensions \
+    && chown -R $USERNAME \
+        /home/$USERNAME/.vscode-server \
