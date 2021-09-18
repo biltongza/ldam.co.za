@@ -4,6 +4,7 @@
     <RootNamespace>ldam.co.za.client</RootNamespace>
     <BlazorEnableTimeZoneSupport>false</BlazorEnableTimeZoneSupport>
     <BlazorWebAssemblyPreserveCollationData>false</BlazorWebAssemblyPreserveCollationData>
+    <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="BlazorApplicationInsights" Version="1.2.1" />
