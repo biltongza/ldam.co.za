@@ -1,0 +1,17 @@
+.content {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    row-gap: 1rem;
+    flex-direction: column;
+}
+@media only screen and (min-width : 1224px) {
+    .content {
+        flex-direction: row;
+    }
+}
+
+.selfie {
+    max-width: 400px;
+}

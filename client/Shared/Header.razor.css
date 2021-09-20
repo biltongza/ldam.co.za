@@ -9,6 +9,8 @@ a, a:hover, a:visited, a:active {
     text-decoration: none;
 }
 
-.socials {
-    
+.links {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
