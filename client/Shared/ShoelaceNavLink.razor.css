@@ -1,0 +1,3 @@
+sl-button::part(base) {
+  color: var(--sl-color-neutral-1000);
+}
