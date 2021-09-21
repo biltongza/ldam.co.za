@@ -1,14 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using BlazorApplicationInsights;
 using ldam.co.za.client.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using Ljbc1994.Blazor.IntersectionObserver;
 
 namespace ldam.co.za.client
 {
@@ -26,6 +23,7 @@ namespace ldam.co.za.client
             });
             builder.Services.AddSingleton<IManifestProvider, ManifestProvider>();
             builder.Services.AddBlazorApplicationInsights();
+            builder.Services.AddIntersectionObserver();
 
             await builder.Build().RunAsync();
         }

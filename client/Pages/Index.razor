@@ -25,10 +25,4 @@ else
         var manifest = await this.ManifestProvider.Manifest;
         this.Album = manifest.Albums[this.Configuration[Constants.Configuration.IndexAlbumId]];
     }
-
-    protected string GetThumbnailFromMetadata(ImageMetadata metadata)
-    {
-        var thumbnail = metadata.Hrefs["thumbnail2x"];
-        return $"{storageRoot}/portfolio/{thumbnail}";
-    }
 }

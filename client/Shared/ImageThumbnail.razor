@@ -1,18 +1,62 @@
+@using Ljbc1994.Blazor.IntersectionObserver;
 @inject IConfiguration Configuration
+@inject IIntersectionObserverService ObserverService
+@implements IDisposable
+
 <a href="@ImageRoute">
-    <img src="@ThumbnailUrl" />
+    <img @ref="ImageRef" width="@Width" height="@Height" src="@ThumbnailUrl" />
 </a>
+
 @code {
     [Parameter]
     public ImageMetadata Metadata { get; set; }
-    protected string ThumbnailUrl { get; private set; }
+    protected string ThumbnailUrl => this.isIntersecting ? this.thumbnailUrl : string.Empty; 
     protected string ImageRoute { get; private set; }
+    protected ElementReference ImageRef { get; set; }
+
+    public double Width { get; private set; }
+    public double Height { get; private set; }
+    
+    private bool isIntersecting = false;
+    private string thumbnailUrl = null;
+    private IntersectionObserver observer = null;
+    
+    // max width/height for thumbnail
+    private const double MaxDimension = 320;
+    
     protected override Task OnInitializedAsync()
     {
         var storageRoot = Configuration[Constants.Configuration.StorageRoot];
         var thumbnail = this.Metadata.Hrefs["thumbnail2x"];
-        this.ThumbnailUrl = $"{storageRoot}/portfolio/{thumbnail}";
+        thumbnailUrl = $"{storageRoot}/portfolio/{thumbnail}";
         this.ImageRoute = $"image/{this.Metadata.Id}";
+        var ratio = Math.Min(MaxDimension / this.Metadata.Width, MaxDimension / this.Metadata.Height);
+        Console.WriteLine(ratio);
+        this.Width = this.Metadata.Width * ratio;
+        this.Height = this.Metadata.Height * ratio;
         return Task.CompletedTask;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender)
+        {
+            await SetupObserver();
+        }
+    }
+
+    private async Task SetupObserver()
+    {
+        this.observer = await ObserverService.Observe(ImageRef, (entries) =>
+        {
+            var entry = entries.FirstOrDefault();
+            isIntersecting |= entry.IsIntersecting;
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        this.observer?.Dispose();
     }
 }
