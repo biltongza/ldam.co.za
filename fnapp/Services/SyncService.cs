@@ -74,6 +74,9 @@ namespace ldam.co.za.fnapp.Services
                     if (!manifestAlbum.Images.TryGetValue(imageInfo.AssetId, out var manifestImageInfo))
                     {
                         logger.LogInformation("Asset {assetId} is not present in manifest, syncing", imageInfo.AssetId);
+                        
+                        var gcd = GreatestCommonDenominator(imageInfo.Width, imageInfo.Height);
+                        
                         var metadata = new ImageMetadata
                         {
                             CameraMake = imageInfo.Make,
@@ -90,7 +93,9 @@ namespace ldam.co.za.fnapp.Services
                             Title = imageInfo.Title,
                             Width = imageInfo.Width,
                             Height = imageInfo.Height,
+                            AspectRatio = $"{imageInfo.Width / gcd}:{imageInfo.Height / gcd}",
                         };
+                        
                         manifestAlbum.Images.Add(imageInfo.AssetId, metadata);
                         manifestImageInfo = metadata;
                         manifestModified = true;
@@ -129,6 +134,15 @@ namespace ldam.co.za.fnapp.Services
                 await storageService.Store(manifestName, serializedStream);
                 logger.LogInformation("Manifest {manifestName} updated", manifestName);
             }
+        }
+
+        static int GreatestCommonDenominator(int a, int b)
+        {
+            if (b == 0)
+            {
+                return a;
+            }
+            return GreatestCommonDenominator(b, a % b);
         }
     }
 }

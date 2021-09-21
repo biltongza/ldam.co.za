@@ -20,5 +20,6 @@ namespace ldam.co.za.lib.Models
         public DateTime LastModified { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
+        public string AspectRatio { get; set; }
     }
 }
