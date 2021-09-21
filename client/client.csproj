@@ -6,6 +6,9 @@
     <BlazorWebAssemblyPreserveCollationData>false</BlazorWebAssemblyPreserveCollationData>
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
+  <PropertyGroup>
+    <PublishTrimmed>true</PublishTrimmed>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="BlazorApplicationInsights" Version="1.2.1" />
     <PackageReference Include="BlazorIntersectionObserver" Version="3.0.0" />
