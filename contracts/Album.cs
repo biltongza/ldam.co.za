@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ldam.co.za.lib.Models
+namespace ldam.co.za.contracts
 {
     public class Album
     {

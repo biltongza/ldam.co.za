@@ -3,7 +3,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace ldam.co.za.lib
+namespace ldam.co.za.client
 {
     public class AsyncLazy<T> : Lazy<Task<T>>
     {

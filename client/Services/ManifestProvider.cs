@@ -1,8 +1,7 @@
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using ldam.co.za.lib;
-using ldam.co.za.lib.Models;
+using ldam.co.za.contracts;
 
 namespace ldam.co.za.client.Services
 {

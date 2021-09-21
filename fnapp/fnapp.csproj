@@ -29,5 +29,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../lib/lib.csproj" />
+    <ProjectReference Include="..\contracts\contracts.csproj" />
   </ItemGroup>
 </Project>

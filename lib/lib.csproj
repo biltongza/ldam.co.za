@@ -4,11 +4,11 @@
     <RootNamespace>ldam.co.za.lib</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0"/>
-    <PackageReference Include="Azure.Identity" Version="1.4.1"/>
-    <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.2.0"/>
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.9.1"/>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2"/>
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0" />
+    <PackageReference Include="Azure.Identity" Version="1.4.1" />
+    <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.2.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.9.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
   </ItemGroup>
 </Project>

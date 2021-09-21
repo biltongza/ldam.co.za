@@ -8,7 +8,7 @@
     [Parameter]
     public string ImageId { get; set; }
 
-    protected lib.Models.ImageMetadata ImageToDisplay { get; private set; }
+    protected contracts.ImageMetadata ImageToDisplay { get; private set; }
     protected string ImageUrl { get; private set; }
 
     protected override async Task OnInitializedAsync()

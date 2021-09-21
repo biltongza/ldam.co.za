@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using ldam.co.za.lib.Models;
+using ldam.co.za.contracts;
 using ldam.co.za.lib.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;

@@ -1,15 +1,15 @@
 using System;
-using System.Collections.Generic;
 
-namespace ldam.co.za.lib.Models
+namespace ldam.co.za.contracts
 {
-    public class ImageMetadata
+    public class ImageInfo
     {
-        public string Id { get; set; }
-        public IDictionary<string, string> Hrefs { get; set; } = new Dictionary<string, string>();
+        public string AssetId { get; set; }
+        public string FileName { get; set; }
+        public long FileSize { get; set; }
         public DateTime CaptureDate { get; set; }
-        public string CameraMake { get; set; }
-        public string CameraModel { get; set; }
+        public string Make { get; set; }
+        public string Model { get; set; }
         public string FNumber { get; set; }
         public string ShutterSpeed { get; set; }
         public string FocalLength { get; set; }
@@ -20,6 +20,5 @@ namespace ldam.co.za.lib.Models
         public DateTime LastModified { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
-        public string AspectRatio { get; set; }
     }
 }
