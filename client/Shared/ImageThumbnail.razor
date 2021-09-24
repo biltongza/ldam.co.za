@@ -2,7 +2,13 @@
 @inject IViewportService ViewportService
 
 <a href="@ImageRoute">
-    <img class="thumbnail" loading="lazy" style="max-width: @Width; max-height: @Height" src="@ThumbnailUrl" />
+    <img 
+        src="@ThumbnailUrl" 
+        class="thumbnail" 
+        loading="lazy" 
+        style="max-width: @Width; max-height: @Height" 
+        width="@Width"
+        height="@Height" />
 </a>
 
 @code {
