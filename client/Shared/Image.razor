@@ -1,9 +1,9 @@
 @page "/image/{imageId}"
 @inject IManifestProvider ManifestProvider
 @inject IConfiguration Configuration
-<sl-responsive-media aspectRatio="@ImageToDisplay.AspectRatio" fit="contain">
-    <img src="@ImageUrl" />
-</sl-responsive-media>
+
+<img class="image" src="@ImageUrl" style="max-width: @ImageToDisplay.Width;" />
+
 @code {
     [Parameter]
     public string ImageId { get; set; }
