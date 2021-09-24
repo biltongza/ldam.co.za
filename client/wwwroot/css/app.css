@@ -3,6 +3,7 @@ body {
   font-family: pt-sans-pro, sans-serif;
   margin-left: var(--sl-spacing-small);
   margin-right: var(--sl-spacing-small);
+  margin-bottom: var(--sl-spacing-large);
 }
 
 @media only screen and (min-width: 1224px) {
