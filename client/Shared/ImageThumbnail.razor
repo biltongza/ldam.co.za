@@ -2,34 +2,40 @@
 @inject IViewportService ViewportService
 
 <a href="@ImageRoute">
-    <img 
-        loading="lazy" 
-        src="@src" 
-        srcset="@srcset" />
+    <img class="thumbnail" loading="lazy" style="max-width: @Width; max-height: @Height" src="@ThumbnailUrl" />
 </a>
 
 @code {
     [Parameter]
     public ImageMetadata Metadata { get; set; }
-    
-    private string ImageRoute { get; set; }
-    private string src { get; set; }
-    private string srcset { get; set; }
-    
-    private static readonly Dictionary<string, string> HrefToWidthMap = new Dictionary<string, string>
-    {
-        { "thumbnail2x", "" },
-        { "640", "1.5x" },
-    };
+    protected string ThumbnailUrl { get; private set; }
+    protected string ImageRoute { get; private set; }
+
+    public double Width { get; private set; }
+    public double Height { get; private set; }
+
+    // max width/height for thumbnail
+    private const double MaxDimensionNormalDensity = 320;
+    private const string ThumbnailHrefNormalDensity = "thumbnail2x";
+    private const double MaxDimensionHighDensity = 640;
+    private const string ThumbnailHrefHighDensity = "640";
 
     protected override async Task OnInitializedAsync()
     {
         var storageRoot = Configuration[Constants.Configuration.StorageRoot];
-        this.src = BuildSrc(this.Metadata.Hrefs["640"]);
-        this.srcset = string.Join(", ", HrefToWidthMap.Select(x => $"{BuildSrc(this.Metadata.Hrefs[x.Key])} {x.Value}".Trim()));
+        var deviceRatio = await this.ViewportService.GetViewportDensity();
+        var isHighDensity = deviceRatio > 1;
+        
+        var thumbnail = this.Metadata.Hrefs[isHighDensity ? ThumbnailHrefHighDensity : ThumbnailHrefNormalDensity];
+        this.ThumbnailUrl = $"{storageRoot}/portfolio/{thumbnail}";
+        this.ImageRoute = $"image/{this.Metadata.Id}";
+        
+        var maxDimension = deviceRatio > 1 ? MaxDimensionHighDensity : MaxDimensionNormalDensity;
+        var ratio = Math.Min(maxDimension / this.Metadata.Width, maxDimension / this.Metadata.Height);
+        
+        this.Width = this.Metadata.Width * ratio;
+        this.Height = this.Metadata.Height * ratio;
         
         await base.OnInitializedAsync();
-
-        string BuildSrc(string thing) => $"{storageRoot}/portfolio/{thing}";
     }
 }
