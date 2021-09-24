@@ -68,8 +68,10 @@ namespace ldam.co.za.fnapp.Services
                 }
 
                 var imageInfos = lightroomService.GetImageList(album.Key);
+                var albumImageIds = new List<string>();
                 await foreach (var imageInfo in imageInfos)
                 {
+                    albumImageIds.Add(imageInfo.AssetId);
                     bool syncImage = false;
                     if (!manifestAlbum.Images.TryGetValue(imageInfo.AssetId, out var manifestImageInfo))
                     {
@@ -121,6 +123,14 @@ namespace ldam.co.za.fnapp.Services
                             logger.LogInformation("Synced {imageName}", imageName);
                         }
                     }
+                }
+                var toRemove = manifestAlbum.Images.Select(x => x.Key).Except(albumImageIds);
+                foreach(var imageId in toRemove)
+                {
+                    logger.LogInformation("Image with id {imageId} exists in manifest but not in album, deleting", imageId);
+                    manifestAlbum.Images.Remove(imageId);
+                    manifestModified = true;
+                    await this.storageService.DeleteBlobsStartingWith(imageId);
                 }
             }).ToArray();
 

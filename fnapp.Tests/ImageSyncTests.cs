@@ -63,7 +63,7 @@ namespace ldam.co.za.fnapp.Tests
 
             var adobeImages = new List<ImageInfo>
             {
-                new ImageInfo { AssetId = "image1" }
+                new ImageInfo { AssetId = "image1", Width = 1, Height = 1 }
             };
 
             var mockManifest = new Manifest
@@ -102,8 +102,8 @@ namespace ldam.co.za.fnapp.Tests
 
             var adobeImages = new List<ImageInfo>
             {
-                new ImageInfo { AssetId = "image1" },
-                new ImageInfo { AssetId = "image2 "},
+                new ImageInfo { AssetId = "image1", Width = 1, Height = 1 },
+                new ImageInfo { AssetId = "image2", Width = 1, Height = 1 },
             };
 
             var mockManifest = new Manifest
@@ -130,6 +130,42 @@ namespace ldam.co.za.fnapp.Tests
             await syncService.SyncImages();
 
             mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<bool>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task ShouldRemoveImagesPresentInManfestButNotInAlbum()
+        {
+            var manifestImages = new Dictionary<string, ImageMetadata>
+            {
+                { "image1",  new ImageMetadata { Id = "image1" } },
+            };
+
+            var adobeImages = new List<ImageInfo>();
+
+            var mockManifest = new Manifest
+            {
+                LastModified = new DateTime(2021, 8, 8),
+                Albums = new Dictionary<string, Album>
+                {
+                    { "testalbum1", new Album { Id = "testalbum1", Images = manifestImages}},
+                }
+            };
+
+            Stream serialisedManifest = new MemoryStream(JsonSerializer.SerializeToUtf8Bytes(mockManifest));
+
+            mockLightroomService
+                .Setup(x => x.GetAlbums())
+                .Returns(new Dictionary<string, string>() { { "testalbum1", "Test album 1" } }.ToAsyncEnumerable());
+
+            mockLightroomService
+                .Setup(x => x.GetImageList(It.IsAny<string>()))
+                .Returns(adobeImages.ToAsyncEnumerable());
+
+            mockStorageService.Setup(x => x.Get(ManifestName)).Returns(Task.FromResult(serialisedManifest));
+
+            await syncService.SyncImages();
+
+            mockStorageService.Verify(x => x.DeleteBlobsStartingWith("image1"), Times.Once);
         }
     }
 }
