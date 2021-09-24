@@ -5,7 +5,6 @@ using ldam.co.za.client.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Ljbc1994.Blazor.IntersectionObserver;
 
 namespace ldam.co.za.client
 {
@@ -23,7 +22,7 @@ namespace ldam.co.za.client
             });
             builder.Services.AddSingleton<IManifestProvider, ManifestProvider>();
             builder.Services.AddBlazorApplicationInsights();
-            builder.Services.AddIntersectionObserver();
+            builder.Services.AddSingleton<IViewportService, ViewportService>();
 
             await builder.Build().RunAsync();
         }

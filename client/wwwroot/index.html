@@ -37,6 +37,11 @@
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="_content/BlazorApplicationInsights/JsInterop.js"></script>
+    <script>
+        window.getViewportDensity = function () {
+            return window.devicePixelRatio;
+        }
+    </script>
 </body>
 
 </html>

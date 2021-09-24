@@ -1,62 +1,41 @@
-@using Ljbc1994.Blazor.IntersectionObserver;
 @inject IConfiguration Configuration
-@inject IIntersectionObserverService ObserverService
-@implements IDisposable
+@inject IViewportService ViewportService
 
 <a href="@ImageRoute">
-    <img @ref="ImageRef" width="@Width" height="@Height" src="@ThumbnailUrl" />
+    <img loading="lazy" width="@Width" height="@Height" src="@ThumbnailUrl" />
 </a>
 
 @code {
     [Parameter]
     public ImageMetadata Metadata { get; set; }
-    protected string ThumbnailUrl => this.isIntersecting ? this.thumbnailUrl : string.Empty; 
+    protected string ThumbnailUrl { get; private set; }
     protected string ImageRoute { get; private set; }
-    protected ElementReference ImageRef { get; set; }
 
     public double Width { get; private set; }
     public double Height { get; private set; }
-    
-    private bool isIntersecting = false;
-    private string thumbnailUrl = null;
-    private IntersectionObserver observer = null;
-    
+
     // max width/height for thumbnail
-    private const double MaxDimension = 320;
-    
-    protected override Task OnInitializedAsync()
+    private const double MaxDimensionNormalDensity = 320;
+    private const string ThumbnailHrefNormalDensity = "thumbnail2x";
+    private const double MaxDimensionHighDensity = 640;
+    private const string ThumbnailHrefHighDensity = "640";
+
+    protected override async Task OnInitializedAsync()
     {
         var storageRoot = Configuration[Constants.Configuration.StorageRoot];
-        var thumbnail = this.Metadata.Hrefs["thumbnail2x"];
-        thumbnailUrl = $"{storageRoot}/portfolio/{thumbnail}";
+        var deviceRatio = await this.ViewportService.GetViewportDensity();
+        var isHighDensity = deviceRatio > 1;
+        
+        var thumbnail = this.Metadata.Hrefs[isHighDensity ? ThumbnailHrefHighDensity : ThumbnailHrefNormalDensity];
+        this.ThumbnailUrl = $"{storageRoot}/portfolio/{thumbnail}";
         this.ImageRoute = $"image/{this.Metadata.Id}";
-        var ratio = Math.Min(MaxDimension / this.Metadata.Width, MaxDimension / this.Metadata.Height);
-        Console.WriteLine(ratio);
+        
+        var maxDimension = deviceRatio > 1 ? MaxDimensionHighDensity : MaxDimensionNormalDensity;
+        var ratio = Math.Min(maxDimension / this.Metadata.Width, maxDimension / this.Metadata.Height);
+        
         this.Width = this.Metadata.Width * ratio;
         this.Height = this.Metadata.Height * ratio;
-        return Task.CompletedTask;
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if(firstRender)
-        {
-            await SetupObserver();
-        }
-    }
-
-    private async Task SetupObserver()
-    {
-        this.observer = await ObserverService.Observe(ImageRef, (entries) =>
-        {
-            var entry = entries.FirstOrDefault();
-            isIntersecting |= entry.IsIntersecting;
-            StateHasChanged();
-        });
-    }
-
-    public void Dispose()
-    {
-        this.observer?.Dispose();
+        
+        await base.OnInitializedAsync();
     }
 }
