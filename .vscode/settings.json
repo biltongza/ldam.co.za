@@ -13,5 +13,8 @@
     "scss.validate": false,
     "editor.codeActionsOnSave": {
         "source.organizeImports": true
-    }
+    },
+    "[svelte]": {
+        "editor.defaultFormatter": "svelte.svelte-vscode"
+    },
 }
