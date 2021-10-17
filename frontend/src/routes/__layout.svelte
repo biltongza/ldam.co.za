@@ -2,4 +2,4 @@
 	import Header from '$lib/header.svelte';
 </script>
 <Header/>
-<slot />
+<slot></slot>
