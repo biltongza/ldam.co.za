@@ -1,10 +1,11 @@
 <script context="module" lang="ts">
+	import { browser } from '$app/env';
 	import type { IApplicationInsights } from '@microsoft/applicationinsights-web';
 	import type { ErrorLoad } from '@sveltejs/kit';
 
-	const appInsights: IApplicationInsights = (<any>window).appInsights;
+	const appInsights: IApplicationInsights = browser && (<any>window).appInsights;
 	const load: ErrorLoad = function ({ error, status, page }) {
-		appInsights.trackException({
+		appInsights && appInsights.trackException({
 			error: error,
             properties: {
                 status,
