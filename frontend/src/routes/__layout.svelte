@@ -3,15 +3,18 @@
 	import type { Manifest } from '$lib/manifest';
 	import { StorageBaseUrl } from '$lib/__consts';
 	import type { Load } from '@sveltejs/kit';
+	let manifest: Manifest;
 	const load: Load = async function ({ fetch }) {
-		const response = await fetch(`${StorageBaseUrl}/manifest.json`);
-		if (!response.ok) {
-			return {
-				status: response.status,
-				error: new Error(`Couldn't load manifest: ${response.status}`),
-			};
+		if (!manifest) {
+			const response = await fetch(`${StorageBaseUrl}/manifest.json`);
+			if (!response.ok) {
+				return {
+					status: response.status,
+					error: new Error(`Couldn't load manifest: ${response.status}`)
+				};
+			}
+			manifest = await response.json();
 		}
-		const manifest: Manifest = await response.json();
 
 		return {
 			stuff: {
