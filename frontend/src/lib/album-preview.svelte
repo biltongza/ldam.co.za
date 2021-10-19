@@ -2,13 +2,22 @@
 	import type { Album } from './manifest';
 	import Thumbnail from './thumbnail.svelte';
 	export let album: Album;
+
+	const images = Object.entries(album.Images)
+		.map(([, meta]) => meta)
+		.sort((meta1, meta2) => {
+			const a = new Date(meta1.CaptureDate).valueOf();
+			const b = new Date(meta2.CaptureDate).valueOf();
+
+			return Number(b > a) - Number(b < a);
+		});
 </script>
 
 <div class="album-container">
 	<h3>{album.Title}</h3>
 	<div class="thumbnail-container">
-		{#each Object.entries(album.Images) as [image_key, image_value] (image_key)}
-			<Thumbnail image={image_value} />
+		{#each images as image (image.Id)}
+			<Thumbnail image={image} />
 		{/each}
 	</div>
 </div>
