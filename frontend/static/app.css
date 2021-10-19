@@ -13,3 +13,9 @@ body {
     margin-right: var(--sl-spacing-2x-large);
   }
 }
+
+.thumbnail,
+.image {
+  width: 100%;
+  height: 100%;
+}
