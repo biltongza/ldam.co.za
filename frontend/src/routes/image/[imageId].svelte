@@ -1,17 +1,22 @@
-<script lang="ts">
-	import { manifestStore } from '$lib/manifest-store';
-	import { HighResHref } from '$lib/__consts';
-
+<script context="module" lang="ts">
+	import type { Manifest } from '$lib/manifest';
+	import { HighResHref,StorageBaseUrl } from '$lib/__consts';
+	import type { Load } from '@sveltejs/kit';
+	
 	let src: string;
-	export async function load({ page: { params } }) {
+	const load: Load = function({ page: { params }, stuff }) {
+		const manifest: Manifest = stuff.manifest;
 		const imageId = params.imageId;
-		const manifest = await $manifestStore;
 		const [_, image] = Object.entries(manifest.Albums)
 			.flatMap(([_, album]) => Object.entries(album.Images))
 			.find(([key]) => key === imageId);
-		src = image.Hrefs[HighResHref];
-		debugger;
-	}
+		const href = image.Hrefs[HighResHref]; 
+		src = `${StorageBaseUrl}/${href}`;
+
+		return {};
+	};
+
+	export { load };
 </script>
 
 <!-- svelte-ignore a11y-missing-attribute -->
