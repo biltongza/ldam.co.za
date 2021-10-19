@@ -2,7 +2,7 @@
 	<div class="brand"><a href="/"><h3>LOGAN DAM</h3></a></div>
 	<div class="links">
         <nav>
-            <a href="/about">About</a>
+            <a sveltekit:prefetch href="/about">About</a>
         </nav>
 		<div class="socials">
 			<sl-tooltip content="Github">
