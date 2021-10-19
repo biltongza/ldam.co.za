@@ -1,8 +1,0 @@
-@inherits NavLink
-
-<sl-button type="text" @attributes="AdditionalAttributes" class="@AppliedCssClass">@ChildContent</sl-button>
-
-@code {
-    const string DefaultClass = "nav-link";
-    protected string AppliedCssClass => !string.IsNullOrWhiteSpace(base.CssClass) ? $"{DefaultClass} {base.CssClass}" : DefaultClass;
-}
