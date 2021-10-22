@@ -1,15 +1,23 @@
 html,
 body {
-  font-family: pt-sans-pro, sans-serif;
-  margin-left: var(--sl-spacing-small);
-  margin-right: var(--sl-spacing-small);
-  margin-bottom: var(--sl-spacing-large);
+	font-family: pt-sans-pro, sans-serif;
+	margin-left: var(--sl-spacing-small);
+	margin-right: var(--sl-spacing-small);
+	margin-bottom: var(--sl-spacing-large);
 }
 
 @media only screen and (min-width: 1224px) {
-  html,
-  body {
-    margin-left: var(--sl-spacing-2x-large);
-    margin-right: var(--sl-spacing-2x-large);
-  }
+	html,
+	body {
+		margin-left: var(--sl-spacing-2x-large);
+		margin-right: var(--sl-spacing-2x-large);
+	}
+}
+
+.header a,
+.header a:hover,
+.header a:visited,
+.header a:active {
+	color: inherit;
+	text-decoration: none;
 }

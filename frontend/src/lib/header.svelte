@@ -1,8 +1,12 @@
+<script>
+	import RouterLink from './router-link.svelte';
+</script>
+
 <div class="header">
 	<div class="brand"><a href="/"><h3>LOGAN DAM</h3></a></div>
 	<div class="links">
 		<nav>
-			<a sveltekit:prefetch href="/about">About</a>
+			<RouterLink path="/about">About</RouterLink>
 		</nav>
 		<div class="socials">
 			<sl-icon-button
@@ -39,14 +43,6 @@
 		justify-content: space-between;
 		align-items: center;
 		height: 60px;
-	}
-
-	a,
-	a:hover,
-	a:visited,
-	a:active {
-		color: inherit;
-		text-decoration: none;
 	}
 
 	.links {
