@@ -5,25 +5,25 @@ using Microsoft.Extensions.Logging;
 
 namespace ldam.co.za.fnapp.Functions
 {
-    public class RefreshImagesFunc
+    public class RefreshImagesTimer
     {
         private readonly SyncService syncService;
 
-        public RefreshImagesFunc(SyncService syncService)
+        public RefreshImagesTimer(SyncService syncService)
         {
             this.syncService = syncService;
         }
 
-        [Function(nameof(RefreshImagesFunc))]
-        public async Task Run([TimerTrigger("0 */5 * * * *")] TimerInfo timerInfo, FunctionContext functionContext)
+        [Function(nameof(RefreshImagesTimer))]
+        public async Task Run([TimerTrigger("0 */30 * * * *")] TimerInfo timerInfo, FunctionContext functionContext)
         {
-            var logger = functionContext.GetLogger<RefreshImagesFunc>();
+            var logger = functionContext.GetLogger<RefreshImagesTimer>();
             if(timerInfo.IsPastDue)
             {
                 logger.LogInformation("Timer is late, skipping");
                 return;
             }
-            await syncService.SyncImages();
+            await syncService.Synchronize(force: false);
         }
     }
 }

@@ -56,12 +56,6 @@ namespace ldam.co.za.fnapp.Services
                 after = !string.IsNullOrWhiteSpace(afterHref) ? afterHref.Substring(afterHref.IndexOf('=')) : null;
                 foreach (var asset in albumAssetResponse.Resources)
                 {
-                    var exposureTimeArray = asset.Asset.Payload.Xmp.Exif.ExposureTime;
-                    var exposureNumerator = exposureTimeArray[0];
-                    var exposureDivisor = exposureTimeArray[1];
-                    var exposureTime = exposureNumerator == 1 && exposureDivisor > 1 ? $"1/{exposureDivisor}s" : $"{exposureNumerator / exposureDivisor}s";
-                    var apertureArray = asset.Asset.Payload.Xmp.Exif.FNumber;
-                    var aperture = apertureArray[0] / apertureArray[1];
                     var make = asset.Asset.Payload.Xmp.Tiff.Make;
                     var model = asset.Asset.Payload.Xmp.Tiff.Model;
                     yield return new ImageInfo
@@ -70,10 +64,10 @@ namespace ldam.co.za.fnapp.Services
                         FileName = asset.Asset.Payload.ImportSource.FileName,
                         CaptureDate = asset.Asset.Payload.CaptureDate,
                         FileSize = asset.Asset.Payload.ImportSource.FileSize,
-                        ShutterSpeed = exposureTime.ToString(),
-                        FNumber = $"f/{aperture}",
-                        FocalLength = $"{asset.Asset.Payload.Xmp.Exif.FocalLength.First()}mm",
-                        ISO = asset.Asset.Payload.Xmp.Exif.ISOSpeedRatings.ToString(),
+                        ShutterSpeed = asset.Asset.Payload.Xmp.Exif.ExposureTime,
+                        FNumber = asset.Asset.Payload.Xmp.Exif.FNumber,
+                        FocalLength = asset.Asset.Payload.Xmp.Exif.FocalLength.First(),
+                        ISO = asset.Asset.Payload.Xmp.Exif.ISOSpeedRatings,
                         Lens = asset.Asset.Payload.Xmp.Aux.Lens,
                         Make = make,
                         Model = model,
