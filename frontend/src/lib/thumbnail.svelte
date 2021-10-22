@@ -39,5 +39,6 @@
 		width: 100%;
 		height: 100%;
 		object-fit: contain;
+		max-height: 85vh;
 	}
 </style>
