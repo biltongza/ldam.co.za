@@ -11,16 +11,14 @@
 
 <a href={path} class:active={matches}><slot /></a>
 
-<style lang="scss">
-    a {
-        &.active {
-            border-bottom: 1px solid black;
-            &:hover {
-                border-bottom-color: rgb(var(--sl-color-primary-600));
-            }
-        }
-        &:hover {
-            color: rgb(var(--sl-color-primary-600));
-        }
+<style>
+    a.active {
+        border-bottom: 1px solid black;
+    }
+    a.active:hover {
+        border-bottom-color: rgb(var(--sl-color-primary-600));
+    }
+    a:hover {
+        color: rgb(var(--sl-color-primary-600));
     }
 </style>
