@@ -19,7 +19,7 @@
 		</p>
 	</div>
 
-	<img src="/Selfie.jpg" class="selfie" />
+	<img src="/Selfie.jpg" class="selfie" alt="Portrait of Logan Dam" />
 </div>
 
 <style>
