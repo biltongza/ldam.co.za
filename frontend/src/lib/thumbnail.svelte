@@ -40,5 +40,8 @@
 		height: 100%;
 		object-fit: contain;
 		max-height: 85vh;
+		background-image: url('/tail-spin.svg');
+		background-repeat: no-repeat;
+		background-position: center;
 	}
 </style>

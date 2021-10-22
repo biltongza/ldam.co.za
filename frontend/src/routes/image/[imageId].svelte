@@ -57,6 +57,9 @@
 	.image {
 		object-fit: contain;
 		justify-content: center;
+		background-image: url('/tail-spin.svg');
+		background-repeat: no-repeat;
+		background-position: center;
 	}
 
 	.metadata {
