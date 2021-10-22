@@ -20,10 +20,7 @@
 </script>
 
 <div class="image-container">
-	<!-- svelte-ignore a11y-missing-attribute -->
-	<sl-responsive-media class="image" aspect-ratio={metadata.AspectRatio} fit="contain">
-		<img {src} />
-	</sl-responsive-media>
+	<img class="image" {src} alt={metadata.Caption} />
 	<div class="metadata">
 		{#if metadata.Title}
 			<h3>{metadata.Title}</h3>
@@ -58,7 +55,8 @@
 
 <style>
 	.image {
-		flex: 3 1 auto;
+		object-fit: contain;
+		justify-content: center;
 	}
 
 	.metadata {
@@ -74,6 +72,7 @@
 	@media only screen and (min-width: 768px) {
 		.image-container {
 			flex-direction: row;
+			height: 90vh;
 		}
 	}
 
