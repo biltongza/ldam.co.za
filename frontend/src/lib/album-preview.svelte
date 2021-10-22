@@ -27,17 +27,22 @@
 <style>
 	.thumbnail-container {
 		display: grid;
-		max-width: 1200px;
-		margin-left: auto;
-		margin-right: auto;
-		column-gap: var(--sl-spacing-xx-large);
+		column-gap: var(--sl-spacing-2x-large);
 		row-gap: var(--sl-spacing-large);
 		place-items: center;
+		justify-content: center;
 	}
 
 	@media only screen and (min-width: 768px) {
 		.thumbnail-container {
-			grid-template-columns: repeat(3, 1fr);
+			grid-auto-rows: 320px;
+			grid-template-columns: repeat(2, fit-content(320px));
+		}
+	}
+
+	@media only screen and (min-width: 1030px) {
+		.thumbnail-container {
+			grid-template-columns: repeat(3, fit-content(320px));
 		}
 	}
 </style>

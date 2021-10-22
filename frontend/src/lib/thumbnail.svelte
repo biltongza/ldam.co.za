@@ -1,33 +1,43 @@
+<script context="module" lang="ts">
+	const thumbnailSizes = {
+		thumbnail2x: '320w',
+		'640': '640w'
+	};
+</script>
+
 <script lang="ts">
 	import type { ImageMetadata } from './manifest';
-	import { MaxDimensionHighDensity,MaxDimensionNormalDensity,StorageBaseUrl,ThumbnailHrefHighDensity,ThumbnailHrefNormalDensity } from './__consts';
+	import {
+	StorageBaseUrl,
+	ThumbnailHrefNormalDensity
+	} from './__consts';
 
 	export let image: ImageMetadata = undefined;
 	let imageRoute: string;
 	let src: string;
-	let width: number;
-	let height: number;
+	let srcSet: string;
 
 	$: {
 		imageRoute = `/image/${image.Id}`;
-		const maxDimension =
-			window.devicePixelRatio > 1 ? MaxDimensionHighDensity : MaxDimensionNormalDensity;
-		const ratio = Math.min(maxDimension / image.Width, maxDimension / image.Height);
-		width = image.Width * ratio;
-		height = image.Height * ratio;
-        const thumbnailHrefKey = window.devicePixelRatio > 1 ? ThumbnailHrefHighDensity : ThumbnailHrefNormalDensity;
-        src = `${StorageBaseUrl}/${image.Hrefs[thumbnailHrefKey]}`;
+		src = `${StorageBaseUrl}/${image.Hrefs[ThumbnailHrefNormalDensity]}`;
+		srcSet = Object.entries(thumbnailSizes).map(([key, value]) => `${StorageBaseUrl}/${image.Hrefs[key]} ${value}`).join(', ');
 	}
 </script>
 
 <a href={imageRoute}>
 	<!-- svelte-ignore a11y-missing-attribute -->
-	<img
-		{src}
-		class="thumbnail"
-		loading="lazy"
-		style="max-width: {width}; max-height: {height}"
-		{width}
-		{height}
-	/>
+	<img {src} class="thumbnail" loading="lazy" {srcSet}/>
 </a>
+
+<style>
+	a {
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+	.thumbnail {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+</style>
