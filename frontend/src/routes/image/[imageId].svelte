@@ -60,6 +60,9 @@
 		background-image: url('/tail-spin.svg');
 		background-repeat: no-repeat;
 		background-position: center;
+		height: 100%;
+		width: 100%;
+		max-height: 85vh;
 	}
 
 	.metadata {
