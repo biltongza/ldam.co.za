@@ -1,17 +1,17 @@
 using System;
-using Xunit;
-using Moq;
-using ldam.co.za.fnapp.Services;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using ldam.co.za.fnapp;
 using System.Collections.Generic;
-using System.Linq;
 using System.IO;
+using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using ldam.co.za.contracts;
-using System.Text.Json;
+using ldam.co.za.fnapp;
+using ldam.co.za.fnapp.Services;
 using ldam.co.za.lib.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Moq;
+using Xunit;
 
 namespace ldam.co.za.fnapp.Tests
 {
@@ -22,16 +22,19 @@ namespace ldam.co.za.fnapp.Tests
         private readonly Mock<IConfiguration> mockConfiguration = new();
         private readonly Mock<IStorageService> mockStorageService = new();
         private readonly Mock<ILogger<SyncService>> mockLogger = new();
+        private readonly Mock<IMetadataService> mockMetadataService = new();
         private readonly SyncService syncService;
         public ImageSyncTests()
         {
             mockConfiguration.Setup(x => x[Constants.Configuration.Adobe.AlbumIds]).Returns("testalbum1");
             mockConfiguration.Setup(x => x[Constants.Configuration.Adobe.SizesToSync]).Returns("2048");
+            mockMetadataService.Setup(x => x.MapAdobeMetadataToManifestMetadata(It.IsAny<ImageInfo>())).Returns(new ImageMetadata());
             syncService = new SyncService(
                 mockLightroomService.Object,
                 mockConfiguration.Object,
                 mockStorageService.Object,
-                mockLogger.Object
+                mockLogger.Object,
+                mockMetadataService.Object
             );
         }
 
@@ -48,7 +51,7 @@ namespace ldam.co.za.fnapp.Tests
 
             mockStorageService.Setup(x => x.Get(ManifestName)).Returns(Task.FromResult(Stream.Null));
 
-            await syncService.SyncImages();
+            await syncService.Synchronize(false);
 
             mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<bool>()), Times.Once);
         }
@@ -87,7 +90,7 @@ namespace ldam.co.za.fnapp.Tests
 
             mockStorageService.Setup(x => x.Get(ManifestName)).Returns(Task.FromResult(serialisedManifest));
 
-            await syncService.SyncImages();
+            await syncService.Synchronize(false);
 
             mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<bool>()), Times.Never);
         }
@@ -102,8 +105,8 @@ namespace ldam.co.za.fnapp.Tests
 
             var adobeImages = new List<ImageInfo>
             {
-                new ImageInfo { AssetId = "image1", Width = 1, Height = 1 },
-                new ImageInfo { AssetId = "image2", Width = 1, Height = 1 },
+                new ImageInfo { AssetId = "image1", Width = 1, Height = 1, ShutterSpeed = new int[2] {1,1}, FNumber = new int[2] {1,1}, CaptureDate = default },
+                new ImageInfo { AssetId = "image2", Width = 1, Height = 1, ShutterSpeed = new int[2] {1,1}, FNumber = new int[2] {1,1}, CaptureDate = default },
             };
 
             var mockManifest = new Manifest
@@ -125,9 +128,11 @@ namespace ldam.co.za.fnapp.Tests
                 .Setup(x => x.GetImageList(It.IsAny<string>()))
                 .Returns(adobeImages.ToAsyncEnumerable());
 
+            mockLightroomService.Setup(x => x.GetImageStream(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<Stream>(new MemoryStream()));
+
             mockStorageService.Setup(x => x.Get(ManifestName)).Returns(Task.FromResult(serialisedManifest));
 
-            await syncService.SyncImages();
+            await syncService.Synchronize(false);
 
             mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<bool>()), Times.Once);
         }
@@ -163,7 +168,7 @@ namespace ldam.co.za.fnapp.Tests
 
             mockStorageService.Setup(x => x.Get(ManifestName)).Returns(Task.FromResult(serialisedManifest));
 
-            await syncService.SyncImages();
+            await syncService.Synchronize(false);
 
             mockStorageService.Verify(x => x.DeleteBlobsStartingWith("image1"), Times.Once);
         }
