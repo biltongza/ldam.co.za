@@ -10,5 +10,6 @@
         "logLevel": {
             "default": "Information"
         }
-    }
+    },
+    "functionTimeout": "00:10:00"
 }
