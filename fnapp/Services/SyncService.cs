@@ -70,48 +70,58 @@ namespace ldam.co.za.fnapp.Services
                         Id = album.Key,
                         Title = album.Value,
                     };
-                    manifest.Albums.Add(album.Key, manifestAlbum);
+                    lock (manifest.Albums)
+                    {
+                        manifest.Albums.Add(album.Key, manifestAlbum);
+                    }
                     manifestModified = true;
                 }
 
                 var imageInfos = lightroomService.GetImageList(album.Key);
                 var albumImageIds = new List<string>();
-                await foreach (var imageInfo in imageInfos)
+                await foreach (var batch in imageInfos.Buffer(10))
                 {
-                    albumImageIds.Add(imageInfo.AssetId);
-                    bool syncImage = false;
-                    if (!manifestAlbum.Images.TryGetValue(imageInfo.AssetId, out var manifestImageInfo))
+                    foreach (var imageInfo in batch)
                     {
-                        logger.LogInformation("Asset {assetId} is not present in manifest, syncing", imageInfo.AssetId);
-                        
-                        var metadata = metadataService.MapAdobeMetadataToManifestMetadata(imageInfo);
-                        
-                        manifestAlbum.Images.Add(imageInfo.AssetId, metadata);
-                        manifestImageInfo = metadata;
-                        manifestModified = true;
-                        syncImage = true;
-                    }
-
-                    if (manifestImageInfo.LastModified != imageInfo.LastModified)
-                    {
-                        logger.LogInformation("Timestamp of asset {assetId} does not match manifest, syncing", imageInfo.AssetId);
-                        manifestImageInfo.LastModified = imageInfo.LastModified;
-                        syncImage = true;
-                    }
-
-                    if (syncImage)
-                    {
-                        foreach (var size in sizesToSync)
+                        albumImageIds.Add(imageInfo.AssetId);
+                        bool syncImage = false;
+                        if (!manifestAlbum.Images.TryGetValue(imageInfo.AssetId, out var manifestImageInfo))
                         {
-                            using var imageStream = await lightroomService.GetImageStream(imageInfo.AssetId, size);
-                            logger.LogInformation("Setting image metadata {size}", size);
-                            using var updatedMetadataStream = await metadataService.SetImageMetadata(imageStream, imageInfo);
+                            logger.LogInformation("Asset {assetId} is not present in manifest, syncing", imageInfo.AssetId);
 
-                            var imageName = $"{imageInfo.AssetId}.{size}.jpg";
-                            await storageService.Store(imageName, updatedMetadataStream);
-                            manifestImageInfo.Hrefs.TryAdd(size, imageName);
+                            var metadata = metadataService.MapAdobeMetadataToManifestMetadata(imageInfo);
+
+                            lock (manifestAlbum.Images)
+                            {
+                                manifestAlbum.Images.Add(imageInfo.AssetId, metadata);
+                            }
+                            manifestImageInfo = metadata;
                             manifestModified = true;
-                            logger.LogInformation("Synced {imageName}", imageName);
+                            syncImage = true;
+                        }
+
+                        if (manifestImageInfo.LastModified != imageInfo.LastModified)
+                        {
+                            logger.LogInformation("Timestamp of asset {assetId} does not match manifest, syncing", imageInfo.AssetId);
+                            manifestImageInfo.LastModified = imageInfo.LastModified;
+                            syncImage = true;
+                        }
+
+                        if (syncImage)
+                        {
+                            var imageSyncTasks = sizesToSync.Select(async size =>
+                            {
+                                using var imageStream = await lightroomService.GetImageStream(imageInfo.AssetId, size);
+                                logger.LogInformation("Setting image {assetId} metadata {size}", imageInfo.AssetId, size);
+                                using var updatedMetadataStream = await metadataService.SetImageMetadata(imageStream, imageInfo);
+
+                                var imageName = $"{imageInfo.AssetId}.{size}.jpg";
+                                await storageService.Store(imageName, updatedMetadataStream);
+                                manifestImageInfo.Hrefs.TryAdd(size, imageName);
+                                manifestModified = true;
+                                logger.LogInformation("Synced {imageName}", imageName);
+                            });
+                            await Task.WhenAll(imageSyncTasks);
                         }
                     }
                 }
