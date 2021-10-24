@@ -5,6 +5,7 @@ using ldam.co.za.lib.Lightroom;
 using System.Net.Http;
 using ldam.co.za.fnapp.Services;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights.Extensibility;
 
 namespace ldam.co.za.fnapp
 {
@@ -17,6 +18,7 @@ namespace ldam.co.za.fnapp
                 .ConfigureServices((hostBuilder, services) =>
                 {
                     var config = hostBuilder.Configuration;
+                    services.AddApplicationInsightsTelemetryWorkerService();
                     services.AddTransient<ISecretService, SecretService>((_) => new SecretService(config[lib.Constants.Configuration.Azure.KeyVaultUri]));
 
                     services.AddTransient<IAccessTokenProvider, AccessTokenProvider>();
