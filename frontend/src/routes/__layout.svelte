@@ -6,7 +6,7 @@
 	let manifest: Manifest;
 	const load: Load = async function ({ fetch }) {
 		if (!manifest) {
-			const response = await fetch(`${StorageBaseUrl}/manifest.json`);
+			const response = await fetch(`${StorageBaseUrl}/manifest.json?t=${new Date().valueOf()}`);
 			if (!response.ok) {
 				return {
 					status: response.status,
