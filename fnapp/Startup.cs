@@ -16,7 +16,7 @@ namespace ldam.co.za.fnapp
             var services = builder.Services;
 
             var config = builder.GetContext().Configuration;
-            services.AddApplicationInsightsTelemetryWorkerService();
+            services.AddMemoryCache();
             services.AddTransient<ISecretService, SecretService>((_) => new SecretService(config[lib.Constants.Configuration.Azure.KeyVaultUri]));
 
             services.AddTransient<IAccessTokenProvider, AccessTokenProvider>();
@@ -24,7 +24,8 @@ namespace ldam.co.za.fnapp
                 .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
                 {
                     AllowAutoRedirect = true,
-                });
+                })
+                .RedactLoggedHeaders(new string[] {"Bearer"});
 
             services.AddTransient<ILightroomClient, LightroomClient>((svp) =>
             {
