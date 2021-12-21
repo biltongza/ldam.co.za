@@ -25,7 +25,7 @@ namespace ldam.co.za.fnapp
                 {
                     AllowAutoRedirect = true,
                 })
-                .RedactLoggedHeaders(new string[] {"Authorization"});
+                .RedactLoggedHeaders(new string[] {"Authorization", "X-API-KEY"});
 
             services.AddTransient<ILightroomClient, LightroomClient>((svp) =>
             {
