@@ -75,7 +75,7 @@ namespace ldam.co.za.fnapp.Services
             image.Metadata.ExifProfile.SetValue(ExifTag.DateTimeOriginal, imageInfo.CaptureDate.ToString(ExifDateFormat));
             image.Metadata.ExifProfile.SetValue(ExifTag.ApertureValue, new Rational((uint)imageInfo.FNumber[0], (uint)imageInfo.FNumber[1]));
 
-            var updatedStream = new MemoryStream(1024 * 100);
+            var updatedStream = new MemoryStream();
             await image.SaveAsJpegAsync(updatedStream, this.encoder);
             updatedStream.Seek(0, SeekOrigin.Begin);
             return updatedStream;
