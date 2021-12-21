@@ -22,7 +22,7 @@ namespace ldam.co.za.fnapp.Services
         public LightroomService(ILightroomClient lightroomClient)
         {
             this.lightroomClient = lightroomClient;
-            catalog = new Lazy<CatalogResponse>(() => lightroomClient.GetCatalog().Result);
+            catalog = new Lazy<CatalogResponse>(() => lightroomClient.GetCatalog().GetAwaiter().GetResult());
         }
 
         public async IAsyncEnumerable<KeyValuePair<string, string>> GetAlbums()
