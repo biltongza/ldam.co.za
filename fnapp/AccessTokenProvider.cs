@@ -44,7 +44,7 @@ namespace ldam.co.za.fnapp
                 var expires_in = long.Parse(jwt.Claims.Single(x => x.Type == "expires_in").Value);
                 var createdTime = DateTimeOffset.FromUnixTimeMilliseconds(created_at);
                 var expiresTime = createdTime.AddMilliseconds(expires_in);
-                memoryCache.Set(key, expiresTime.Subtract(TimeSpan.FromMinutes(5)));
+                memoryCache.Set(key, accessToken, expiresTime.Subtract(TimeSpan.FromMinutes(5)));
             }
             return accessToken;
         }
