@@ -25,7 +25,7 @@ namespace ldam.co.za.fnapp
                 {
                     AllowAutoRedirect = true,
                 })
-                .RedactLoggedHeaders(new string[] {"Bearer"});
+                .RedactLoggedHeaders(new string[] {"Authorization"});
 
             services.AddTransient<ILightroomClient, LightroomClient>((svp) =>
             {
