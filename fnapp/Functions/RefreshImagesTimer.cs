@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using ldam.co.za.fnapp.Services;
-using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 
 namespace ldam.co.za.fnapp.Functions
@@ -14,10 +14,9 @@ namespace ldam.co.za.fnapp.Functions
             this.syncService = syncService;
         }
 
-        [Function(nameof(RefreshImagesTimer))]
-        public async Task Run([TimerTrigger("0 */30 * * * *")] TimerInfo timerInfo, FunctionContext functionContext)
+        [FunctionName(nameof(RefreshImagesTimer))]
+        public async Task Run([TimerTrigger("0 */30 * * * *")] TimerInfo timerInfo, ILogger logger)
         {
-            var logger = functionContext.GetLogger<RefreshImagesTimer>();
             if(timerInfo.IsPastDue)
             {
                 logger.LogInformation("Timer is late, skipping");

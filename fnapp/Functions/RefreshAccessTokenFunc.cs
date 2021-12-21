@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using ldam.co.za.fnapp.Services;
-using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Logging;
 
 namespace ldam.co.za.fnapp.Functions
 {
@@ -12,8 +13,8 @@ namespace ldam.co.za.fnapp.Functions
             this.refreshTokenService = refreshTokenService;
         }
 
-        [Function(nameof(RefreshAccessTokenFunc))]
-        public async Task Run([TimerTrigger("0 */5 * * * *")] TimerInfo timerInfo, FunctionContext functionContext)
+        [FunctionName(nameof(RefreshAccessTokenFunc))]
+        public async Task Run([TimerTrigger("0 */5 * * * *")] TimerInfo timerInfo, ILogger logger)
         {
             await refreshTokenService.RefreshAccessToken();
         }

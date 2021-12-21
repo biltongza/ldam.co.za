@@ -1,7 +1,8 @@
 using System.Threading.Tasks;
 using ldam.co.za.fnapp.Services;
-using Microsoft.Azure.Functions.Worker;
-using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 
 namespace ldam.co.za.fnapp.Functions
@@ -15,13 +16,11 @@ namespace ldam.co.za.fnapp.Functions
             this.syncService = syncService;
         }
 
-        [Function(nameof(ManualImageSync))]
-        public async Task Run([HttpTrigger(authLevel: AuthorizationLevel.Function, "post")] HttpRequestData req, FunctionContext context)
+        [FunctionName(nameof(ManualImageSync))]
+        public async Task Run([HttpTrigger(authLevel: AuthorizationLevel.Function, "post")] HttpRequest req, ILogger logger)
         {
-            var logger = context.GetLogger<ManualImageSync>();
             logger.LogInformation("Manual sync requested");
-            var query = System.Web.HttpUtility.ParseQueryString(req.Url.Query);
-            bool.TryParse(query["force"], out bool force);
+            bool.TryParse(req.Query["force"], out bool force);
             await syncService.Synchronize(force);
         }
     }
