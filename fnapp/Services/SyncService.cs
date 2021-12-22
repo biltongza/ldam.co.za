@@ -45,17 +45,18 @@ namespace ldam.co.za.fnapp.Services
             Manifest manifest = null;
             bool manifestModified = false;
             var manifestName = "manifest.json";
-            var manifestStream = await storageService.Get(manifestName);
-            if (manifestStream == Stream.Null || force)
+            using (var manifestStream = await storageService.Get(manifestName))
             {
-                manifest = new Manifest();
-                manifestModified = true;
+                if (manifestStream == Stream.Null || force)
+                {
+                    manifest = new Manifest();
+                    manifestModified = true;
+                }
+                else
+                {
+                    manifest = await JsonSerializer.DeserializeAsync<Manifest>(manifestStream);
+                }
             }
-            else
-            {
-                manifest = await JsonSerializer.DeserializeAsync<Manifest>(manifestStream);
-            }
-
             var albumsToSync = await lightroomService.GetAlbums()
                 .Where(album => albumIdsToSync.Contains(album.Key))
                 .ToListAsync();
