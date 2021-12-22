@@ -141,8 +141,8 @@ namespace ldam.co.za.fnapp.Services
             if (manifestModified)
             {
                 manifest.LastModified = DateTime.Now;
-                var serializedManifest = JsonSerializer.SerializeToUtf8Bytes(manifest);
-                using var serializedStream = new MemoryStream(serializedManifest);
+                using var serializedStream = new MemoryStream();
+                var serializedManifest = JsonSerializer.SerializeAsync(serializedStream, manifest);
                 await storageService.Store(manifestName, serializedStream);
                 logger.LogInformation("Manifest {manifestName} updated", manifestName);
             }
