@@ -5,10 +5,13 @@
             "samplingExcludedTypes": "Request",
             "samplingSettings": {
                 "isEnabled": true
+            },
+            "snapshotConfiguration": {
+                "isEnabled": true
             }
         },
         "logLevel": {
-            "default": "Trace"
+            "default": "Information"
         }
     },
     "functionTimeout": "00:10:00"
