@@ -15,7 +15,7 @@
 
 <div>
 	<div class="album-list">
-		{#each Object.entries(manifest.Albums) as [album_key, album_value] (album_key)}
+		{#each Object.entries(manifest.albums) as [album_key, album_value] (album_key)}
 			<AlbumPreview album={album_value} />
 		{/each}
 	</div>

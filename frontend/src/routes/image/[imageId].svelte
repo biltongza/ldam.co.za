@@ -8,10 +8,10 @@
 	const load: Load = function ({ page: { params }, stuff }) {
 		const manifest: Manifest = stuff.manifest;
 		const imageId = params.imageId;
-		[, metadata] = Object.entries(manifest.Albums)
-			.flatMap(([_, album]) => Object.entries(album.Images))
+		[, metadata] = Object.entries(manifest.albums)
+			.flatMap(([_, album]) => Object.entries(album.images))
 			.find(([key]) => key === imageId);
-		const href = metadata.Hrefs[HighResHref];
+		const href = metadata.hrefs[HighResHref];
 		src = `${StorageBaseUrl}/${href}`;
 		return {};
 	};
@@ -20,34 +20,34 @@
 </script>
 
 <div class="image-container">
-	<img class="image" {src} alt={metadata.Caption} />
+	<img class="image" {src} alt={metadata.caption} />
 	<div class="metadata">
-		{#if metadata.Title}
-			<h3>{metadata.Title}</h3>
+		{#if metadata.title}
+			<h3>{metadata.title}</h3>
 		{/if}
-		{#if metadata.Caption}
-			<h4>{metadata.Caption}</h4>
+		{#if metadata.caption}
+			<h4>{metadata.caption}</h4>
 		{/if}
 		<div class="date-info">
 			<sl-icon name="calendar-event"></sl-icon>
 			<div class="content">
-				<span>{new Date(metadata.CaptureDate).toLocaleDateString()}</span>
+				<span>{new Date(metadata.captureDate).toLocaleDateString()}</span>
 			</div>
 		</div>
 		<div class="camera-info">
 			<sl-icon library="ionicons" name="camera-outline"></sl-icon>
 			<div class="content">
-				<div>{metadata.CameraModel}</div>
-				<div>{metadata.Lens}</div>
+				<div>{metadata.cameraModel}</div>
+				<div>{metadata.lens}</div>
 			</div>
 		</div>
 		<div class="exposure-info">
 			<sl-icon library="ionicons" name="aperture-outline"></sl-icon>
 			<div class="content">
-				<span>ISO {metadata.ISO}</span>
-				<span>{metadata.FocalLength}</span>
-				<span>{metadata.FNumber}</span>
-				<span>{metadata.ShutterSpeed}</span>
+				<span>ISO {metadata.iso}</span>
+				<span>{metadata.focalLength}</span>
+				<span>{metadata.fNumber}</span>
+				<span>{metadata.shutterSpeed}</span>
 			</div>
 		</div>
 	</div>

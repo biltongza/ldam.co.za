@@ -4,11 +4,11 @@
 	export let album: Album;
 	export let numberOfImages: number = Number.MAX_SAFE_INTEGER;
 
-	const entries = Object.entries(album.Images).map(([, meta]) => meta);
+	const entries = Object.entries(album.images).map(([, meta]) => meta);
 	const images = entries
 		.sort((meta1, meta2) => {
-			const a = new Date(meta1.CaptureDate).valueOf();
-			const b = new Date(meta2.CaptureDate).valueOf();
+			const a = new Date(meta1.captureDate).valueOf();
+			const b = new Date(meta2.captureDate).valueOf();
 
 			return Number(b > a) - Number(b < a);
 		})
@@ -16,9 +16,9 @@
 </script>
 
 <div class="album-container">
-	<h3>{album.Title}</h3>
+	<h3>{album.title}</h3>
 	<div class="thumbnail-container">
-		{#each images as image (image.Id)}
+		{#each images as image (image.id)}
 			<Thumbnail {image} />
 		{/each}
 	</div>

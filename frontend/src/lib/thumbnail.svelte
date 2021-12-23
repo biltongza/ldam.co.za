@@ -18,9 +18,9 @@
 	let srcSet: string;
 
 	$: {
-		imageRoute = `/image/${image.Id}`;
-		src = `${StorageBaseUrl}/${image.Hrefs[ThumbnailHrefNormalDensity]}`;
-		srcSet = Object.entries(thumbnailSizes).map(([key, value]) => `${StorageBaseUrl}/${image.Hrefs[key]} ${value}`).join(', ');
+		imageRoute = `/image/${image.id}`;
+		src = `${StorageBaseUrl}/${image.hrefs[ThumbnailHrefNormalDensity]}`;
+		srcSet = Object.entries(thumbnailSizes).map(([key, value]) => `${StorageBaseUrl}/${image.hrefs[key]} ${value}`).join(', ');
 	}
 </script>
 

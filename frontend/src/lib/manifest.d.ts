@@ -1,29 +1,29 @@
 export interface ImageMetadata {
-    Id: string;
-    Hrefs: { [key: string]: string };
-    CaptureDate: Date;
-    CameraMake: string;
-    CameraModel: string;
-    FNumber: string;
-    ShutterSpeed: string;
-    FocalLength: string;
-    ISO: string;
-    Lens: string;
-    Title: string;
-    Caption: string;
-    LastModified: Date;
-    Width: number;
-    Height: number;
-    AspectRatio: string;
+    id: string;
+    hrefs: { [key: string]: string };
+    captureDate: Date;
+    cameraMake: string;
+    cameraModel: string;
+    fNumber: string;
+    shutterSpeed: string;
+    focalLength: string;
+    iso: string;
+    lens: string;
+    title: string;
+    caption: string;
+    lastModified: Date;
+    width: number;
+    height: number;
+    aspectRatio: string;
 }
 
 export interface Album {
-    Id: string;
-    Title: string;
-    Images: { [key: string]: ImageMetadata };
+    id: string;
+    title: string;
+    images: { [key: string]: ImageMetadata };
 }
 
 export interface Manifest {
-	LastModified: Date;
-	Albums: { [key: string]: Album };
+	lastModified: Date;
+	albums: { [key: string]: Album };
 }
