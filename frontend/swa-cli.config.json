@@ -1,0 +1,8 @@
+{
+	"configurations": {
+		"app": {
+			"context": "./build/static",
+			"apiLocation": "./api"
+		}
+	}
+}
