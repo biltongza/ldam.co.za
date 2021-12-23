@@ -4,6 +4,10 @@
         {
             "route": "/index.html",
             "rewrite": "/api/__render"
+        },
+        {
+            "route": "/Index.html",
+            "rewrite": "/api/__render"
         }
     ],
     "navigationFallback": {
