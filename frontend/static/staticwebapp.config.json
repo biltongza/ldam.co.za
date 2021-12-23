@@ -6,7 +6,7 @@
             "rewrite": "/api/__render"
         },
         {
-            "route": "/Index.html",
+            "route": "/",
             "rewrite": "/api/__render"
         }
     ],
