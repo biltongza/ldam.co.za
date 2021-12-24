@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ldam.co.za.lib.Services;
 using Microsoft.Extensions.Configuration;
 using AspNet.Security.OAuth.AdobeIO;
+using Microsoft.Extensions.Logging;
 
 namespace ldam.co.za.fnapp.Services
 {
@@ -17,12 +18,14 @@ namespace ldam.co.za.fnapp.Services
         private readonly IHttpClientFactory httpClientFactory;
         private readonly ISecretService secretService;
         private readonly IConfiguration configuration;
+        private readonly ILogger logger;
 
-        public LightroomTokenService(IHttpClientFactory httpClientFactory, ISecretService secretService, IConfiguration configuration)
+        public LightroomTokenService(IHttpClientFactory httpClientFactory, ISecretService secretService, IConfiguration configuration, ILogger<LightroomTokenService> logger)
         {
             this.httpClientFactory = httpClientFactory;
             this.secretService = secretService;
             this.configuration = configuration;
+            this.logger = logger;
         }
 
         public async Task UpdateAccessToken()
@@ -49,13 +52,15 @@ namespace ldam.co.za.fnapp.Services
             var newAccessToken = payload.RootElement.GetProperty("access_token").GetString();
             if (!string.IsNullOrEmpty(newAccessToken))
             {
+                logger.LogInformation("Updating access token");
                 await secretService.SetSecret(lib.Constants.KeyVault.LightroomAccessToken, newAccessToken);
             }
 
             var newRefreshToken = payload.RootElement.GetProperty("refresh_token").GetString();
             if (!string.IsNullOrEmpty(newRefreshToken))
             {
-                await secretService.SetSecret(lib.Constants.KeyVault.LightroomRefreshToken, newAccessToken);
+                logger.LogInformation("Updating refresh token");
+                await secretService.SetSecret(lib.Constants.KeyVault.LightroomRefreshToken, newRefreshToken);
             }
         }
 
