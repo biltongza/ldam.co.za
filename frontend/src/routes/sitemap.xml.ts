@@ -18,6 +18,7 @@ export async function get(): Promise<EndpointOutput<DefaultBody>> {
 	const manifest = (await response.json()) as Manifest;
 	const routes = ['about'];
 	const files = routes.map((route) => ({ route, stat: fs.statSync(`${path.join(__dirname, route)}.svelte`) }));
+  const imageRouteLastModified = fs.statSync(path.join(__dirname, 'image', '[imageId].svelte')).mtime;
 
 	return {
 		headers,
@@ -32,7 +33,7 @@ export async function get(): Promise<EndpointOutput<DefaultBody>> {
       >
       <url>
         <loc>${website}</loc>
-        <lastmod>${manifest.lastModified}</lastmod>
+        <lastmod>${new Date(manifest.lastModified).toISOString()}</lastmod>
       </url>
       ${
         files.map(({route, stat}) => `
@@ -46,7 +47,7 @@ export async function get(): Promise<EndpointOutput<DefaultBody>> {
 						([key, metadata]) => `
         <url>
           <loc>${website}/image/${key}</loc>
-          <lastmod>${metadata.lastModified}</lastmod>
+          <lastmod>${new Date(Math.max.apply(null, [imageRouteLastModified, new Date(metadata.lastModified)])).toISOString()}</lastmod>
         </url>`
 					);
 				})
