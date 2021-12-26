@@ -3,14 +3,21 @@ import type { Manifest } from '$lib/manifest';
 import { StorageBaseUrl } from '$lib/__consts';
 import type { EndpointOutput } from '@sveltejs/kit';
 import type { DefaultBody } from '@sveltejs/kit/types/endpoint';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export async function get(): Promise<EndpointOutput<DefaultBody>> {
 	const headers = {
 		'Cache-Control': 'max-age=0, s-maxage=3600',
 		'Content-Type': 'application/xml'
 	};
-  const response = await fetch(`${StorageBaseUrl}/manifest.json?t=${new Date().valueOf()}`);
-  const manifest = await response.json() as Manifest;
+	const response = await fetch(`${StorageBaseUrl}/manifest.json?t=${new Date().valueOf()}`);
+	const manifest = (await response.json()) as Manifest;
+	const routes = ['about'];
+	const files = routes.map((route) => ({ route, stat: fs.statSync(`${path.join(__dirname, route)}.svelte`) }));
 
 	return {
 		headers,
@@ -25,18 +32,25 @@ export async function get(): Promise<EndpointOutput<DefaultBody>> {
       >
       <url>
         <loc>${website}</loc>
-        <changefreq>daily</changefreq>
-        <priority>0.7</priority>
-        <lastmod>${new Date(manifest.lastModified).toISOString()}</lastmod>
+        <lastmod>${manifest.lastModified}</lastmod>
       </url>
-      ${Object.entries(manifest.albums).flatMap(([_, album]) => {
-        return Object.entries(album.images).map(([key]) => `
+      ${
+        files.map(({route, stat}) => `
+        <url>
+          <loc>${website}/${route}</loc>
+          <lastmod>${stat.mtime.toISOString()}</lastmod>
+        </url>`).join('')}
+      ${Object.entries(manifest.albums)
+				.flatMap(([, album]) => {
+					return Object.entries(album.images).map(
+						([key, metadata]) => `
         <url>
           <loc>${website}/image/${key}</loc>
-          <changefreq>daily</changefreq>
-          <priority>0.7</priority>
-        </url>`);
-      }).join('')}
+          <lastmod>${metadata.lastModified}</lastmod>
+        </url>`
+					);
+				})
+				.join('')}
       </urlset>`
 	};
 }
