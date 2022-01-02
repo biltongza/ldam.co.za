@@ -50,7 +50,7 @@
 				<span>{metadata.shutterSpeed}</span>
 			</div>
 		</div>
-		<div xmlns:cc="http://creativecommons.org/ns#">
+		<div>
 			This work is licensed under <a
 				href="http://creativecommons.org/licenses/by-nc/4.0/?ref=chooser-v1"
 				target="_blank"
@@ -59,12 +59,15 @@
 				>CC BY-NC 4.0<img
 					style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
 					src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"
+					alt="cc"
 				/><img
 					style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
 					src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"
+					alt="by"
 				/><img
 					style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
 					src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1"
+					alt="nc"
 				/></a
 			>
 		</div>
