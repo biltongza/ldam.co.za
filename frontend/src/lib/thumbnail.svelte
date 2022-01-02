@@ -25,8 +25,7 @@
 </script>
 
 <a href={imageRoute}>
-	<!-- svelte-ignore a11y-missing-attribute -->
-	<img {src} class="thumbnail" loading="lazy" {srcSet}/>
+	<img {src} class="thumbnail-image" loading="lazy" alt="" {srcSet}/>
 </a>
 
 <style>
@@ -35,7 +34,7 @@
 		width: 100%;
 		height: 100%;
 	}
-	.thumbnail {
+	.thumbnail-image {
 		width: 100%;
 		height: 100%;
 		object-fit: contain;

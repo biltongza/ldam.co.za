@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Album } from './manifest';
+	import type { Album,ImageMetadata } from './manifest';
 	import Thumbnail from './thumbnail.svelte';
 	export let album: Album;
 	export let numberOfImages: number = Number.MAX_SAFE_INTEGER;
@@ -13,36 +13,68 @@
 			return Number(b > a) - Number(b < a);
 		})
 		.slice(0, numberOfImages);
+
+	function getClassList(image: ImageMetadata): string {
+		const parts = image.aspectRatio.split(':').map(part => +part);
+		const isLandscape = parts[0] > parts[1];
+		return `thumbnail ${isLandscape ? 'span-col' : ''}`
+	}
 </script>
 
 <div class="album-container">
 	<h3>{album.title}</h3>
-	<div class="thumbnail-container">
+	<div class="thumbnails">
 		{#each images as image (image.id)}
-			<Thumbnail {image} />
+			<div class={getClassList(image)} >
+				<Thumbnail {image} />
+			</div>
 		{/each}
 	</div>
 </div>
 
 <style>
-	.thumbnail-container {
+	:root {
+		--thumbnail-width: 500px
+	}
+	.thumbnails {
+		line-height: 0;
 		display: grid;
-		column-gap: var(--sl-spacing-2x-large);
-		row-gap: var(--sl-spacing-large);
+		column-gap: var(--sl-spacing-small);
+		row-gap: var(--sl-spacing-small);
 		place-items: center;
 		justify-content: center;
+		grid-auto-flow: dense;
+	}
+
+	.thumbnail.span-col {
+		grid-column: span 2;
+	}
+	
+	.thumbnail:hover {
+		transform: scale(1.02);
+	}
+
+	@media only screen and (max-width: 640px) {
+		.thumbnail.span-col {
+			grid-column: initial;
+		}
 	}
 
 	@media only screen and (min-width: 768px) {
-		.thumbnail-container {
-			grid-auto-rows: 320px;
-			grid-template-columns: repeat(2, fit-content(320px));
+		.thumbnails {
+			grid-template-columns: repeat(3, fit-content(var(--thumbnail-width)));
 		}
 	}
 
 	@media only screen and (min-width: 1030px) {
-		.thumbnail-container {
-			grid-template-columns: repeat(3, fit-content(320px));
+		.thumbnails {
+			grid-template-columns: repeat(4, fit-content(var(--thumbnail-width)));
+		}
+	}
+
+	@media only screen and (min-width: 1200px) {
+		.thumbnails {
+			grid-template-columns: repeat(5, fit-content(var(--thumbnail-width)));
 		}
 	}
 </style>
