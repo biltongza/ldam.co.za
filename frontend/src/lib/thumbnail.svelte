@@ -1,7 +1,8 @@
 <script context="module" lang="ts">
 	const thumbnailSizes = {
 		thumbnail2x: '320w',
-		'640': '640w'
+		'640': '640w',
+		'1280': '1280w',
 	};
 </script>
 
