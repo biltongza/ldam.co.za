@@ -34,7 +34,7 @@
 
 <style>
 	:root {
-		--thumbnail-width: 500px
+		--thumbnail-size: 480px
 	}
 	.thumbnails {
 		line-height: 0;
@@ -44,6 +44,7 @@
 		place-items: center;
 		justify-content: center;
 		grid-auto-flow: dense;
+		grid-auto-rows: minmax(var(--thumbnail-size), max-content);
 	}
 
 	.thumbnail.span-col {
@@ -62,19 +63,13 @@
 
 	@media only screen and (min-width: 768px) {
 		.thumbnails {
-			grid-template-columns: repeat(3, fit-content(var(--thumbnail-width)));
-		}
-	}
-
-	@media only screen and (min-width: 1030px) {
-		.thumbnails {
-			grid-template-columns: repeat(4, fit-content(var(--thumbnail-width)));
+			grid-template-columns: repeat(4, fit-content(var(--thumbnail-size)));
 		}
 	}
 
 	@media only screen and (min-width: 1200px) {
 		.thumbnails {
-			grid-template-columns: repeat(5, fit-content(var(--thumbnail-width)));
+			grid-template-columns: repeat(6, fit-content(var(--thumbnail-size)));
 		}
 	}
 </style>
