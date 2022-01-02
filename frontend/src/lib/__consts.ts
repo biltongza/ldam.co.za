@@ -1,4 +1,4 @@
-export const StorageBaseUrl = 'https://ldamcoza.azureedge.net/portfolio';
+export const StorageBaseUrl = 'https://cdn.ldam.co.za/portfolio';
 export const MaxDimensionNormalDensity = 320;
 export const ThumbnailHrefNormalDensity = "thumbnail2x";
 export const MaxDimensionHighDensity = 640;
