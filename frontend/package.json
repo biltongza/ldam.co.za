@@ -2,8 +2,8 @@
   "name": "frontend",
   "version": "0.0.1",
   "scripts": {
-    "dev": "svelte-kit dev --port 5000",
-    "build": "svelte-kit build",
+    "dev": "node ./generate-last-modified-metadata.js && svelte-kit dev --port 5000",
+    "build": "node ./generate-last-modified-metadata.js && svelte-kit build",
     "preview": "svelte-kit preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
