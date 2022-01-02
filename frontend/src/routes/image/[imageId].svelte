@@ -29,26 +29,44 @@
 			<h4>{metadata.caption}</h4>
 		{/if}
 		<div class="date-info">
-			<sl-icon name="calendar-event"></sl-icon>
+			<sl-icon name="calendar-event" />
 			<div class="content">
 				<span>{new Date(metadata.captureDate).toLocaleDateString()}</span>
 			</div>
 		</div>
 		<div class="camera-info">
-			<sl-icon library="ionicons" name="camera-outline"></sl-icon>
+			<sl-icon library="ionicons" name="camera-outline" />
 			<div class="content">
 				<div>{metadata.cameraModel}</div>
 				<div>{metadata.lens}</div>
 			</div>
 		</div>
 		<div class="exposure-info">
-			<sl-icon library="ionicons" name="aperture-outline"></sl-icon>
+			<sl-icon library="ionicons" name="aperture-outline" />
 			<div class="content">
 				<span>ISO {metadata.iso}</span>
 				<span>{metadata.focalLength}</span>
 				<span>{metadata.fNumber}</span>
 				<span>{metadata.shutterSpeed}</span>
 			</div>
+		</div>
+		<div xmlns:cc="http://creativecommons.org/ns#">
+			This work is licensed under <a
+				href="http://creativecommons.org/licenses/by-nc/4.0/?ref=chooser-v1"
+				target="_blank"
+				rel="license noopener noreferrer"
+				style="display:inline-block;"
+				>CC BY-NC 4.0<img
+					style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+					src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"
+				/><img
+					style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+					src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"
+				/><img
+					style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+					src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1"
+				/></a
+			>
 		</div>
 	</div>
 </div>
