@@ -16,9 +16,9 @@
         border-bottom: 1px solid black;
     }
     a.active:hover {
-        border-bottom-color: rgb(var(--sl-color-primary-600));
+        border-bottom-color: var(--sl-color-primary-600);
     }
     a:hover {
-        color: rgb(var(--sl-color-primary-600));
+        color: var(--sl-color-primary-600);
     }
 </style>
