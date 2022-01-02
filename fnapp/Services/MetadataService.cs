@@ -4,6 +4,7 @@ using ldam.co.za.contracts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
+using SixLabors.ImageSharp.Metadata.Profiles.Iptc;
 
 namespace ldam.co.za.fnapp.Services
 {
@@ -64,7 +65,8 @@ namespace ldam.co.za.fnapp.Services
             using var image = await Image.LoadAsync(stream);
 
             image.Metadata.ExifProfile = new ExifProfile();
-            image.Metadata.ExifProfile.SetValue(ExifTag.Copyright, $"© Logan Dam {imageInfo.CaptureDate.Year}");
+            image.Metadata.ExifProfile.SetValue(ExifTag.Artist, "Logan Dam");
+            image.Metadata.ExifProfile.SetValue(ExifTag.Copyright, $"This work is licensed under CC BY-NC 4.0. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/4.0/");
             image.Metadata.ExifProfile.SetValue(ExifTag.FNumber, new Rational((uint)imageInfo.FNumber[0], (uint)imageInfo.FNumber[1]));
             image.Metadata.ExifProfile.SetValue(ExifTag.ISOSpeedRatings, new[] { (ushort)imageInfo.ISO });
             image.Metadata.ExifProfile.SetValue(ExifTag.ExposureTime, new Rational((uint)imageInfo.ShutterSpeed[0], (uint)imageInfo.ShutterSpeed[1]));
@@ -74,6 +76,13 @@ namespace ldam.co.za.fnapp.Services
             image.Metadata.ExifProfile.SetValue(ExifTag.LensModel, imageInfo.Lens);
             image.Metadata.ExifProfile.SetValue(ExifTag.DateTimeOriginal, imageInfo.CaptureDate.ToString(ExifDateFormat));
             image.Metadata.ExifProfile.SetValue(ExifTag.ApertureValue, new Rational((uint)imageInfo.FNumber[0], (uint)imageInfo.FNumber[1]));
+            image.Metadata.IptcProfile = new IptcProfile();
+            image.Metadata.IptcProfile.SetValue(IptcTag.CopyrightNotice, "This work is licensed under CC BY-NC 4.0. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/4.0/");
+            image.Metadata.IptcProfile.SetValue(IptcTag.Credit, "Logan Dam");
+            image.Metadata.IptcProfile.SetValue(IptcTag.Byline, "Logan Dam");
+            image.Metadata.IptcProfile.SetValue(IptcTag.Contact, "https://twitter.com/thebiltong");
+            image.Metadata.IptcProfile.SetValue(IptcTag.CreatedDate, imageInfo.CaptureDate.ToString("yyyyMMdd"));
+            image.Metadata.IptcProfile.SetValue(IptcTag.CreatedTime, imageInfo.CaptureDate.ToString("HHmmsszzz").Replace(":", ""));
 
             var updatedStream = new MemoryStream();
             await image.SaveAsJpegAsync(updatedStream, this.encoder);
