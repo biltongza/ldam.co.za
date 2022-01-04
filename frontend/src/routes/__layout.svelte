@@ -26,4 +26,21 @@
 </script>
 
 <Header />
-<slot />
+<div class="content">
+	<slot />
+</div>
+
+<style lang="scss">
+	.content {
+		margin-left: var(--sl-spacing-small);
+		margin-right: var(--sl-spacing-small);
+		margin-bottom: var(--sl-spacing-large);
+	}
+
+	@media only screen and (min-width: 1224px) {
+		.content {
+			margin-left: var(--sl-spacing-2x-large);
+			margin-right: var(--sl-spacing-2x-large);
+		}
+	}
+</style>

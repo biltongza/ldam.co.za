@@ -3,7 +3,7 @@
 </script>
 
 <div class="header">
-	<div class="brand"><a href="/"><h3>LOGAN DAM</h3></a></div>
+	<div class="brand"><a href="/"><h1>Logan Dam</h1></a></div>
 	<div class="links">
 		<nav>
 			<RouterLink path="/about">About</RouterLink>
@@ -43,11 +43,29 @@
 		justify-content: space-between;
 		align-items: center;
 		height: 60px;
+		background-color: var(--sl-color-neutral-100);
 	}
 
 	.links {
 		display: flex;
 		justify-content: flex-end;
 		align-items: center;
+	}
+
+	h1 {
+		text-transform: uppercase;
+		font-size: 100%;
+	}
+
+	.header {
+		padding-left: var(--sl-spacing-small);
+		padding-right: var(--sl-spacing-small);
+	}
+
+	@media only screen and (min-width: 1224px) {
+		.header {
+			padding-left: var(--sl-spacing-2x-large);
+			padding-right: var(--sl-spacing-2x-large);
+		}
 	}
 </style>

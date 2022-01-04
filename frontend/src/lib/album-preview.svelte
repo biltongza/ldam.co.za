@@ -22,7 +22,7 @@
 </script>
 
 <div class="album-container">
-	<h3>{album.title}</h3>
+	<h2>{album.title}</h2>
 	<div class="thumbnails">
 		{#each images as image (image.id)}
 			<div class={getClassList(image)} >
@@ -71,5 +71,9 @@
 		.thumbnails {
 			grid-template-columns: repeat(6, fit-content(var(--thumbnail-size)));
 		}
+	}
+
+	h2 {
+		text-align: center;
 	}
 </style>
