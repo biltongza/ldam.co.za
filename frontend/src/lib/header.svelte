@@ -44,6 +44,7 @@
 		align-items: center;
 		height: 60px;
 		background-color: var(--sl-color-neutral-100);
+		margin-bottom: var(--sl-spacing-small);
 	}
 
 	.links {
