@@ -1,21 +1,77 @@
 <script context="module">
-    export const prerender = true;
+	export const prerender = true;
 </script>
+
 <script>
 	let yearsInField = new Date().getFullYear() - 2013;
 </script>
 
 <div class="content">
 	<div class="blurb">
-		<h3>Hi. I'm Logan.</h3>
+		<h2>Hi. I'm Logan.</h2>
 		<p>
 			I'm a full time software engineer, with {yearsInField} years in the industry, with a strong technical
 			background in .NET and MSSQL. I have a passion for helping others realise their potential and enjoy
 			mentorship and elevating the abilities of my peers.
 		</p>
 		<p>
+			I am presently employed as a Technical Lead at <a
+				href="https://entelect.co.za/"
+				rel="noopener noreferrer"
+				target="">Entelect</a
+			> but this website and the views depicted on it are entirely my own.
+		</p>
+		<p>
 			I'm a hobbyist photographer in my free time. I enjoy capturing depth, colour, and detail, and
 			frequently use my photography to express my emotions.
+		</p>
+		<h3>My story</h3>
+		<p>
+			I have been interested in computers for as long as I can remember. My parents used to call me
+			square eyes because of how much time I spent in front of a computer screen. I absorb knowledge
+			on topics that interest me, so I quickly learnt how to use a computer and then spent the
+			greater part of my childhood gaming!
+		</p>
+		<p>
+			I started out learning how to create maps in Warcraft III, then later on made gamemodes and
+			scripts in Grand Theft Auto <a
+				href="https://www.sa-mp.com/"
+				target="_blank"
+				rel="nofollow noreferrer">San Andreas Multiplayer</a
+			> to play with my friends. That sparked an interest in how regular old applications were made,
+			and I started teaching myself C# and C++, writing little applications just to see what I could
+			do with them.
+		</p>
+		<p>
+			By the end of high school I knew that I wanted to write code, so I applied to study Computer
+			Science at a few universities. I landed up studying a Computer Systems degree through what was
+			then known as CTI (which subsequently merged with Pearson Institute of Higher Education and is
+			now known as <a href="https://www.eduvos.com/" rel="nofollow noreferrer" target="_blank"
+				>Eduvos</a
+			>).
+		</p>
+		<p>
+			Not long after figuring out how much I love code, I figured out I have a love for photography
+			as well. I bought my first DSLR (A Canon EOS 1200D) for a trip to Europe in 2014 and have been
+			enjoying it as a hobby since.
+		</p>
+		<p>
+			My photographic work has been described as abstract, though I'm not certain I agree entirely.
+			I enjoy capturing images that give me inspiration and let me express my feelings.
+		</p>
+		<h3>Portfolio</h3>
+		<p>
+			This website is intended to be a portfolio of my creative work. It is entirely written by
+			myself, with the source available <a
+				href="https://github.com/biltongza/ldam.co.za"
+				rel="nofollow noreferrer"
+				target="_blank">on Github</a
+			>. The photography on this site is synchronised from
+			<a
+				href="https://www.adobe.com/products/photoshop-lightroom.html"
+				target="_blank"
+				rel="nofollow noreferrer">Adobe Lightroom</a
+			> because I'm lazy and don't like having to manage image files :)
 		</p>
 	</div>
 
@@ -28,7 +84,7 @@
 		margin-left: auto;
 		margin-right: auto;
 		display: flex;
-		row-gap: 1rem;
+		gap: 1rem;
 		flex-direction: column;
 	}
 	@media only screen and (min-width: 1224px) {
@@ -39,5 +95,9 @@
 
 	.selfie {
 		max-width: 400px;
+		max-height: 70vh;
+		object-fit: cover;
+		margin-left: auto;
+		margin-right: auto;
 	}
 </style>
