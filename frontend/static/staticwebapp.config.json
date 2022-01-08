@@ -1,6 +1,0 @@
-{
-    "$schema": "https://json.schemastore.org/staticwebapp.config.json",
-    "navigationFallback": {
-        "rewrite": "/api/__render"
-    }
-}
