@@ -19,6 +19,9 @@ namespace ldam.co.za.fnapp.Services
         private readonly ILogger logger;
         private readonly IMetadataService metadataService;
 
+        public const string JpgMimeType = "image/jpeg";
+        public const string JsonMimeType = "application/json";
+
         public SyncService(
             ILightroomService lightroomService,
             IConfiguration configuration,
@@ -117,7 +120,7 @@ namespace ldam.co.za.fnapp.Services
                                 using var updatedMetadataStream = await metadataService.SetImageMetadata(imageStream, imageInfo);
 
                                 var imageName = $"{imageInfo.AssetId}.{size}.jpg";
-                                await storageService.Store(imageName, updatedMetadataStream);
+                                await storageService.Store(imageName, updatedMetadataStream, JpgMimeType);
                                 manifestImageInfo.Hrefs.TryAdd(size, imageName);
                                 manifestModified = true;
                                 logger.LogInformation("Synced {imageName}", imageName);
@@ -144,7 +147,7 @@ namespace ldam.co.za.fnapp.Services
                 using var serializedStream = new MemoryStream();
                 await JsonSerializer.SerializeAsync(serializedStream, manifest, new JsonSerializerOptions(JsonSerializerDefaults.Web));
                 serializedStream.Seek(0, SeekOrigin.Begin);
-                await storageService.Store(manifestName, serializedStream);
+                await storageService.Store(manifestName, serializedStream, JsonMimeType);
                 logger.LogInformation("Manifest {manifestName} updated", manifestName);
             }
         }

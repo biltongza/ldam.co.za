@@ -53,7 +53,7 @@ namespace ldam.co.za.fnapp.Tests
 
             await syncService.Synchronize(false);
 
-            mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<bool>()), Times.Once);
+            mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>()), Times.Once);
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace ldam.co.za.fnapp.Tests
 
             await syncService.Synchronize(false);
 
-            mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<bool>()), Times.Never);
+            mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>()), Times.Never);
         }
 
         [Fact]
@@ -134,7 +134,7 @@ namespace ldam.co.za.fnapp.Tests
 
             await syncService.Synchronize(false);
 
-            mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<bool>()), Times.Once);
+            mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>()), Times.Once);
         }
 
         [Fact]
