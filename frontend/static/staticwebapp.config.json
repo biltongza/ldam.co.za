@@ -1,5 +1,15 @@
 {
     "$schema": "https://json.schemastore.org/staticwebapp.config.json",
+    "routes": [
+        {
+            "route": "/index.html",
+            "rewrite": "/api/__render"
+        },
+        {
+            "route": "/",
+            "rewrite": "/api/__render"
+        }
+    ],
     "navigationFallback": {
         "rewrite": "/api/__render"
     }
