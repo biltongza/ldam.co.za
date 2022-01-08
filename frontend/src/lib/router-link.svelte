@@ -4,7 +4,7 @@
 	let matches = false;
 	$: {
 		const routeSegments = path?.split('/') || [];
-		const activeRouteSegments = $page.path?.split('/') || [];
+		const activeRouteSegments = $page.url.pathname?.split('/') || [];
 		matches = routeSegments.every((segment, index) => activeRouteSegments[index] === segment);
 	}
 </script>
