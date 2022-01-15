@@ -1,7 +1,6 @@
-namespace ldam.co.za.lib.Lightroom
+namespace ldam.co.za.lib.Lightroom;
+
+public class HealthResponse
 {
-    public class HealthResponse
-    {
-        public string Version { get; set; }
-    }
+    public string Version { get; set; }
 }

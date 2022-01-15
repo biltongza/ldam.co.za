@@ -1,14 +1,11 @@
-using System;
+namespace ldam.co.za.fnapp.Services;
 
-namespace ldam.co.za.fnapp.Services
+public interface IClock
 {
-    public interface IClock
-    {
-        DateTime Now();
-    }
+    DateTime Now();
+}
 
-    public class Clock : IClock
-    {
-        public DateTime Now() => DateTime.Now;
-    }
+public class Clock : IClock
+{
+    public DateTime Now() => DateTime.Now;
 }

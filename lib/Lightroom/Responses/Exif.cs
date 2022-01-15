@@ -1,10 +1,9 @@
-namespace ldam.co.za.lib.Lightroom
+namespace ldam.co.za.lib.Lightroom;
+
+public class Exif
 {
-    public class Exif
-    {
-        public int[] ExposureTime { get; set; }
-        public int[] FNumber { get; set; }
-        public int[] FocalLength { get; set; }
-        public int ISOSpeedRatings { get; set; }
-    }
+    public int[] ExposureTime { get; set; }
+    public int[] FNumber { get; set; }
+    public int[] FocalLength { get; set; }
+    public int ISOSpeedRatings { get; set; }
 }

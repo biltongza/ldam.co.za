@@ -1,10 +1,7 @@
-using System.Threading.Tasks;
+namespace ldam.co.za.lib.Lightroom;
 
-namespace ldam.co.za.lib.Lightroom
+public interface IAccessTokenProvider
 {
-    public interface IAccessTokenProvider
-    {
-        Task<string> GetAccessToken();
-        Task<string> GetRefreshToken();
-    }
+    Task<string> GetAccessToken();
+    Task<string> GetRefreshToken();
 }

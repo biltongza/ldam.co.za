@@ -1,7 +1,6 @@
-namespace ldam.co.za.lib.Lightroom
+namespace ldam.co.za.lib.Lightroom;
+
+public class Aux
 {
-    public class Aux
-    {
-        public string Lens { get; set; }
-    }
+    public string Lens { get; set; }
 }

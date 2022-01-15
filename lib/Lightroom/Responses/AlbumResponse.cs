@@ -1,7 +1,6 @@
-namespace ldam.co.za.lib.Lightroom
+namespace ldam.co.za.lib.Lightroom;
+
+public class AlbumResponse : BaseResponse
 {
-    public class AlbumResponse : BaseResponse
-    {
-        public AlbumPayload Payload { get; set; }
-    }
+    public AlbumPayload Payload { get; set; }
 }

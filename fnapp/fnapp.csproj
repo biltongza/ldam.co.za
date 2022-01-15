@@ -4,6 +4,7 @@
 		<AzureFunctionsVersion>v4</AzureFunctionsVersion>
 		<RootNamespace>ldam.co.za.fnapp</RootNamespace>
 		<_FunctionsSkipCleanOutput>true</_FunctionsSkipCleanOutput>
+		<ImplicitUsings>true</ImplicitUsings>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="AspNet.Security.OAuth.AdobeIO" Version="6.0.1" />
@@ -30,6 +31,5 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="../lib/lib.csproj" />
-		<ProjectReference Include="..\contracts\contracts.csproj" />
 	</ItemGroup>
 </Project>

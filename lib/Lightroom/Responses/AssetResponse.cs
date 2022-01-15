@@ -1,8 +1,6 @@
-namespace ldam.co.za.lib.Lightroom
+namespace ldam.co.za.lib.Lightroom;
+
+public class AssetResponse : BaseResponse
 {
-    public class AssetResponse : BaseResponse
-    {
-        public Asset Asset { get; set; }
-        public dynamic Payload { get; set; }
-    }
+    public Asset Asset { get; set; }
 }

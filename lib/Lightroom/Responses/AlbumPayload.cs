@@ -1,9 +1,6 @@
-using System.Collections.Generic;
+namespace ldam.co.za.lib.Lightroom;
 
-namespace ldam.co.za.lib.Lightroom
+public class AlbumPayload : BasePayload
 {
-    public class AlbumPayload : BasePayload
-    {
-        public string Name { get; set; }   
-    }
+    public string Name { get; set; }
 }

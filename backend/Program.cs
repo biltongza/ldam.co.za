@@ -1,24 +1,57 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+using ldam.co.za.lib.Lightroom;
+using ldam.co.za.lib.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 
-namespace ldam.co.za.backend
-{
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+var builder = WebApplication.CreateBuilder(args);
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(cfg => cfg.ForwardChallenge = "adobe")
+                .AddAdobeIO("adobe", options =>
                 {
-                    webBuilder.UseStartup<Startup>();
-                    webBuilder.UseKestrel(options => 
-                    {
-                        options.ListenAnyIP(5001, opts => opts.UseHttps());
-                    });
+                    options.ClientId = builder.Configuration[Constants.AdobeConfiguration.Auth.ClientId];
+                    options.ClientSecret = builder.Configuration[Constants.AdobeConfiguration.Auth.ClientSecret];
+                    options.Scope.Add("lr_partner_apis");
+                    options.Scope.Add("offline_access");
+                    options.SaveTokens = true;
                 });
-    }
+builder.Services.AddAuthorization();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddTransient<IAccessTokenProvider, AccessTokenProvider>();
+builder.Services.AddSingleton<ISecretService, SecretService>((_) => new SecretService(builder.Configuration[Constants.AzureConfiguration.KeyVaultUri]));
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
 }
+
+app.UseHttpsRedirection();
+
+app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapGet("/auth/login", [Authorize] async (IAccessTokenProvider accessTokenProvider, ISecretService secretService) =>
+{
+    var accessToken = await accessTokenProvider.GetAccessToken();
+    if (string.IsNullOrWhiteSpace(accessToken))
+    {
+        return Results.Problem("no access_token");
+    }
+
+    var refreshToken = await accessTokenProvider.GetRefreshToken();
+    if (string.IsNullOrWhiteSpace(refreshToken))
+    {
+        return Results.Problem("no refresh_token");
+    }
+
+    await secretService.SetSecret(ldam.co.za.lib.Constants.KeyVault.LightroomAccessToken, accessToken);
+    await secretService.SetSecret(ldam.co.za.lib.Constants.KeyVault.LightroomRefreshToken, refreshToken);
+    return Results.Ok("Logged in!");
+});
+
+app.Run("https://localhost:5001");
+

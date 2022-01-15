@@ -1,8 +1,7 @@
-namespace ldam.co.za.lib.Lightroom
+namespace ldam.co.za.lib.Lightroom;
+
+public class ImportSource
 {
-    public class ImportSource
-    {
-        public string FileName { get; set; }
-        public long FileSize { get; set; }
-    }
+    public string FileName { get; set; }
+    public long FileSize { get; set; }
 }

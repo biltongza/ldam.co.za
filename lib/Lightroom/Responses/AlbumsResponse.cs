@@ -1,11 +1,8 @@
-using System.Collections.Generic;
+namespace ldam.co.za.lib.Lightroom;
 
-namespace ldam.co.za.lib.Lightroom
+public class AlbumsResponse
 {
-    public class AlbumsResponse
-    {
-        public string Base { get; set; }
-        public IEnumerable<AlbumResponse> Resources { get; set; }
-        public IDictionary<string, Link> Links { get; set; }
-    }
+    public string Base { get; set; }
+    public IEnumerable<AlbumResponse> Resources { get; set; }
+    public IDictionary<string, Link> Links { get; set; }
 }

@@ -1,9 +1,6 @@
-using System.Collections.Generic;
+namespace ldam.co.za.lib.Lightroom;
 
-namespace ldam.co.za.lib.Lightroom
+public class FavoritesContainer
 {
-    public class FavoritesContainer
-    {
-        public IDictionary<string, bool> Favorites { get; set; }
-    }
+    public IDictionary<string, bool> Favorites { get; set; }
 }

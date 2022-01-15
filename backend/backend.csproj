@@ -3,6 +3,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<UserSecretsId>32de766e-0589-4a13-8b88-f04d4faa8c58</UserSecretsId>
 		<RootNamespace>ldam.co.za.server</RootNamespace>
+		<ImplicitUsings>true</ImplicitUsings>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="AspNet.Security.OAuth.AdobeIO" Version="6.0.1"/>

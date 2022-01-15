@@ -1,12 +1,9 @@
-using System;
+namespace ldam.co.za.lib.Lightroom;
 
-namespace ldam.co.za.lib.Lightroom
+public class AssetPayload
 {
-    public class AssetPayload
-    {
-        public Develop Develop { get; set; }
-        public Xmp Xmp { get; set; }
-        public ImportSource ImportSource { get; set; }
-        public DateTime CaptureDate { get; set; }
-    }
+    public Develop Develop { get; set; }
+    public Xmp Xmp { get; set; }
+    public ImportSource ImportSource { get; set; }
+    public DateTime CaptureDate { get; set; }
 }

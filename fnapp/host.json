@@ -7,11 +7,11 @@
                 "isEnabled": true
             },
             "snapshotConfiguration": {
-                "isEnabled": true
+                "isEnabled": false
             }
         },
         "logLevel": {
-            "default": "Information"
+            "default": "Trace"
         }
     },
     "functionTimeout": "00:10:00"

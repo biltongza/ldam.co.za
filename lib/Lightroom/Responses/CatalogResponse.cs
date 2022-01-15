@@ -1,9 +1,6 @@
-using System;
+namespace ldam.co.za.lib.Lightroom;
 
-namespace ldam.co.za.lib.Lightroom
+public class CatalogResponse : BaseResponse
 {
-    public class CatalogResponse : BaseResponse
-    {
-        public CatalogPayload Payload { get; set; }
-    }
+    public CatalogPayload Payload { get; set; }
 }
