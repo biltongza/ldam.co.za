@@ -21,7 +21,14 @@ public class StorageService : IStorageService
     {
         this.logger = logger;
         var storageUri = configuration[Constants.Configuration.Azure.BlobStorageUri];
-        var blobServiceClient = new BlobServiceClient(new Uri(storageUri), new ChainedTokenCredential(new ManagedIdentityCredential(), new AzureCliCredential()));
+        var blobServiceClient = new BlobServiceClient(
+            new Uri(storageUri), 
+            new ChainedTokenCredential(
+#if !DEBUG
+            new ManagedIdentityCredential(), 
+#endif
+            new AzureCliCredential()
+            ));
         this.blobContainerClient = blobServiceClient.GetBlobContainerClient(configuration[Constants.Configuration.Azure.BlobContainer]);
     }
 
