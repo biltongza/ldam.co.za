@@ -52,7 +52,7 @@ public class SyncService
             }
             else
             {
-                manifest = await JsonSerializer.DeserializeAsync<Manifest>(manifestStream);
+                manifest = await JsonSerializer.DeserializeAsync(manifestStream, typeof(Manifest), ManifestSerializerContext.Default) as Manifest;
             }
         }
         var albumsToSync = await lightroomService.GetAlbums()
@@ -140,7 +140,7 @@ public class SyncService
         {
             manifest.LastModified = DateTime.Now;
             using var serializedStream = new MemoryStream();
-            await JsonSerializer.SerializeAsync(serializedStream, manifest, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            await JsonSerializer.SerializeAsync(serializedStream, manifest, ManifestSerializerContext.Default.Manifest);
             serializedStream.Seek(0, SeekOrigin.Begin);
             await storageService.Store(manifestName, serializedStream, JsonMimeType);
             logger.LogInformation("Manifest {manifestName} updated", manifestName);
