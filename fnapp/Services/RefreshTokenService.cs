@@ -11,7 +11,7 @@ public class RefreshTokenService
     private readonly IClock clock;
     private readonly ILogger logger;
     private readonly ILightroomTokenService lightroomTokenService;
-    private readonly JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+    private readonly JwtSecurityTokenHandler handler = new();
 
     public RefreshTokenService(
         ISecretService secretService,

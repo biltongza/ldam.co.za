@@ -19,7 +19,9 @@ public class ManualImageSync
     public async Task Run([HttpTrigger(authLevel: AuthorizationLevel.Function, "post")] HttpRequest req, ILogger logger)
     {
         logger.LogInformation("Manual sync requested");
+        #pragma warning disable CA1806
         bool.TryParse(req.Query["force"], out bool force);
+        #pragma warning restore CA1806
         await syncService.Synchronize(force);
     }
 }

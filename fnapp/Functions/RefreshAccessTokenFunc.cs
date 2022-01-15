@@ -6,14 +6,16 @@ namespace ldam.co.za.fnapp.Functions;
 
 public class RefreshAccessTokenFunc
 {
-    RefreshTokenService refreshTokenService;
+    private readonly RefreshTokenService refreshTokenService;
     public RefreshAccessTokenFunc(RefreshTokenService refreshTokenService)
     {
         this.refreshTokenService = refreshTokenService;
     }
 
     [FunctionName(nameof(RefreshAccessTokenFunc))]
+    #pragma warning disable IDE0060
     public async Task Run([TimerTrigger("0 */5 * * * *")] TimerInfo timerInfo, ILogger logger)
+    #pragma warning restore IDE0060
     {
         await refreshTokenService.RefreshAccessToken();
     }

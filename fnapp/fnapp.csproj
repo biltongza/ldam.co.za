@@ -5,6 +5,8 @@
 		<RootNamespace>ldam.co.za.fnapp</RootNamespace>
 		<_FunctionsSkipCleanOutput>true</_FunctionsSkipCleanOutput>
 		<ImplicitUsings>true</ImplicitUsings>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisLevel>latest</AnalysisLevel>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="AspNet.Security.OAuth.AdobeIO" Version="6.0.1" />

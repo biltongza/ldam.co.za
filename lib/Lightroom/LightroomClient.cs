@@ -5,11 +5,10 @@ namespace ldam.co.za.lib.Lightroom;
 
 public class LightroomClient : ILightroomClient, IDisposable
 {
-    private HttpClient httpClient;
-    private IAccessTokenProvider accessTokenProvider;
-    private string baseUrl;
-    private static readonly Regex WhileRegex = new Regex(@"^while\s*\(\s*1\s*\)\s*{\s*}\s*", RegexOptions.Compiled);
-    private readonly JsonSerializerOptions defaultSerializerOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
+    private readonly HttpClient httpClient;
+    private readonly IAccessTokenProvider accessTokenProvider;
+    private readonly string baseUrl;
+    private static readonly Regex WhileRegex = new(@"^while\s*\(\s*1\s*\)\s*{\s*}\s*", RegexOptions.Compiled);
     public LightroomClient(IHttpClientFactory httpClientFactory, IAccessTokenProvider accessTokenProvider, string baseUrl, string apiKey)
     {
         this.accessTokenProvider = accessTokenProvider;
@@ -28,7 +27,7 @@ public class LightroomClient : ILightroomClient, IDisposable
         return request;
     }
 
-    protected async Task<T> HandleResponse<T>(HttpResponseMessage response, bool stripWhile = true)
+    protected static async Task<T> HandleResponse<T>(HttpResponseMessage response, bool stripWhile = true)
     {
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
@@ -43,6 +42,7 @@ public class LightroomClient : ILightroomClient, IDisposable
     public void Dispose()
     {
         httpClient.Dispose();
+        GC.SuppressFinalize(this);
     }
 
     public async Task<CatalogResponse> GetCatalog()
@@ -118,7 +118,7 @@ public class LightroomClient : ILightroomClient, IDisposable
         var builder = new StringBuilder();
         builder.Append("/v2/catalogs/");
         builder.Append(catalogId);
-        builder.Append("/");
+        builder.Append('/');
         builder.Append(href);
 
         var request = await PrepareRequest(HttpMethod.Get, builder.ToString());

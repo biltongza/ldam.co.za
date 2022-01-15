@@ -30,7 +30,7 @@ public class LightroomService : ILightroomService
             albumsResponse.Links?.TryGetValue("next", out next);
             var afterHref = next?.Href;
 
-            after = !string.IsNullOrWhiteSpace(afterHref) ? afterHref.Substring(afterHref.IndexOf('=')) : null;
+            after = !string.IsNullOrWhiteSpace(afterHref) ? afterHref[afterHref.IndexOf('=')..] : null;
 
             foreach (var albumResponse in albumsResponse.Resources.Where(x => x.Subtype == "collection"))
             {
@@ -48,7 +48,7 @@ public class LightroomService : ILightroomService
             Link next = null;
             albumAssetResponse.Links?.TryGetValue("next", out next);
             var afterHref = next?.Href;
-            after = !string.IsNullOrWhiteSpace(afterHref) ? afterHref.Substring(afterHref.IndexOf('=')) : null;
+            after = !string.IsNullOrWhiteSpace(afterHref) ? afterHref[afterHref.IndexOf('=')..] : null;
             foreach (var asset in albumAssetResponse.Resources)
             {
                 var make = asset.Asset.Payload.Xmp.Tiff.Make;

@@ -10,7 +10,7 @@ public class AccessTokenProvider : IAccessTokenProvider
 {
     private readonly ISecretService secretService;
     private readonly IMemoryCache memoryCache;
-    private readonly JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
+    private readonly JwtSecurityTokenHandler handler = new();
     private readonly ILogger logger;
 
     public AccessTokenProvider(ISecretService secretService, IMemoryCache memoryCache, ILogger<AccessTokenProvider> logger)
