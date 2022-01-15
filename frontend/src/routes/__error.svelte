@@ -4,12 +4,13 @@
 	import type { ErrorLoad } from '@sveltejs/kit';
 
 	const appInsights: IApplicationInsights = browser && (<any>window).appInsights;
-	const load: ErrorLoad = function ({ error, status, page }) {
+	const load: ErrorLoad = function ({ error, status, url, params }) {
 		appInsights && appInsights.trackException({
 			error: error,
             properties: {
                 status,
-                ...page,
+				url,
+                ...params,
             },
 		});
 		return {

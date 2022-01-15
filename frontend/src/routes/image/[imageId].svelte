@@ -5,7 +5,7 @@
 
 	let src: string;
 	let metadata: ImageMetadata;
-	const load: Load = function ({ page: { params }, stuff }) {
+	const load: Load = function ({ params, stuff }) {
 		const manifest: Manifest = stuff.manifest;
 		const imageId = params.imageId;
 		[, metadata] = Object.entries(manifest.albums)
