@@ -1,6 +1,6 @@
 import { metadata } from '$lib/.metadata.js';
 import { website } from '$lib/info';
-import type { ImageMetadata, Manifest } from '$lib/manifest';
+import type { ImageMetadata, Manifest } from '$lib/types';
 import { StorageBaseUrl } from '$lib/__consts';
 import type { EndpointOutput } from '@sveltejs/kit';
 import type { DefaultBody } from '@sveltejs/kit/types/endpoint';

@@ -7,6 +7,7 @@
 	<div class="links">
 		<nav>
 			<RouterLink path="/about">About</RouterLink>
+			<RouterLink path="/blog">Blog</RouterLink>
 		</nav>
 		<div class="socials">
 			<sl-icon-button
@@ -68,5 +69,10 @@
 			padding-left: var(--sl-spacing-2x-large);
 			padding-right: var(--sl-spacing-2x-large);
 		}
+	}
+	nav {
+		display: flex;
+		justify-content: space-between;
+		gap: 1em;
 	}
 </style>

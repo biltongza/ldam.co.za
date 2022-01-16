@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
 	import AlbumPreview from '$lib/album-preview.svelte';
-	import type { Manifest } from '$lib/manifest';
+	import type { Manifest } from '$lib/types';
 	import type { Load } from '@sveltejs/kit';
 
 	let manifest: Manifest;

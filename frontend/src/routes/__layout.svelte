@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
 	import Header from '$lib/header.svelte';
-	import type { Manifest } from '$lib/manifest';
+	import type { Manifest } from '$lib/types';
 	import { StorageBaseUrl } from '$lib/__consts';
 	import type { Load } from '@sveltejs/kit';
 	let manifest: Manifest;

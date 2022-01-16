@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-	import type { ImageMetadata,Manifest } from '$lib/manifest';
+	import type { ImageMetadata,Manifest } from '$lib/types';
 	import { HighResHref,StorageBaseUrl } from '$lib/__consts';
 	import type { Load } from '@sveltejs/kit';
 

@@ -1,3 +1,15 @@
+export interface BlogMetadata {
+    title: string;
+    date: string;
+    excerpt: string;
+    slug: string;
+}
+
+export interface BlogResponse {
+    metadata: BlogMetadata;
+    content: string;
+}
+
 export interface ImageMetadata {
     id: string;
     hrefs: { [key: string]: string };
