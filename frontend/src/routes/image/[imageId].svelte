@@ -1,7 +1,9 @@
 <script context="module" lang="ts">
+	import { title } from '$lib/title.store';
 	import type { ImageMetadata,Manifest } from '$lib/types';
 	import { HighResHref,StorageBaseUrl } from '$lib/__consts';
 	import type { Load } from '@sveltejs/kit';
+	import { onDestroy } from 'svelte';
 
 	let src: string;
 	let metadata: ImageMetadata;
@@ -13,10 +15,15 @@
 			.find(([key]) => key === imageId);
 		const href = metadata.hrefs[HighResHref];
 		src = `${StorageBaseUrl}/${href}`;
+		title.set(metadata.title);
 		return {};
 	};
 
 	export { load };
+</script>
+
+<script lang="ts">
+	onDestroy(() => title.set(undefined));
 </script>
 
 <div class="image-container">

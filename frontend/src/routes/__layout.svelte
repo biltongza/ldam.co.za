@@ -1,5 +1,6 @@
 <script context="module" lang="ts">
 	import Header from '$lib/header.svelte';
+	import { title } from '$lib/title.store';
 	import type { Manifest } from '$lib/types';
 	import { StorageBaseUrl } from '$lib/__consts';
 	import type { Load } from '@sveltejs/kit';
@@ -22,8 +23,18 @@
 			}
 		};
 	};
+
 	export { load };
 </script>
+
+<script lang="ts">
+	export let pageTitle: string;
+	$: pageTitle = `${$title ? $title + ' - ' : ''}Logan Dam - Developer, Photographer`;
+</script>
+
+<svelte:head>
+	<title>{pageTitle}</title>
+</svelte:head>
 
 <Header />
 <div class="content">
