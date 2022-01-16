@@ -18,6 +18,7 @@
 		meta.set({
 			'og:type': 'article',
 			'og:title': post.metadata.title,
+			'og:description': post.metadata.excerpt,
 		})
 		return {
 			props: { post }
