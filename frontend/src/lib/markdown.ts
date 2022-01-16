@@ -6,7 +6,7 @@ import frontmatter from 'remark-frontmatter';
 import gfm from 'remark-gfm';
 import parse from 'remark-parse';
 import remark2rehype from 'remark-rehype';
-import vfile from 'to-vfile';
+import * as vfile from 'to-vfile';
 import { unified } from 'unified';
 import type { BlogMetadata } from './types';
 import { DateFormat } from './__consts';
