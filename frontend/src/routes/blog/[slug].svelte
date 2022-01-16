@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-	import { title } from '$lib/title.store';
+	import { meta,title } from '$lib/stores';
 	import type { BlogResponse } from '$lib/types';
 	import type { Load } from '@sveltejs/kit';
 	import { onDestroy } from 'svelte';
@@ -15,6 +15,10 @@
 		}
 		const post: BlogResponse = await response.json();
 		title.set(post.metadata.title);
+		meta.set({
+			'og:type': 'article',
+			'og:title': post.metadata.title,
+		})
 		return {
 			props: { post }
 		};
@@ -27,6 +31,7 @@
 	export let post: BlogResponse;
 	onDestroy(() => {
 		title.set(undefined);
+		meta.set(undefined);
 	});
 </script>
 

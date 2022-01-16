@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
-	import { title } from '$lib/title.store';
+	import { meta,title } from '$lib/stores';
 	import type { ImageMetadata,Manifest } from '$lib/types';
-	import { HighResHref,StorageBaseUrl } from '$lib/__consts';
+	import { HighResHref,HighResMaxDimension,StorageBaseUrl } from '$lib/__consts';
 	import type { Load } from '@sveltejs/kit';
 	import { onDestroy } from 'svelte';
 
@@ -16,6 +16,19 @@
 		const href = metadata.hrefs[HighResHref];
 		src = `${StorageBaseUrl}/${href}`;
 		title.set(metadata.title);
+		const [widthRatio, heightRatio] = metadata.aspectRatio.split(':').map(x => Number(x));
+		const width = widthRatio > heightRatio ? HighResMaxDimension : widthRatio / heightRatio * HighResMaxDimension;
+		const height = heightRatio > widthRatio ? HighResMaxDimension : heightRatio / widthRatio * HighResMaxDimension;
+		meta.set({
+			'twitter:card': 'summary_large_image',
+			'og:type': 'article',
+			'og:image': src,
+			'og:title': metadata.title,
+			'og:description': 'Photography by Logan Dam',
+			'og:image:width': width.toString(),
+			'og:image:height': height.toString(),
+			'og:image:alt': metadata.caption,
+		});
 		return {};
 	};
 
@@ -23,7 +36,10 @@
 </script>
 
 <script lang="ts">
-	onDestroy(() => title.set(undefined));
+	onDestroy(() => {
+		title.set(undefined);
+		meta.set(undefined);
+	});
 </script>
 
 <div class="image-container">

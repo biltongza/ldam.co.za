@@ -1,8 +1,8 @@
 <script context="module" lang="ts">
 	import Header from '$lib/header.svelte';
-	import { title } from '$lib/title.store';
+	import { meta,title } from '$lib/stores';
 	import type { Manifest } from '$lib/types';
-	import { StorageBaseUrl } from '$lib/__consts';
+	import { defaultMetadata,StorageBaseUrl } from '$lib/__consts';
 	import type { Load } from '@sveltejs/kit';
 	let manifest: Manifest;
 	const load: Load = async function ({ fetch }) {
@@ -29,11 +29,19 @@
 
 <script lang="ts">
 	export let pageTitle: string;
+	export let metas: { key: string; value: string }[];
 	$: pageTitle = `${$title ? $title + ' - ' : ''}Logan Dam - Developer, Photographer`;
+	$: metas = Object.entries({ ...defaultMetadata, ...$meta }).map(([key, value]) => ({
+		key,
+		value
+	}));
 </script>
 
 <svelte:head>
 	<title>{pageTitle}</title>
+	{#each metas as meta (meta.key)}
+		<meta property={meta.key} content={meta.value} />
+	{/each}
 </svelte:head>
 
 <Header />
