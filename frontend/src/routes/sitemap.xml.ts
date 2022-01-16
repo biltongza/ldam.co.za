@@ -4,17 +4,19 @@ import type { ImageMetadata, Manifest } from '$lib/types';
 import { StorageBaseUrl } from '$lib/__consts';
 import type { EndpointOutput } from '@sveltejs/kit';
 import type { DefaultBody } from '@sveltejs/kit/types/endpoint';
+import fs from 'fs';
+import glob from 'glob';
 export async function get(): Promise<EndpointOutput<DefaultBody>> {
 	const headers = {
 		'Cache-Control': 'max-age=0, s-maxage=3600',
 		'Content-Type': 'application/xml'
 	};
 	const response = await fetch(`${StorageBaseUrl}/manifest.json?t=${new Date().valueOf()}`);
-  if(!response.ok) {
-    throw new Error(`failed to load manifest: ${response.status}`);
-  }
+	if (!response.ok) {
+		throw new Error(`failed to load manifest: ${response.status}`);
+	}
 	const manifest = (await response.json()) as Manifest;
-	const routes = { about: 'src/routes/about.svelte' };
+	const routes = { about: 'src/routes/about.svelte', blog: 'src/routes/blog/index.svelte' };
 	const files = Object.entries(routes).map(([route, path]) => {
 		const lastModified = metadata.find((x) => x.path === path).lastModified;
 		return { route, lastModified: new Date(lastModified).toISOString() };
@@ -23,6 +25,23 @@ export async function get(): Promise<EndpointOutput<DefaultBody>> {
 	const imageRouteLastModified = metadata.find(
 		(x) => x.path === 'src/routes/image/[imageId].svelte'
 	).lastModified;
+
+	const blogPosts: { file: string; url: string; lastModified: string }[] = await new Promise(
+		(resolve, reject) => {
+			glob('src/posts/*.md', (err, matches) => {
+				if (err) {
+					reject(err);
+				}
+				resolve(
+					matches.map((match) => ({
+						file: match,
+						url: `blog/${match.slice(match.lastIndexOf('/')+1, -3)}`,
+						lastModified: fs.statSync(match).mtime.toISOString()
+					}))
+				);
+			});
+		}
+	);
 
 	function generateImageNode(metadata: ImageMetadata): string {
 		return `<url>
@@ -64,6 +83,16 @@ export async function get(): Promise<EndpointOutput<DefaultBody>> {
 					return Object.entries(album.images).map(([, metadata]) => generateImageNode(metadata));
 				})
 				.join('')}
+				${Object.entries(blogPosts)
+					.map(
+						([, post]) => `
+				<url>
+				<loc>${website}/${post.url}</loc>
+				<lastmod>${post.lastModified}</lastmod>
+				</url>
+				`
+					)
+					.join('')}
       </urlset>`
 	};
 }
