@@ -1,7 +1,7 @@
 ---
 title: Hello World!
 date: 2021-12-26
-excerpt: First blog post!
+excerpt: Coming soon!
 ---
 
-Hello world!
+Coming soon!
