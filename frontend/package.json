@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "node ./generate-last-modified-metadata.js && svelte-kit dev --port 5000",
-    "build": "node ./generate-last-modified-metadata.js && svelte-kit build",
+    "build": "node ./generate-last-modified-metadata.js && svelte-kit build && copyfiles src/posts/*.md api",
     "preview": "svelte-kit preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
@@ -18,6 +18,7 @@
     "@types/glob": "^7.2.0",
     "@typescript-eslint/eslint-plugin": "^5.9.1",
     "@typescript-eslint/parser": "^5.9.1",
+    "copyfiles": "^2.4.1",
     "dayjs": "^1.10.7",
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.3.0",
