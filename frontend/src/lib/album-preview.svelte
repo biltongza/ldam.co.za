@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Album,ImageMetadata } from './manifest';
 	import Thumbnail from './thumbnail.svelte';
+	import type { Album,ImageMetadata } from './types';
 	export let album: Album;
 	export let numberOfImages: number = Number.MAX_SAFE_INTEGER;
 
@@ -15,26 +15,26 @@
 		.slice(0, numberOfImages);
 
 	function getClassList(image: ImageMetadata): string {
-		const parts = image.aspectRatio.split(':').map(part => +part);
+		const parts = image.aspectRatio.split(':').map((part) => +part);
 		const isLandscape = parts[0] > parts[1];
-		return `thumbnail ${isLandscape ? 'span-col' : ''}`
+		return `thumbnail ${isLandscape ? 'span-col' : ''}`;
 	}
 </script>
 
-<div class="album-container">
+<section class="album-container">
 	<h2>{album.title}</h2>
 	<div class="thumbnails">
 		{#each images as image (image.id)}
-			<div class={getClassList(image)} >
+			<div class={getClassList(image)}>
 				<Thumbnail {image} />
 			</div>
 		{/each}
 	</div>
-</div>
+</section>
 
 <style>
 	:root {
-		--thumbnail-size: 480px
+		--thumbnail-size: 480px;
 	}
 	.thumbnails {
 		line-height: 0;
@@ -50,7 +50,7 @@
 	.thumbnail.span-col {
 		grid-column: span 2;
 	}
-	
+
 	.thumbnail:hover {
 		transform: scale(1.02);
 	}

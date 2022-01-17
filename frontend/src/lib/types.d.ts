@@ -13,7 +13,7 @@ export interface BlogResponse {
 export interface ImageMetadata {
     id: string;
     hrefs: { [key: string]: string };
-    captureDate: Date;
+    captureDate: string;
     cameraMake: string;
     cameraModel: string;
     fNumber: string;
@@ -23,7 +23,7 @@ export interface ImageMetadata {
     lens: string;
     title: string;
     caption: string;
-    lastModified: Date;
+    lastModified: string;
     width: number;
     height: number;
     aspectRatio: string;

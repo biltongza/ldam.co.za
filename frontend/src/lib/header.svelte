@@ -2,7 +2,7 @@
 	import RouterLink from './router-link.svelte';
 </script>
 
-<div class="header">
+<header class="header">
 	<div class="brand"><a href="/"><h1>Logan Dam</h1></a></div>
 	<div class="links">
 		<nav>
@@ -36,7 +36,7 @@
 			/>
 		</div>
 	</div>
-</div>
+</header>
 
 <style>
 	.header {

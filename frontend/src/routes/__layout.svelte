@@ -45,9 +45,9 @@
 </svelte:head>
 
 <Header />
-<div class="content">
+<main class="content">
 	<slot />
-</div>
+</main>
 
 <style lang="scss">
 	.content {

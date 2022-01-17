@@ -7,6 +7,7 @@
 
 	let src: string;
 	let metadata: ImageMetadata;
+	let date: Date;
 	const load: Load = function ({ params, stuff }) {
 		const manifest: Manifest = stuff.manifest;
 		const imageId = params.imageId;
@@ -16,9 +17,15 @@
 		const href = metadata.hrefs[HighResHref];
 		src = `${StorageBaseUrl}/${href}`;
 		title.set(metadata.title);
-		const [widthRatio, heightRatio] = metadata.aspectRatio.split(':').map(x => Number(x));
-		const width = widthRatio > heightRatio ? HighResMaxDimension : widthRatio / heightRatio * HighResMaxDimension;
-		const height = heightRatio > widthRatio ? HighResMaxDimension : heightRatio / widthRatio * HighResMaxDimension;
+		const [widthRatio, heightRatio] = metadata.aspectRatio.split(':').map((x) => Number(x));
+		const width =
+			widthRatio > heightRatio
+				? HighResMaxDimension
+				: (widthRatio / heightRatio) * HighResMaxDimension;
+		const height =
+			heightRatio > widthRatio
+				? HighResMaxDimension
+				: (heightRatio / widthRatio) * HighResMaxDimension;
 		meta.set({
 			'twitter:card': 'summary_large_image',
 			'og:type': 'article',
@@ -27,8 +34,10 @@
 			'og:description': 'Photography by Logan Dam',
 			'og:image:width': width.toString(),
 			'og:image:height': height.toString(),
-			'og:image:alt': metadata.caption,
+			'og:image:alt': metadata.caption
 		});
+		//
+		date = new Date(metadata.captureDate);
 		return {};
 	};
 
@@ -42,19 +51,19 @@
 	});
 </script>
 
-<div class="image-container">
-	<img class="image" {src} alt={metadata.caption} />
-	<div class="metadata">
+<article class="image-container">
+	<img {src} class="image" aria-labelledby="" alt={metadata.caption} />
+	<section class="metadata">
 		{#if metadata.title}
-			<h3>{metadata.title}</h3>
+			<h2 class="title">{metadata.title}</h2>
 		{/if}
 		{#if metadata.caption}
-			<h4>{metadata.caption}</h4>
+			<h3 class="caption">{metadata.caption}</h3>
 		{/if}
 		<div class="date-info">
 			<sl-icon name="calendar-event" />
 			<div class="content">
-				<span>{new Date(metadata.captureDate).toLocaleDateString()}</span>
+				<time datetime={date.toISOString()}>{date.toLocaleDateString()}</time>
 			</div>
 		</div>
 		<div class="camera-info">
@@ -94,8 +103,8 @@
 				/></a
 			>
 		</div>
-	</div>
-</div>
+	</section>
+</article>
 
 <style>
 	.image {

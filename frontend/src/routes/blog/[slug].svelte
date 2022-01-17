@@ -18,8 +18,8 @@
 		meta.set({
 			'og:type': 'article',
 			'og:title': post.metadata.title,
-			'og:description': post.metadata.excerpt,
-		})
+			'og:description': post.metadata.excerpt
+		});
 		return {
 			props: { post }
 		};
@@ -36,9 +36,11 @@
 	});
 </script>
 
-<h2>{post.metadata.title}</h2>
-<p class="date">{post.metadata.date}</p>
-{@html post.content}
+<article>
+	<h2>{post.metadata.title}</h2>
+	<p class="date">{post.metadata.date}</p>
+	{@html post.content}
+</article>
 
 <style lang="scss">
 	.date {
