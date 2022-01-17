@@ -7,7 +7,7 @@
 </script>
 
 <script lang="ts">
-	import type { ImageMetadata } from './manifest';
+	import type { ImageMetadata } from './types';
 	import {
 	StorageBaseUrl,
 	ThumbnailHrefNormalDensity
