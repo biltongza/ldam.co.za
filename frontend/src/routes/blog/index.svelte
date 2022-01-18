@@ -2,6 +2,7 @@
 	import { base } from '$app/paths';
 	import type { BlogMetadata } from '$lib/types';
 	import type { Load } from '@sveltejs/kit';
+	import dayjs from 'dayjs';
 	const load: Load = async function load({ fetch }) {
 		const response = await fetch(`${base}/blog/posts.json`);
 		if (!response.ok) {
@@ -10,9 +11,10 @@
 				error: new Error(`Couldn't load blog index: ${response.status}`)
 			};
 		}
-		const posts = await response.json();
+		const posts: BlogMetadata[] = await response.json();
+		const sortedPosts = posts.sort((a, b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf());
 		return {
-			props: { posts }
+			props: { posts: sortedPosts }
 		};
 	};
 	export { load };
