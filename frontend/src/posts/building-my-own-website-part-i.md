@@ -15,7 +15,7 @@ I used [Squarespace](https://www.squarespace.com/), since their templates were v
 
 ![My old website as at 2022-01-18](/assets/ldamcoza.png)
 
-Fast forward to 2021, I haven't updated my site in months, because getting my photos out of [Lightroom](https://www.adobe.com/africa/products/photoshop-lightroom.html) and into Squarespace is just a chore (their image uploader didn't handle bulk uploads with large images particularly well, nevermind having to manually export photos). Me being the developer I am, I decided I would look for a way to automate it.
+Fast forward to 2021, I haven't updated my site in months, because getting my photos out of [Lightroom](https://www.adobe.com/africa/products/photoshop-lightroom.html) and into Squarespace is just a chore (their image uploader didn't handle bulk uploads with large images particularly well, nevermind having to manually export photos). Me being the developer I am, I decided I would look for a way to automate it. Also, I've grown and realised that photography is not my only skill, and my portfolio should reflect my software engineering abilities too.
 
 ### Investigation
 My first thought was to try automate the upload process, since that was the part I was having trouble with, but Squarespace don't offer a public API to upload images, so that idea was a no go. That was the first time I thought about making my own site, but it did nothing to satiate my desire to automate things.
