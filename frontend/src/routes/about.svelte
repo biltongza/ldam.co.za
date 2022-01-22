@@ -17,7 +17,7 @@
 		<p>
 			I am presently employed as a Technical Lead at <a
 				href="https://entelect.co.za/"
-				rel="noopener noreferrer"
+				rel="nofollow noopener"
 				target="">Entelect</a
 			> but this website and the views depicted on it are entirely my own.
 		</p>
@@ -37,7 +37,7 @@
 			scripts in Grand Theft Auto <a
 				href="https://www.sa-mp.com/"
 				target="_blank"
-				rel="nofollow noreferrer">San Andreas Multiplayer</a
+				rel="nofollow noopener">San Andreas Multiplayer</a
 			> to play with my friends. That sparked an interest in how regular old applications were made,
 			and I started teaching myself C# and C++, writing little applications just to see what I could
 			do with them.
@@ -46,7 +46,7 @@
 			By the end of high school I knew that I wanted to write code, so I applied to study Computer
 			Science at a few universities. I landed up studying a Computer Systems degree through what was
 			then known as CTI (which subsequently merged with Pearson Institute of Higher Education and is
-			now known as <a href="https://www.eduvos.com/" rel="nofollow noreferrer" target="_blank"
+			now known as <a href="https://www.eduvos.com/" rel="nofollow noopener" target="_blank"
 				>Eduvos</a
 			>).
 		</p>
@@ -64,17 +64,17 @@
 			This website is intended to be a portfolio of my creative work. It is entirely written by
 			myself (save for some lovely <a
 				href="https://shoelace.style"
-				rel="nofollow noreferrer"
+				rel="nofollow noopener"
 				target="_blank">Shoelace</a
 			>
 			components), with the source available
-			<a href="https://github.com/biltongza/ldam.co.za" rel="nofollow noreferrer" target="_blank"
+			<a href="https://github.com/biltongza/ldam.co.za" rel="nofollow nooopener" target="_blank"
 				>on Github</a
 			>. The photography on this site is synchronised from
 			<a
 				href="https://www.adobe.com/products/photoshop-lightroom.html"
 				target="_blank"
-				rel="nofollow noreferrer">Adobe Lightroom</a
+				rel="nofollow noopener">Adobe Lightroom</a
 			> because I'm lazy and don't like having to manage image files :)
 		</p>
 	</div>
