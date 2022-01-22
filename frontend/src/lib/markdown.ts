@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import yaml from 'js-yaml';
+import rehypeExternalLinks from 'rehype-external-links';
 import highlight from 'rehype-highlight';
 import rehypeStringify from 'rehype-stringify';
 import frontmatter from 'remark-frontmatter';
@@ -14,7 +15,12 @@ import { DateFormat } from './__consts';
 
 const parser = unified().use(parse).use(gfm).use(frontmatter, ['yaml']);
 
-const runner = unified().use(remark2rehype).use(highlight).use(rehypeStringify).use(remarkUnwrapImages);
+const runner = unified()
+	.use(remark2rehype)
+	.use(highlight)
+	.use(rehypeExternalLinks, { target: false, rel: ['nofollow', 'noopener'] })
+	.use(rehypeStringify)
+	.use(remarkUnwrapImages);
 
 export function process(filename: string): { metadata: BlogMetadata; content: string } {
 	const tree = parser.parse(vfile.readSync(filename));

@@ -27,6 +27,7 @@
     "node-sass": "^7.0.1",
     "prettier": "^2.5.1",
     "prettier-plugin-svelte": "^2.6.0",
+    "rehype-external-links": "^1.0.1",
     "rehype-highlight": "^5.0.1",
     "rehype-stringify": "^9.0.2",
     "remark-frontmatter": "^4.0.1",
