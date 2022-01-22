@@ -62,10 +62,14 @@
 		<h3>Portfolio</h3>
 		<p>
 			This website is intended to be a portfolio of my creative work. It is entirely written by
-			myself, with the source available <a
-				href="https://github.com/biltongza/ldam.co.za"
+			myself (save for some lovely <a
+				href="https://shoelace.style"
 				rel="nofollow noreferrer"
-				target="_blank">on Github</a
+				target="_blank">Shoelace</a
+			>
+			components), with the source available
+			<a href="https://github.com/biltongza/ldam.co.za" rel="nofollow noreferrer" target="_blank"
+				>on Github</a
 			>. The photography on this site is synchronised from
 			<a
 				href="https://www.adobe.com/products/photoshop-lightroom.html"
