@@ -87,7 +87,6 @@
 		align-items: start;
 
 		@media only screen and (min-width: 1224px) {
-			flex-direction: column;
 			padding-left: var(--sl-spacing-2x-large);
 			padding-right: var(--sl-spacing-2x-large);
 		}
