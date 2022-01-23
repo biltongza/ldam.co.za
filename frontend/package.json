@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "node ./generate-last-modified-metadata.js && svelte-kit dev --port 5000",
-    "build": "node ./generate-last-modified-metadata.js && svelte-kit build && copyfiles src/posts/*.md api",
+    "build": "rimraf api/src && node ./generate-last-modified-metadata.js && svelte-kit build && copyfiles src/posts/*.md api",
     "preview": "svelte-kit preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
@@ -35,6 +35,7 @@
     "remark-parse": "^10.0.1",
     "remark-rehype": "^10.1.0",
     "remark-unwrap-images": "^3.0.1",
+    "rimraf": "^3.0.2",
     "svelte": "^3.46.2",
     "svelte-adapter-azure-swa": "^0.3.0",
     "svelte-check": "^2.3.0",
