@@ -3,6 +3,7 @@ export interface BlogMetadata {
     date: string;
     excerpt: string;
     slug: string;
+    tags: string[];
 }
 
 export interface BlogResponse {

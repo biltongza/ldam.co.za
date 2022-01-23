@@ -39,6 +39,11 @@
 <article>
 	<h2>{post.metadata.title}</h2>
 	<p class="date">{post.metadata.date}</p>
+	<p>
+		{#each post.metadata.tags as tag}
+			<sl-badge variant="primary" pill>{tag}</sl-badge>
+		{/each}
+	</p>
 	{@html post.content}
 </article>
 

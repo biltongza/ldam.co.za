@@ -38,7 +38,8 @@ export function process(filename: string): { metadata: BlogMetadata; content: st
 			title: 'Error!',
 			date: '?',
 			excerpt: 'Missing Frontmatter! Expected at least a title and a date!',
-			slug: slug
+			slug: slug,
+			tags: [],
 		};
 		content = 'Missing Frontmatter! Expected at least a title and a date!';
 	}

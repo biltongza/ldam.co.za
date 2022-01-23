@@ -32,6 +32,11 @@
 				<h2 class="title">{post.title}</h2>
 			</a>
 			<p class="date">{post.date}</p>
+			<p>
+				{#each post.tags as tag}
+					<sl-badge variant="primary" pill>{tag}</sl-badge>
+				{/each}
+			</p>
 			<p>{post.excerpt}</p>
 		</div>
 	{/each}
