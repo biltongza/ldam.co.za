@@ -64,6 +64,7 @@ As I alluded to before, I wanted to try out Blazor WebAssembly. While it was _co
 
 It all worked just fine on a desktop browser, with a nice fast internet connection, _but_ my initial bundle was 3MB, which is larger than the initial bundle of the entire transactional website I work on at my current client. _For a simple photography portfolio!_ It also took upwards of 20 seconds for Blazor to boot on my phone (a OnePlus Nord), even with AOT compilation and trimming enabled. 
 
+### Rebuild
 That just wasn't acceptable for me, so I searched for an alternative. My current day to day work is Angular, so that was out. I've used React on a side project (that I would love to talk about here one day!) and I'm not the biggest fan of it. I then found Svelte, and decided it was different enough and yet still in the same sort of paradigm of "web frameworks" that I'd be comfortable with to give it a try. 
 
 Svelte has a SPA mode (which works quite well I might add), and I wound up with around a 40kb bundle using it. _Sweet! Everything sorted then!_ I just needed to port what I had done in Blazor over to Svelte. It took an afternoon to get a functionally equivalent website up.
