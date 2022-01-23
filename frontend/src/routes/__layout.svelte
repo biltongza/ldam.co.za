@@ -1,20 +1,15 @@
 <script context="module" lang="ts">
-	import Header from '$lib/header.svelte';
+	import { getManifest } from '$lib/getManifest';
+	import Header from '$lib/header/header.svelte';
 	import { meta,title } from '$lib/stores';
 	import type { Manifest } from '$lib/types';
-	import { defaultMetadata,StorageBaseUrl } from '$lib/__consts';
+	import { defaultMetadata } from '$lib/__consts';
 	import type { Load } from '@sveltejs/kit';
+
 	let manifest: Manifest;
 	const load: Load = async function ({ fetch }) {
 		if (!manifest) {
-			const response = await fetch(`${StorageBaseUrl}/manifest.json?t=${new Date().valueOf()}`);
-			if (!response.ok) {
-				return {
-					status: response.status,
-					error: new Error(`Couldn't load manifest: ${response.status}`)
-				};
-			}
-			manifest = await response.json();
+			manifest = await getManifest();
 		}
 
 		return {

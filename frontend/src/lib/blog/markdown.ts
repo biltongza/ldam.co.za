@@ -10,8 +10,8 @@ import remark2rehype from 'remark-rehype';
 import remarkUnwrapImages from 'remark-unwrap-images';
 import * as vfile from 'to-vfile';
 import { unified } from 'unified';
-import type { BlogMetadata } from './types';
-import { DateFormat } from './__consts';
+import type { BlogMetadata } from '../types';
+import { DateFormat } from '../__consts';
 
 const parser = unified().use(parse).use(gfm).use(frontmatter, ['yaml']);
 

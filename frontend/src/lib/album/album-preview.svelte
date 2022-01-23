@@ -1,6 +1,6 @@
 <script lang="ts">
+	import type { Album,ImageMetadata } from '$lib/types';
 	import Thumbnail from './thumbnail.svelte';
-	import type { Album,ImageMetadata } from './types';
 	export let album: Album;
 	export let numberOfImages: number = Number.MAX_SAFE_INTEGER;
 

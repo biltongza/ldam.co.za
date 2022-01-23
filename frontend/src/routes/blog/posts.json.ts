@@ -1,4 +1,4 @@
-import { process } from '$lib/markdown';
+import { process } from '$lib/blog/markdown';
 import { DateFormat } from '$lib/__consts';
 import type { RequestHandler } from '@sveltejs/kit';
 import dayjs from 'dayjs';

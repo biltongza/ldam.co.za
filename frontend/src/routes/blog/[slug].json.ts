@@ -1,4 +1,4 @@
-import { process } from '$lib/markdown';
+import { process } from '$lib/blog/markdown';
 import type { BlogResponse } from '$lib/types';
 
 export async function get({ params }) {

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import SocialIcon from './header/social-icon.svelte';
 	import RouterLink from './router-link.svelte';
+	import SocialIcon from './social-icon.svelte';
 	let smol = false;
 	let expanded = false;
 	onMount(() => {

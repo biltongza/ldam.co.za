@@ -7,11 +7,11 @@
 </script>
 
 <script lang="ts">
-	import type { ImageMetadata } from './types';
+	import type { ImageMetadata } from '$lib/types';
 	import {
 	StorageBaseUrl,
 	ThumbnailHrefNormalDensity
-	} from './__consts';
+	} from '$lib/__consts';
 
 	export let image: ImageMetadata = undefined;
 	let imageRoute: string;

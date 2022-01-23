@@ -21,7 +21,7 @@
 </script>
 
 <script lang="ts">
-	export let posts: BlogMetadata[];
+	export let posts: BlogMetadata[] = [];
 </script>
 
 <div>
