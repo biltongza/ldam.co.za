@@ -7,9 +7,11 @@
 		<ImplicitUsings>true</ImplicitUsings>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
+		<Nullable>warnings</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="AspNet.Security.OAuth.AdobeIO" Version="6.0.1" />
+		<PackageReference Include="Azure.ResourceManager.Cdn" Version="1.0.0-beta.2" />
 		<PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.20.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />

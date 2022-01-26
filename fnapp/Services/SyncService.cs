@@ -13,6 +13,7 @@ public class SyncService
     private readonly IStorageService storageService;
     private readonly ILogger logger;
     private readonly IMetadataService metadataService;
+    private readonly ICdnService cdnService;
 
     public const string JpgMimeType = "image/jpeg";
     public const string JsonMimeType = "application/json";
@@ -22,13 +23,15 @@ public class SyncService
         IConfiguration configuration,
         IStorageService storageService,
         ILogger<SyncService> logger,
-        IMetadataService metadataService)
+        IMetadataService metadataService,
+        ICdnService cdnService)
     {
         this.lightroomService = lightroomService;
         this.configuration = configuration;
         this.storageService = storageService;
         this.logger = logger;
         this.metadataService = metadataService;
+        this.cdnService = cdnService;
     }
 
     public async Task Synchronize(bool force)
@@ -55,6 +58,12 @@ public class SyncService
                 manifest = await JsonSerializer.DeserializeAsync(manifestStream, typeof(Manifest), ManifestSerializerContext.Default) as Manifest;
             }
         }
+
+        if(manifest == null)
+        {
+            throw new InvalidOperationException("Manifest is null! Is the json in storage valid?");
+        }
+
         var albumsToSync = await lightroomService.GetAlbums()
             .Where(album => albumIdsToSync.Contains(album.Key))
             .ToListAsync();
@@ -144,6 +153,9 @@ public class SyncService
             serializedStream.Seek(0, SeekOrigin.Begin);
             await storageService.Store(manifestName, serializedStream, JsonMimeType);
             logger.LogInformation("Manifest {manifestName} updated", manifestName);
+            logger.LogInformation("Purging CDN cache");
+            await cdnService.ClearCache("/*");
+            logger.LogInformation("CDN cache purged");
         }
     }
 }

@@ -1,3 +1,5 @@
+using Azure.Identity;
+using Azure.ResourceManager;
 using ldam.co.za.fnapp.Services;
 using ldam.co.za.lib.Lightroom;
 using ldam.co.za.lib.Services;
@@ -42,5 +44,24 @@ public class Startup : FunctionsStartup
         services.AddTransient<SyncService>();
         services.AddTransient<ILightroomTokenService, LightroomTokenService>();
         services.AddTransient<IMetadataService, MetadataService>();
+        services.AddTransient<ICdnService>((svp) =>
+        {
+            var armClient = new ArmClient(
+                new ChainedTokenCredential(
+                    #if DEBUG
+                    new AzureCliCredential(),
+                    #endif
+                    new ManagedIdentityCredential()
+                )
+            );
+            
+            return new CdnService(
+                armClient, 
+                config[Constants.Configuration.Azure.CdnSubscriptionId], 
+                config[Constants.Configuration.Azure.CdnResourceGroup],
+                config[Constants.Configuration.Azure.CdnProfileName],
+                config[Constants.Configuration.Azure.CdnEndpointName]
+            );
+        });
     }
 }

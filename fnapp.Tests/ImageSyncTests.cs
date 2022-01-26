@@ -22,6 +22,7 @@ public class ImageSyncTests
     private readonly Mock<IStorageService> mockStorageService = new();
     private readonly Mock<ILogger<SyncService>> mockLogger = new();
     private readonly Mock<IMetadataService> mockMetadataService = new();
+    private readonly Mock<ICdnService> mockCdnService = new();
     private readonly SyncService syncService;
     public ImageSyncTests()
     {
@@ -33,7 +34,8 @@ public class ImageSyncTests
             mockConfiguration.Object,
             mockStorageService.Object,
             mockLogger.Object,
-            mockMetadataService.Object
+            mockMetadataService.Object,
+            mockCdnService.Object
         );
     }
 
@@ -77,7 +79,7 @@ public class ImageSyncTests
                 }
         };
 
-        Stream serialisedManifest = new MemoryStream(JsonSerializer.SerializeToUtf8Bytes(mockManifest));
+        Stream serialisedManifest = new MemoryStream(JsonSerializer.SerializeToUtf8Bytes(mockManifest, typeof(Manifest), ManifestSerializerContext.Default));
 
         mockLightroomService
             .Setup(x => x.GetAlbums())
@@ -92,6 +94,7 @@ public class ImageSyncTests
         await syncService.Synchronize(false);
 
         mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>()), Times.Never);
+        mockCdnService.Verify(x => x.ClearCache(It.IsAny<string>()), Times.Never);
     }
 
     [Fact]
@@ -117,7 +120,7 @@ public class ImageSyncTests
                 }
         };
 
-        Stream serialisedManifest = new MemoryStream(JsonSerializer.SerializeToUtf8Bytes(mockManifest));
+        Stream serialisedManifest = new MemoryStream(JsonSerializer.SerializeToUtf8Bytes(mockManifest, typeof(Manifest), ManifestSerializerContext.Default));
 
         mockLightroomService
             .Setup(x => x.GetAlbums())
@@ -134,6 +137,7 @@ public class ImageSyncTests
         await syncService.Synchronize(false);
 
         mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>()), Times.Once);
+        mockCdnService.Verify(x => x.ClearCache(It.IsAny<string>()), Times.Once);
     }
 
     [Fact]
@@ -155,7 +159,7 @@ public class ImageSyncTests
                 }
         };
 
-        Stream serialisedManifest = new MemoryStream(JsonSerializer.SerializeToUtf8Bytes(mockManifest));
+        Stream serialisedManifest = new MemoryStream(JsonSerializer.SerializeToUtf8Bytes(mockManifest, typeof(Manifest), ManifestSerializerContext.Default));
 
         mockLightroomService
             .Setup(x => x.GetAlbums())
@@ -170,6 +174,7 @@ public class ImageSyncTests
         await syncService.Synchronize(false);
 
         mockStorageService.Verify(x => x.DeleteBlobsStartingWith("image1"), Times.Once);
+        mockCdnService.Verify(x => x.ClearCache(It.IsAny<string>()), Times.Once);
     }
 }
 
