@@ -12,10 +12,7 @@
 		const manifest: Manifest = stuff.manifest;
 		const imageId = params.imageId;
 		const match = Object.entries(manifest.albums || {})
-			.flatMap(([_, album]) => {
-				console.log(album);
-				return Object.entries(album.images || {});
-			})
+			.flatMap(([_, album]) => Object.entries(album.images || {}))
 			.find(([key]) => key === imageId);
 		if (!match) {
 			return {
