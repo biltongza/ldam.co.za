@@ -27,4 +27,8 @@
 </script>
 
 <h3>{status}</h3>
-<p>Something went wrong :(</p>
+{#if status === 404}
+	<p>That page doesn't seem to exist :(</p>
+{:else}
+	<p>Something went wrong :(</p>
+{/if}

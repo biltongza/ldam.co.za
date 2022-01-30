@@ -11,9 +11,18 @@
 	const load: Load = function ({ params, stuff }) {
 		const manifest: Manifest = stuff.manifest;
 		const imageId = params.imageId;
-		[, metadata] = Object.entries(manifest.albums)
-			.flatMap(([_, album]) => Object.entries(album.images))
+		const match = Object.entries(manifest.albums || {})
+			.flatMap(([_, album]) => {
+				console.log(album);
+				return Object.entries(album.images || {});
+			})
 			.find(([key]) => key === imageId);
+		if (!match) {
+			return {
+				status: 404
+			};
+		}
+		[, metadata] = match;
 		const href = metadata.hrefs[HighResHref];
 		src = `${StorageBaseUrl}/${href}`;
 		title.set(metadata.title);
