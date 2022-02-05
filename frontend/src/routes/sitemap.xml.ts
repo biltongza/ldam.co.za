@@ -3,18 +3,18 @@ import { getManifest } from '$lib/getManifest';
 import { website } from '$lib/info';
 import type { ImageMetadata } from '$lib/types';
 import { StorageBaseUrl } from '$lib/__consts';
-import type { EndpointOutput } from '@sveltejs/kit';
-import type { DefaultBody } from '@sveltejs/kit/types/endpoint';
+import type { RequestHandler } from '@sveltejs/kit/types/endpoint';
 import fs from 'fs';
 import glob from 'glob';
-export async function get(): Promise<EndpointOutput<DefaultBody>> {
+
+export const get: RequestHandler = async function () {
 	const headers = {
 		'Cache-Control': 'max-age=0, s-maxage=3600',
 		'Content-Type': 'application/xml'
 	};
-	
+
 	const manifest = await getManifest();
-	
+
 	const routes = { about: 'src/routes/about.svelte', blog: 'src/routes/blog/index.svelte' };
 	const files = Object.entries(routes).map(([route, path]) => {
 		const lastModified = metadata.find((x) => x.path === path).lastModified;
@@ -34,7 +34,7 @@ export async function get(): Promise<EndpointOutput<DefaultBody>> {
 				resolve(
 					matches.map((match) => ({
 						file: match,
-						url: `blog/${match.slice(match.lastIndexOf('/')+1, -3)}`,
+						url: `blog/${match.slice(match.lastIndexOf('/') + 1, -3)}`,
 						lastModified: fs.statSync(match).mtime.toISOString()
 					}))
 				);
@@ -94,4 +94,4 @@ export async function get(): Promise<EndpointOutput<DefaultBody>> {
 					.join('')}
       </urlset>`
 	};
-}
+};

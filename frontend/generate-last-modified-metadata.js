@@ -7,7 +7,10 @@ glob(`${routesPath}/**/*.svelte`, (err, matches) => {
 		throw err;
 	}
 
-	const lastModified = matches.map((match) => ({ path: match, lastModified: fs.statSync(match).mtimeMs }));
+	const lastModified = matches.map((match) => ({
+		path: match,
+		lastModified: fs.statSync(match).mtimeMs
+	}));
 	const lastModifiedJson = `export const metadata = ${JSON.stringify(lastModified)}`;
 	fs.writeFileSync(path.join('src', 'lib', '.metadata.js'), lastModifiedJson);
 });

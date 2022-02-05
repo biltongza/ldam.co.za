@@ -1,29 +1,29 @@
 .typography-regular {
-    --mono: "MONO" 0;
-    --casl: "CASL" 0;
-    --wght: "wght" 500;
-    --slnt: "slnt" 0;
-    --crsv: "CRSV" 0.5;
-    font-family: 'Recursive', monospace;
-    font-variation-settings: var(--mono), var(--casl), var(--wght), var(--slnt), var(--crsv); 
+	--mono: 'MONO' 0;
+	--casl: 'CASL' 0;
+	--wght: 'wght' 500;
+	--slnt: 'slnt' 0;
+	--crsv: 'CRSV' 0.5;
+	font-family: 'Recursive', monospace;
+	font-variation-settings: var(--mono), var(--casl), var(--wght), var(--slnt), var(--crsv);
 }
 
 .typography-light {
-    --mono: "MONO" 0;
-    --casl: "CASL" 0;
-    --wght: "wght" 300;
-    --slnt: "slnt" 0;
-    --crsv: "CRSV" 0.5;
-    font-family: 'Recursive', monospace;
-    font-variation-settings: var(--mono), var(--casl), var(--wght), var(--slnt), var(--crsv); 
+	--mono: 'MONO' 0;
+	--casl: 'CASL' 0;
+	--wght: 'wght' 300;
+	--slnt: 'slnt' 0;
+	--crsv: 'CRSV' 0.5;
+	font-family: 'Recursive', monospace;
+	font-variation-settings: var(--mono), var(--casl), var(--wght), var(--slnt), var(--crsv);
 }
 
 .typography-mono {
-    --mono: "MONO" 1;
-    --casl: "CASL" 0;
-    --wght: "wght" 300;
-    --slnt: "slnt" 0;
-    --crsv: "CRSV" 0.5;
-    font-family: 'Recursive', monospace;
-    font-variation-settings: var(--mono), var(--casl), var(--wght), var(--slnt), var(--crsv); 
+	--mono: 'MONO' 1;
+	--casl: 'CASL' 0;
+	--wght: 'wght' 300;
+	--slnt: 'slnt' 0;
+	--crsv: 'CRSV' 0.5;
+	font-family: 'Recursive', monospace;
+	font-variation-settings: var(--mono), var(--casl), var(--wght), var(--slnt), var(--crsv);
 }

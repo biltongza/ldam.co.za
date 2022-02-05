@@ -1,10 +1,10 @@
 <script context="module" lang="ts">
-	import { meta,title } from '$lib/stores';
+	import { metaStore, titleStore } from '$lib/stores';
 	import type { BlogResponse } from '$lib/types';
 	import type { Load } from '@sveltejs/kit';
 	import { onDestroy } from 'svelte';
 
-	const load: Load = async function load({ params, fetch }) {
+	export const load: Load = async function load({ params, fetch }) {
 		const slug = params.slug;
 		const response = await fetch(`${slug}.json`);
 		if (!response.ok) {
@@ -14,8 +14,8 @@
 			};
 		}
 		const post: BlogResponse = await response.json();
-		title.set(post.metadata.title);
-		meta.set({
+		titleStore.set(post.metadata.title);
+		metaStore.set({
 			'og:type': 'article',
 			'og:title': post.metadata.title,
 			'og:description': post.metadata.excerpt
@@ -24,15 +24,13 @@
 			props: { post }
 		};
 	};
-
-	export { load };
 </script>
 
 <script lang="ts">
 	export let post: BlogResponse;
 	onDestroy(() => {
-		title.set(undefined);
-		meta.set(undefined);
+		titleStore.set(undefined);
+		metaStore.set(undefined);
 	});
 </script>
 

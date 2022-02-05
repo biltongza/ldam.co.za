@@ -4,13 +4,11 @@
 	import type { Load } from '@sveltejs/kit';
 
 	let manifest: Manifest;
-	const load: Load = function ({ stuff }) {
+	export const load: Load = function ({ stuff }) {
 		manifest = stuff.manifest;
 
 		return {};
 	};
-
-	export { load };
 </script>
 
 <div>

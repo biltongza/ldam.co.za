@@ -1,25 +1,18 @@
 <script lang="ts">
-    export let showText = false;
-    export let text: string;
-    export let label: string;
-    export let icon: string;
-    export let href: string;
+	export let showText = false;
+	export let text: string;
+	export let label: string;
+	export let icon: string;
+	export let href: string;
 </script>
 
-<sl-button
-	variant="default"
-	size="medium"
-	href={href}
-	target="_blank"
-	label={label}
->
+<sl-button variant="default" size="medium" {href} target="_blank" {label}>
 	<sl-icon slot="prefix" name={icon} />
 	{showText ? text : ''}
 </sl-button>
 
-
 <style lang="scss">
-    sl-button::part(base) {
+	sl-button::part(base) {
 		border-radius: unset;
 		background-color: unset;
 		color: unset;

@@ -1,3 +1,4 @@
+import type { BlogMetadata } from '$lib/types';
 import dayjs from 'dayjs';
 import yaml from 'js-yaml';
 import rehypeExternalLinks from 'rehype-external-links';
@@ -10,7 +11,6 @@ import remark2rehype from 'remark-rehype';
 import remarkUnwrapImages from 'remark-unwrap-images';
 import * as vfile from 'to-vfile';
 import { unified } from 'unified';
-import type { BlogMetadata } from '../types';
 import { DateFormat } from '../__consts';
 
 const parser = unified().use(parse).use(gfm).use(frontmatter, ['yaml']);
@@ -39,7 +39,7 @@ export function process(filename: string): { metadata: BlogMetadata; content: st
 			date: '?',
 			excerpt: 'Missing Frontmatter! Expected at least a title and a date!',
 			slug: slug,
-			tags: [],
+			tags: []
 		};
 		content = 'Missing Frontmatter! Expected at least a title and a date!';
 	}

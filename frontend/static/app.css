@@ -1,7 +1,7 @@
 @import 'typography.css';
 html,
 body {
-    font-family: 'Recursive', monospace;
+	font-family: 'Recursive', monospace;
 	background-color: var(--sl-color-neutral-50);
 }
 
@@ -13,8 +13,7 @@ body {
 	text-decoration: none;
 }
 
-
-a, 
+a,
 a:visited {
 	color: inherit;
 }

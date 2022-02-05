@@ -3,7 +3,7 @@
 	import type { BlogMetadata } from '$lib/types';
 	import type { Load } from '@sveltejs/kit';
 	import dayjs from 'dayjs';
-	const load: Load = async function load({ fetch }) {
+	export const load: Load = async function load({ fetch }) {
 		const response = await fetch(`${base}/blog/posts.json`);
 		if (!response.ok) {
 			return {
@@ -17,7 +17,6 @@
 			props: { posts: sortedPosts }
 		};
 	};
-	export { load };
 </script>
 
 <script lang="ts">

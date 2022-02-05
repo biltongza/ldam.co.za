@@ -1,13 +1,13 @@
 <script context="module" lang="ts">
 	import { getManifest } from '$lib/getManifest';
 	import Header from '$lib/header/header.svelte';
-	import { meta,title } from '$lib/stores';
+	import { metaStore, titleStore } from '$lib/stores';
 	import type { Manifest } from '$lib/types';
 	import { defaultMetadata } from '$lib/__consts';
 	import type { Load } from '@sveltejs/kit';
 
 	let manifest: Manifest;
-	const load: Load = async function ({ fetch }) {
+	export const load: Load = async function () {
 		if (!manifest) {
 			manifest = await getManifest();
 		}
@@ -18,15 +18,13 @@
 			}
 		};
 	};
-
-	export { load };
 </script>
 
 <script lang="ts">
 	export let pageTitle: string;
 	export let metas: { key: string; value: string }[];
-	$: pageTitle = `${$title ? $title + ' - ' : ''}Logan Dam - Developer, Photographer`;
-	$: metas = Object.entries({ ...defaultMetadata, ...$meta }).map(([key, value]) => ({
+	$: pageTitle = `${$titleStore ? $titleStore + ' - ' : ''}Logan Dam - Developer, Photographer`;
+	$: metas = Object.entries({ ...defaultMetadata, ...$metaStore }).map(([key, value]) => ({
 		key,
 		value
 	}));
@@ -34,8 +32,8 @@
 
 <svelte:head>
 	<title>{pageTitle}</title>
-	{#each metas as meta (meta.key)}
-		<meta property={meta.key} content={meta.value} />
+	{#each metas as m (m.key)}
+		<meta property={m.key} content={m.value} />
 	{/each}
 </svelte:head>
 

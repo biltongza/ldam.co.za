@@ -1,14 +1,14 @@
 <script context="module" lang="ts">
-	import { meta,title } from '$lib/stores';
-	import type { ImageMetadata,Manifest } from '$lib/types';
-	import { HighResHref,HighResMaxDimension,StorageBaseUrl } from '$lib/__consts';
+	import { metaStore, titleStore } from '$lib/stores';
+	import type { ImageMetadata, Manifest } from '$lib/types';
+	import { HighResHref, HighResMaxDimension, StorageBaseUrl } from '$lib/__consts';
 	import type { Load } from '@sveltejs/kit';
 	import { onDestroy } from 'svelte';
 
 	let src: string;
 	let metadata: ImageMetadata;
 	let date: Date;
-	const load: Load = function ({ params, stuff }) {
+	export const load: Load = function ({ params, stuff }) {
 		const manifest: Manifest = stuff.manifest;
 		const imageId = params.imageId;
 		const match = Object.entries(manifest.albums || {})
@@ -22,7 +22,7 @@
 		[, metadata] = match;
 		const href = metadata.hrefs[HighResHref];
 		src = `${StorageBaseUrl}/${href}`;
-		title.set(metadata.title);
+		titleStore.set(metadata.title);
 		const [widthRatio, heightRatio] = metadata.aspectRatio.split(':').map((x) => Number(x));
 		const width =
 			widthRatio > heightRatio
@@ -32,7 +32,7 @@
 			heightRatio > widthRatio
 				? HighResMaxDimension
 				: (heightRatio / widthRatio) * HighResMaxDimension;
-		meta.set({
+		metaStore.set({
 			'twitter:card': 'summary_large_image',
 			'og:type': 'article',
 			'og:image': src,
@@ -42,18 +42,15 @@
 			'og:image:height': height.toString(),
 			'og:image:alt': metadata.caption
 		});
-		//
 		date = new Date(metadata.captureDate);
 		return {};
 	};
-
-	export { load };
 </script>
 
 <script lang="ts">
 	onDestroy(() => {
-		title.set(undefined);
-		meta.set(undefined);
+		titleStore.set(undefined);
+		metaStore.set(undefined);
 	});
 </script>
 

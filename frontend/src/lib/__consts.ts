@@ -14,5 +14,5 @@ export const defaultMetadata = {
 	'og:description': "Logan Dam's portfolio of photography and code.",
 	'og:image': 'https://beta.ldam.co.za/favicon-310.png',
 	'og:url': base,
-    'og:locale': 'en_ZA'
+	'og:locale': 'en_ZA'
 };

@@ -4,26 +4,26 @@
 	import type { ErrorLoad } from '@sveltejs/kit';
 
 	const appInsights: IApplicationInsights = browser && (<any>window).appInsights;
-	const load: ErrorLoad = function ({ error, status, url, params }) {
-		appInsights && appInsights.trackException({
-			error: error,
-            properties: {
-                status,
-				url,
-                ...params,
-            },
-		});
+	export const load: ErrorLoad = function ({ error, status, url, params }) {
+		appInsights &&
+			appInsights.trackException({
+				error: error,
+				properties: {
+					status,
+					url,
+					...params
+				}
+			});
 		return {
-            props: {
-                status,
-            }
-        };
+			props: {
+				status
+			}
+		};
 	};
-
-	export { load };
 </script>
+
 <script lang="ts">
-    export let status: number;
+	export let status: number;
 </script>
 
 <h3>{status}</h3>
