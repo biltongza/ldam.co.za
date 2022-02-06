@@ -37,6 +37,5 @@ jobs:
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "frontend" # App source code path
           api_location: "frontend/api" # Api source code path - optional
-          output_location: "frontend/build/static"
-          skip_app_build: true
+          output_location: "frontend/build/static"     
           ###### End of Repository/Build Configurations ######
