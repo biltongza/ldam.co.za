@@ -48,5 +48,8 @@
 	"type": "module",
 	"dependencies": {
 		"@types/js-yaml": "^4.0.5"
+	}, 
+	"engines": {
+		"node": "16.x"
 	}
 }
