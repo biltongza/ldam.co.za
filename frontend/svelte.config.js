@@ -8,15 +8,7 @@ const config = {
 	preprocess: preprocess(),
 
 	kit: {
-		adapter: azure({
-			customStaticWebAppConfig: {
-				globalHeaders: {
-					"X-Content-Type-Options": "nosniff",
-					"X-Frame-Options": "DENY",
-					"Content-Security-Policy-Report-Only": "default-src 'self'; img-src cdn.ldam.co.za; style-src cdn.jsdelivr.net fonts.googleapis.com; script-src az416426.vo.msecnd.net cdn.jsdelivr.net"
-				}
-			}
-		})
+		adapter: azure()
 	}
 };
 
