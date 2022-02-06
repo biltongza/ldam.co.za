@@ -1,1 +1,1 @@
-export const website = 'https://beta.ldam.co.za';
+export const website = 'https://ldam.co.za';
