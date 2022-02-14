@@ -11,14 +11,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
-using Constants = ldam.co.za.fnapp.Constants;
-
+using Microsoft.Extensions.Options;
 
 public class ImageSyncTests
 {
     const string ManifestName = "manifest.json";
     private readonly Mock<ILightroomService> mockLightroomService = new();
-    private readonly Mock<IConfiguration> mockConfiguration = new();
+    private readonly Mock<IOptionsSnapshot<FunctionAppLightroomOptions>> mockOptions = new();
     private readonly Mock<IStorageService> mockStorageService = new();
     private readonly Mock<ILogger<SyncService>> mockLogger = new();
     private readonly Mock<IMetadataService> mockMetadataService = new();
@@ -26,12 +25,15 @@ public class ImageSyncTests
     private readonly SyncService syncService;
     public ImageSyncTests()
     {
-        mockConfiguration.Setup(x => x[Constants.Configuration.Adobe.AlbumIds]).Returns("testalbum1");
-        mockConfiguration.Setup(x => x[Constants.Configuration.Adobe.SizesToSync]).Returns("2048");
+        mockOptions.SetupGet(x => x.Value).Returns(new FunctionAppLightroomOptions
+        {
+            AlbumIds = "testalbum1",
+            SizesToSync = "2048"
+        });
         mockMetadataService.Setup(x => x.MapAdobeMetadataToManifestMetadata(It.IsAny<ImageInfo>())).Returns(new ImageMetadata());
         syncService = new SyncService(
             mockLightroomService.Object,
-            mockConfiguration.Object,
+            mockOptions.Object,
             mockStorageService.Object,
             mockLogger.Object,
             mockMetadataService.Object,

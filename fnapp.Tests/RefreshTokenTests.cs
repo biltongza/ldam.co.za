@@ -5,6 +5,7 @@ using ldam.co.za.fnapp.Services;
 using ldam.co.za.lib.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
 
@@ -12,7 +13,7 @@ namespace ldam.co.za.fnapp.Tests;
 
 public class RefreshTokenTests
 {
-    private readonly Mock<IConfiguration> mockConfiguration = new();
+    private readonly Mock<IOptionsSnapshot<FunctionAppLightroomOptions>> mockOptions = new();
     private readonly Mock<ILogger<RefreshTokenService>> mockLogger = new();
     private readonly Mock<ISecretService> mockSecretService = new();
     private readonly Mock<IClock> mockClock = new();
@@ -25,13 +26,16 @@ public class RefreshTokenTests
 
     public RefreshTokenTests()
     {
-        mockConfiguration.Setup(x => x[Constants.Configuration.Adobe.RefreshTokenWindowMinutes]).Returns(refreshWindowMinutes.ToString());
+        mockOptions.SetupGet(x => x.Value).Returns(new FunctionAppLightroomOptions
+        {
+            RefreshTokenWindowMinutes = refreshWindowMinutes.ToString()
+        });
         mockSecretService.Setup(x => x.GetSecret(lib.Constants.KeyVault.LightroomAccessToken)).Returns(Task.FromResult(testAccessToken));
         mockSecretService.Setup(x => x.GetSecret(lib.Constants.KeyVault.LightroomRefreshToken)).Returns(Task.FromResult(testRefreshToken));
         refreshTokenService = new RefreshTokenService(
             mockSecretService.Object,
             mockClock.Object,
-            mockConfiguration.Object,
+            mockOptions.Object,
             mockLogger.Object,
             mockLightroomTokenService.Object
         );
