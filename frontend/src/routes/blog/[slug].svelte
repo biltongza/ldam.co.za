@@ -1,33 +1,16 @@
-<script context="module" lang="ts">
-	import { metaStore, titleStore } from '$lib/stores';
-	import type { BlogResponse } from '$lib/types';
-	import type { Load } from '@sveltejs/kit';
-	import { onDestroy } from 'svelte';
-
-	export const load: Load = async function load({ params, fetch }) {
-		const slug = params.slug;
-		const response = await fetch(`${slug}.json`);
-		if (!response.ok) {
-			return {
-				status: response.status,
-				error: new Error(`Couldn't load blog post for slug '${slug}': ${response.status}`)
-			};
-		}
-		const post: BlogResponse = await response.json();
-		titleStore.set(post.metadata.title);
-		metaStore.set({
-			'og:type': 'article',
-			'og:title': post.metadata.title,
-			'og:description': post.metadata.excerpt
-		});
-		return {
-			props: { post }
-		};
-	};
-</script>
-
 <script lang="ts">
+	import { metaStore,titleStore } from '$lib/stores';
+	import type { BlogResponse } from '$lib/types';
+	import { onDestroy } from 'svelte';
 	export let post: BlogResponse;
+
+	titleStore.set(post.metadata.title);
+	metaStore.set({
+		'og:type': 'article',
+		'og:title': post.metadata.title,
+		'og:description': post.metadata.excerpt
+	});
+
 	onDestroy(() => {
 		titleStore.set(undefined);
 		metaStore.set(undefined);

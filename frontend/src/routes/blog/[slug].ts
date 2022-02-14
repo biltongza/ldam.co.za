@@ -7,7 +7,11 @@ export const get: RequestHandler = async function ({ params }) {
 	const { slug } = params;
 
 	const blogResponse: BlogResponse = process(`src/posts/${slug}.md`);
-	const body = JSON.stringify(blogResponse);
+	const result: Typify<BlogResponse> = blogResponse;
 
-	return { body };
+	return {
+		body: {
+			post: result
+		}
+	};
 };
