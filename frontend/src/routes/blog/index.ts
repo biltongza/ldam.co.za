@@ -1,4 +1,5 @@
 import { process } from '$lib/blog/markdown';
+import type { BlogMetadata } from '$lib/types';
 import { DateFormat } from '$lib/__consts';
 import type { RequestHandler } from '@sveltejs/kit';
 import dayjs from 'dayjs';
@@ -13,10 +14,12 @@ export const get: RequestHandler = function () {
 			return metadata;
 		});
 	// sort the posts by create date.
-	posts.sort((a, b) => dayjs(a.date, DateFormat).valueOf() - dayjs(b.date, DateFormat).valueOf());
-	const body = JSON.stringify(posts);
+	posts.sort((a, b) => dayjs(b.date, DateFormat).valueOf() - dayjs(a.date, DateFormat).valueOf());
+	const result: Typify<BlogMetadata[]> = posts;
 
 	return {
-		body
+		body: {
+			posts: result
+		},
 	};
 };
