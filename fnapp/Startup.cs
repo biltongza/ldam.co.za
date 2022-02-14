@@ -20,10 +20,6 @@ public class Startup : FunctionsStartup
 
         var config = builder.GetContext().Configuration;
         services.AddMemoryCache();
-        services.AddOptions<FunctionAppAzureResourceOptions>("Azure");
-        services.AddOptions<AzureResourceOptions>("Azure");
-        services.AddOptions<FunctionAppLightroomOptions>("Lightroom");
-        services.AddOptions<LightroomOptions>("Lightroom");
         services.AddTransient<ISecretService, SecretService>();
 
         services.AddTransient<IAccessTokenProvider, AccessTokenProvider>();
