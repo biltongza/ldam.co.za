@@ -1,20 +1,22 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using ldam.co.za.lib.Configuration;
+using Microsoft.Extensions.Options;
+
 namespace ldam.co.za.lib.Lightroom;
 
 public class LightroomClient : ILightroomClient, IDisposable
 {
     private readonly HttpClient httpClient;
     private readonly IAccessTokenProvider accessTokenProvider;
-    private readonly string baseUrl;
     private static readonly Regex WhileRegex = new(@"^while\s*\(\s*1\s*\)\s*{\s*}\s*", RegexOptions.Compiled);
-    public LightroomClient(IHttpClientFactory httpClientFactory, IAccessTokenProvider accessTokenProvider, string baseUrl, string apiKey)
+    public LightroomClient(IHttpClientFactory httpClientFactory, IAccessTokenProvider accessTokenProvider, IOptionsSnapshot<LightroomOptions> options)
     {
         this.accessTokenProvider = accessTokenProvider;
         httpClient = httpClientFactory.CreateClient("lightroom");
-        httpClient.DefaultRequestHeaders.Add("X-API-KEY", apiKey);
-        this.baseUrl = baseUrl;
+        httpClient.DefaultRequestHeaders.Add("X-API-KEY", options.Value.ClientId);
+        httpClient.BaseAddress = options.Value.BaseUrl;
     }
 
     protected async Task<HttpRequestMessage> PrepareRequest(HttpMethod method, string resource)
@@ -22,7 +24,7 @@ public class LightroomClient : ILightroomClient, IDisposable
         var request = new HttpRequestMessage();
         var accessToken = await accessTokenProvider.GetAccessToken();
         request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
-        request.RequestUri = new Uri(new Uri(this.baseUrl), resource);
+        request.RequestUri = new Uri(resource, UriKind.Relative);
         request.Method = method;
         return request;
     }
@@ -47,7 +49,7 @@ public class LightroomClient : ILightroomClient, IDisposable
 
     public async Task<CatalogResponse> GetCatalog()
     {
-        var request = await PrepareRequest(HttpMethod.Get, "/v2/catalog");
+        var request = await PrepareRequest(HttpMethod.Get, "v2/catalog");
         var response = await httpClient.SendAsync(request);
         var result = await HandleResponse<CatalogResponse>(response);
         return result;
@@ -55,7 +57,7 @@ public class LightroomClient : ILightroomClient, IDisposable
 
     public async Task<HealthResponse> GetHealth()
     {
-        var request = await PrepareRequest(HttpMethod.Get, "/v2/health");
+        var request = await PrepareRequest(HttpMethod.Get, "v2/health");
         var response = await httpClient.SendAsync(request);
         var result = await HandleResponse<HealthResponse>(response);
         return result;
@@ -64,7 +66,7 @@ public class LightroomClient : ILightroomClient, IDisposable
     public async Task<AlbumsResponse> GetAlbums(string catalogId, string after = null)
     {
         var builder = new StringBuilder();
-        builder.Append("/v2/catalogs/");
+        builder.Append("v2/catalogs/");
         builder.Append(catalogId);
         builder.Append("/albums");
         if (!string.IsNullOrWhiteSpace(after))
@@ -81,7 +83,7 @@ public class LightroomClient : ILightroomClient, IDisposable
     public async Task<AlbumAssetResponse> GetAlbumAssets(string catalogId, string albumId, string after = null)
     {
         var builder = new StringBuilder();
-        builder.Append("/v2/catalogs/");
+        builder.Append("v2/catalogs/");
         builder.Append(catalogId);
         builder.Append("/albums/");
         builder.Append(albumId);
@@ -116,7 +118,7 @@ public class LightroomClient : ILightroomClient, IDisposable
         }
 
         var builder = new StringBuilder();
-        builder.Append("/v2/catalogs/");
+        builder.Append("v2/catalogs/");
         builder.Append(catalogId);
         builder.Append('/');
         builder.Append(href);

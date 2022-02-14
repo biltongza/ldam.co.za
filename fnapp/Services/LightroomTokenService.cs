@@ -2,6 +2,7 @@ using AspNet.Security.OAuth.AdobeIO;
 using ldam.co.za.lib.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace ldam.co.za.fnapp.Services;
 
@@ -14,14 +15,14 @@ public class LightroomTokenService : ILightroomTokenService
 {
     private readonly IHttpClientFactory httpClientFactory;
     private readonly ISecretService secretService;
-    private readonly IConfiguration configuration;
+    private readonly IOptions<FunctionAppLightroomOptions> options;
     private readonly ILogger logger;
 
-    public LightroomTokenService(IHttpClientFactory httpClientFactory, ISecretService secretService, IConfiguration configuration, ILogger<LightroomTokenService> logger)
+    public LightroomTokenService(IHttpClientFactory httpClientFactory, ISecretService secretService, IOptions<FunctionAppLightroomOptions> options, ILogger<LightroomTokenService> logger)
     {
         this.httpClientFactory = httpClientFactory;
         this.secretService = secretService;
-        this.configuration = configuration;
+        this.options = options;
         this.logger = logger;
     }
 
@@ -29,11 +30,10 @@ public class LightroomTokenService : ILightroomTokenService
     {
         var refreshToken = await secretService.GetSecret(lib.Constants.KeyVault.LightroomRefreshToken);
         var clientSecret = await secretService.GetSecret(lib.Constants.KeyVault.LightroomClientSecret);
-        var clientId = configuration[Constants.Configuration.Adobe.AuthClientId];
 
         var pairs = new Dictionary<string, string>()
             {
-                { "client_id", clientId },
+                { "client_id", options.Value.ClientId },
                 { "client_secret", clientSecret },
                 { "grant_type", "refresh_token" },
                 { "refresh_token", refreshToken }

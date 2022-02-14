@@ -1,3 +1,6 @@
+using Azure.Core;
+using Azure.Identity;
+using ldam.co.za.lib.Configuration;
 using ldam.co.za.lib.Lightroom;
 using ldam.co.za.lib.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -9,8 +12,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
                 .AddCookie(cfg => cfg.ForwardChallenge = "adobe")
                 .AddAdobeIO("adobe", options =>
                 {
-                    options.ClientId = builder.Configuration[Constants.AdobeConfiguration.Auth.ClientId];
-                    options.ClientSecret = builder.Configuration[Constants.AdobeConfiguration.Auth.ClientSecret];
+                    options.ClientId = builder.Configuration[Constants.AdobeConfiguration.ClientId];
+                    options.ClientSecret = builder.Configuration[Constants.AdobeConfiguration.ClientSecret];
                     options.Scope.Add("lr_partner_apis");
                     options.Scope.Add("offline_access");
                     options.SaveTokens = true;
@@ -18,7 +21,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddAuthorization();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IAccessTokenProvider, AccessTokenProvider>();
-builder.Services.AddSingleton<ISecretService, SecretService>((_) => new SecretService(builder.Configuration[Constants.AzureConfiguration.KeyVaultUri]));
+builder.Services.Configure<AzureResourceOptions>(builder.Configuration.GetSection("Azure"));
+builder.Services.AddSingleton<TokenCredential>((_) => new AzureCliCredential());
+builder.Services.AddSingleton<ISecretService, SecretService>();
 
 var app = builder.Build();
 

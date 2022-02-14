@@ -1,5 +1,7 @@
-using Azure.Identity;
+using Azure.Core;
 using Azure.Security.KeyVault.Secrets;
+using ldam.co.za.lib.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace ldam.co.za.lib.Services;
 
@@ -11,15 +13,9 @@ public interface ISecretService
 public class SecretService : ISecretService
 {
     private readonly SecretClient secretClient;
-    public SecretService(string keyVaultUri)
+    public SecretService(IOptions<AzureResourceOptions> options, TokenCredential credential)
     {
-        var credential = new ChainedTokenCredential(
-#if !DEBUG
-                new ManagedIdentityCredential(),
-#endif
-                new AzureCliCredential()
-        );
-        this.secretClient = new SecretClient(new Uri(keyVaultUri), credential);
+        this.secretClient = new SecretClient(options.Value.KeyVaultUri, credential);
     }
 
     public async Task<string> GetSecret(string key)

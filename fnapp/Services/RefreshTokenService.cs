@@ -1,7 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using ldam.co.za.lib.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+
 namespace ldam.co.za.fnapp.Services;
 
 public class RefreshTokenService
@@ -16,7 +17,7 @@ public class RefreshTokenService
     public RefreshTokenService(
         ISecretService secretService,
         IClock clock,
-        IConfiguration configuration,
+        IOptionsSnapshot<FunctionAppLightroomOptions> options,
         ILogger<RefreshTokenService> logger,
         ILightroomTokenService lightroomTokenService)
     {
@@ -24,7 +25,7 @@ public class RefreshTokenService
         this.clock = clock;
         this.logger = logger;
         this.lightroomTokenService = lightroomTokenService;
-        refreshWindow = TimeSpan.FromMinutes(int.Parse(configuration[Constants.Configuration.Adobe.RefreshTokenWindowMinutes]));
+        refreshWindow = TimeSpan.FromMinutes(int.Parse(options.Value.RefreshTokenWindowMinutes));
     }
 
     public async Task RefreshAccessToken()

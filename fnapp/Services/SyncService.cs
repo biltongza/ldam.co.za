@@ -3,13 +3,14 @@ using ldam.co.za.lib;
 using ldam.co.za.lib.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace ldam.co.za.fnapp.Services;
 
 public class SyncService
 {
     private readonly ILightroomService lightroomService;
-    private readonly IConfiguration configuration;
+    private readonly IOptionsSnapshot<FunctionAppLightroomOptions> options;
     private readonly IStorageService storageService;
     private readonly ILogger logger;
     private readonly IMetadataService metadataService;
@@ -20,14 +21,14 @@ public class SyncService
 
     public SyncService(
         ILightroomService lightroomService,
-        IConfiguration configuration,
+        IOptionsSnapshot<FunctionAppLightroomOptions> options,
         IStorageService storageService,
         ILogger<SyncService> logger,
         IMetadataService metadataService,
         ICdnService cdnService)
     {
         this.lightroomService = lightroomService;
-        this.configuration = configuration;
+        this.options = options;
         this.storageService = storageService;
         this.logger = logger;
         this.metadataService = metadataService;
@@ -40,8 +41,8 @@ public class SyncService
         {
             logger.LogInformation("Forcing full refresh");
         }
-        var albumIdsToSync = configuration[Constants.Configuration.Adobe.AlbumIds].Split(',');
-        var sizesToSync = configuration[Constants.Configuration.Adobe.SizesToSync].Split(',');
+        var albumIdsToSync = options.Value.AlbumIds.Split(',');
+        var sizesToSync = options.Value.SizesToSync.Split(',');
 
         Manifest manifest = null;
         bool manifestModified = false;

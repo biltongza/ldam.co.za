@@ -1,6 +1,8 @@
+using Azure.Core;
 using Azure.Identity;
 using Azure.ResourceManager;
 using ldam.co.za.fnapp.Services;
+using ldam.co.za.lib.Configuration;
 using ldam.co.za.lib.Lightroom;
 using ldam.co.za.lib.Services;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
@@ -18,7 +20,11 @@ public class Startup : FunctionsStartup
 
         var config = builder.GetContext().Configuration;
         services.AddMemoryCache();
-        services.AddTransient<ISecretService, SecretService>((_) => new SecretService(config[lib.Constants.Configuration.Azure.KeyVaultUri]));
+        services.AddOptions<FunctionAppAzureResourceOptions>("Azure");
+        services.AddOptions<AzureResourceOptions>("Azure");
+        services.AddOptions<FunctionAppLightroomOptions>("Lightroom");
+        services.AddOptions<LightroomOptions>("Lightroom");
+        services.AddTransient<ISecretService, SecretService>();
 
         services.AddTransient<IAccessTokenProvider, AccessTokenProvider>();
         services.AddHttpClient("lightroom")
@@ -28,15 +34,7 @@ public class Startup : FunctionsStartup
             })
             .RedactLoggedHeaders(new string[] { "Authorization", "X-API-KEY" });
 
-        services.AddTransient<ILightroomClient, LightroomClient>((svp) =>
-        {
-            return new LightroomClient(
-                svp.GetRequiredService<IHttpClientFactory>(),
-                svp.GetRequiredService<IAccessTokenProvider>(),
-                config[Constants.Configuration.Adobe.CreativeCloudBaseUrl],
-                config[Constants.Configuration.Adobe.AuthClientId]
-            );
-        });
+        services.AddTransient<ILightroomClient, LightroomClient>();
         services.AddTransient<ILightroomService, LightroomService>();
         services.AddTransient<IStorageService, StorageService>();
         services.AddTransient<IClock, Clock>();
@@ -44,24 +42,18 @@ public class Startup : FunctionsStartup
         services.AddTransient<SyncService>();
         services.AddTransient<ILightroomTokenService, LightroomTokenService>();
         services.AddTransient<IMetadataService, MetadataService>();
-        services.AddTransient<ICdnService>((svp) =>
-        {
-            var armClient = new ArmClient(
+        services.AddSingleton<TokenCredential>((_) =>
                 new ChainedTokenCredential(
-                    #if DEBUG
+#if DEBUG
                     new AzureCliCredential(),
-                    #endif
+#endif
                     new ManagedIdentityCredential()
-                )
-            );
-            
-            return new CdnService(
-                armClient, 
-                config[Constants.Configuration.Azure.CdnSubscriptionId], 
-                config[Constants.Configuration.Azure.CdnResourceGroup],
-                config[Constants.Configuration.Azure.CdnProfileName],
-                config[Constants.Configuration.Azure.CdnEndpointName]
-            );
-        });
+                ));
+        services.AddSingleton<ArmClient>();
+        services.AddTransient<ICdnService, CdnService>();
+        services.Configure<FunctionAppAzureResourceOptions>(config.GetSection("Azure"));
+        services.Configure<AzureResourceOptions>(config.GetSection("Azure"));
+        services.Configure<FunctionAppLightroomOptions>(config.GetSection("Lightroom"));
+        services.Configure<LightroomOptions>(config.GetSection("Lightroom"));
     }
 }

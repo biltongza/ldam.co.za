@@ -1,8 +1,9 @@
-using Azure.Identity;
+using Azure.Core;
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
-using Microsoft.Extensions.Configuration;
+using ldam.co.za.lib.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace ldam.co.za.lib.Services;
 
@@ -17,19 +18,11 @@ public class StorageService : IStorageService
 {
     private readonly BlobContainerClient blobContainerClient;
     private readonly ILogger logger;
-    public StorageService(IConfiguration configuration, ILogger<StorageService> logger)
+    public StorageService(IOptionsSnapshot<AzureResourceOptions> options, TokenCredential tokenCredential, ILogger<StorageService> logger)
     {
         this.logger = logger;
-        var storageUri = configuration[Constants.Configuration.Azure.BlobStorageUri];
-        var blobServiceClient = new BlobServiceClient(
-            new Uri(storageUri), 
-            new ChainedTokenCredential(
-#if !DEBUG
-            new ManagedIdentityCredential(), 
-#endif
-            new AzureCliCredential()
-            ));
-        this.blobContainerClient = blobServiceClient.GetBlobContainerClient(configuration[Constants.Configuration.Azure.BlobContainer]);
+        var blobServiceClient = new BlobServiceClient(options.Value.BlobStorageUri, tokenCredential);
+        this.blobContainerClient = blobServiceClient.GetBlobContainerClient(options.Value.BlobContainer);
     }
 
     public async Task Store(string name, Stream stream, string contentType = null)
