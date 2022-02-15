@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { metaStore,titleStore } from '$lib/stores';
 	import type { BlogResponse } from '$lib/types';
+	import { DateFormat } from '$lib/__consts';
+	import dayjs from 'dayjs';
 	import { onDestroy } from 'svelte';
 	export let post: BlogResponse;
 
@@ -19,7 +21,7 @@
 
 <article>
 	<h2>{post.metadata.title}</h2>
-	<p class="date">{post.metadata.date}</p>
+	<p class="date">{dayjs(post.metadata.date).format(DateFormat)}</p>
 	<p>
 		{#each post.metadata.tags as tag}
 			<sl-badge variant="primary" pill>{tag}</sl-badge>

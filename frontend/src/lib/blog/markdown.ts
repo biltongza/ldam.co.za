@@ -11,7 +11,6 @@ import remark2rehype from 'remark-rehype';
 import remarkUnwrapImages from 'remark-unwrap-images';
 import * as vfile from 'to-vfile';
 import { unified } from 'unified';
-import { DateFormat } from '../__consts';
 
 const parser = unified().use(parse).use(gfm).use(frontmatter, ['yaml']);
 
@@ -29,14 +28,14 @@ export function process(filename: string): { metadata: BlogMetadata; content: st
 	if (tree.children.length > 0 && tree.children[0].type == 'yaml') {
 		metadata = yaml.load(tree.children[0].value) as BlogMetadata;
 		tree.children = tree.children.slice(1, tree.children.length);
-		metadata.date = dayjs(metadata.date).format(DateFormat);
+		metadata.date = dayjs(metadata.date);
 		metadata.slug = slug;
 	}
 	let content = runner.stringify(runner.runSync(tree));
 	if (!metadata) {
 		metadata = {
 			title: 'Error!',
-			date: '?',
+			date: dayjs(),
 			excerpt: 'Missing Frontmatter! Expected at least a title and a date!',
 			slug: slug,
 			tags: []

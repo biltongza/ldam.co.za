@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import type { BlogMetadata } from '$lib/types';
+	import { DateFormat } from '$lib/__consts';
+	import dayjs from 'dayjs';
 
 	export let posts: BlogMetadata[] = [];
 </script>
@@ -12,7 +14,7 @@
 			<a href={`${base}/blog/${post.slug}`}>
 				<h2 class="title">{post.title}</h2>
 			</a>
-			<p class="date">{post.date}</p>
+			<p class="date">{dayjs(post.date).format(DateFormat)}</p>
 			<p>
 				{#each post.tags as tag}
 					<sl-badge variant="primary" pill>{tag}</sl-badge>
