@@ -1,8 +1,10 @@
 {
-	"configurations": {
-		"app": {
-			"context": "./build/static",
-			"apiLocation": "./api"
-		}
-	}
+  "configurations": {
+    "frontend": {
+      "appLocation": ".",
+      "apiLocation": "api",
+      "outputLocation": "build/static",
+      "appBuildCommand": "npm run build"
+    }
+  }
 }
