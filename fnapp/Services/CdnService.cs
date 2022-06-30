@@ -10,20 +10,20 @@ public interface ICdnService
 
 public class CdnService : ICdnService
 {
-    private readonly CdnEndpoint cdnEndpoint;
+    private readonly CdnEndpointResource cdnEndpoint;
     public CdnService(ArmClient armClient, IOptions<FunctionAppAzureResourceOptions> options)
     {
-        var endpointResourceIdentifier = CdnEndpoint.CreateResourceIdentifier(
+        var endpointResourceIdentifier = CdnEndpointResource.CreateResourceIdentifier(
             options.Value.CdnSubscriptionId, 
             options.Value.CdnResourceGroup, 
             options.Value.CdnProfileName, 
             options.Value.CdnEndpointName
         );
-        this.cdnEndpoint = armClient.GetCdnEndpoint(endpointResourceIdentifier);
+        this.cdnEndpoint = armClient.GetCdnEndpointResource(endpointResourceIdentifier);
     }
 
     public async Task ClearCache(string path)
     {
-        await cdnEndpoint.PurgeContentAsync(new PurgeOptions(new [] { path ?? "/*"}));
+        await cdnEndpoint.PurgeContentAsync(Azure.WaitUntil.Completed, new PurgeContent(new [] { path ?? "/*"}));
     }
 }
