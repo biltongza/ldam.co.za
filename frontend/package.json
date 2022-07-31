@@ -2,9 +2,9 @@
 	"name": "frontend",
 	"version": "0.0.1",
 	"scripts": {
-		"dev": "node ./generate-last-modified-metadata.js && svelte-kit dev --port 5000",
-		"build": "rimraf api/src && node ./generate-last-modified-metadata.js && svelte-kit build && copyfiles src/posts/*.md api",
-		"preview": "svelte-kit preview",
+		"dev": "node ./generate-last-modified-metadata.js && vite dev",
+		"build": "rimraf api/src && node ./generate-last-modified-metadata.js && vite build && copyfiles src/posts/*.md api",
+		"preview": "vite preview",
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
@@ -16,6 +16,7 @@
 		"@microsoft/applicationinsights-web": "^2.8.4",
 		"@sveltejs/kit": "^1.0.0-next.292",
 		"@types/glob": "^7.2.0",
+		"@types/js-yaml": "^4.0.5",
 		"@typescript-eslint/eslint-plugin": "^5.30.0",
 		"@typescript-eslint/parser": "^5.30.0",
 		"copyfiles": "^2.4.1",
@@ -27,7 +28,7 @@
 		"node-sass": "^7.0.1",
 		"prettier": "^2.7.1",
 		"prettier-plugin-svelte": "^2.7.0",
-		"rehype-external-links": "^1.0.1",
+		"rehype-external-links": "^2.0.0",
 		"rehype-highlight": "^5.0.1",
 		"rehype-stringify": "^9.0.3",
 		"remark-frontmatter": "^4.0.1",
@@ -37,18 +38,16 @@
 		"remark-unwrap-images": "^3.0.1",
 		"rimraf": "^3.0.2",
 		"svelte": "^3.48.0",
-		"svelte-adapter-azure-swa": "^0.7.0",
+		"svelte-adapter-azure-swa": "^0.8.0",
 		"svelte-check": "^2.8.0",
 		"svelte-preprocess": "^4.10.7",
 		"to-vfile": "^7.2.2",
 		"tslib": "^2.4.0",
 		"typescript": "^4.7.4",
-		"unified": "^10.1.2"
+		"unified": "^10.1.2",
+		"vite": "^3.0.4"
 	},
 	"type": "module",
-	"dependencies": {
-		"@types/js-yaml": "^4.0.5"
-	},
 	"engines": {
 		"node": "16.x"
 	}

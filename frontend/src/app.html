@@ -33,7 +33,7 @@
 	<meta property="twitter:card" content="summary">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/vs.min.css">
 	<link href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css" rel="stylesheet" />
-	<link href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.64/dist/themes/light.css"
+	<link href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.78/dist/themes/light.css"
 		rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css2?family=Recursive:CASL,CRSV,MONO@0..1,0,0..1&display=swap"
 		rel="stylesheet">
@@ -74,20 +74,7 @@
 		});
 	</script>
 	<script type="module"
-		src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.64/dist/shoelace.js"></script>
-	<script type="module">
-		import { registerIconLibrary } from 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.64/dist/utilities/icon-library.js';
-
-		registerIconLibrary('ionicons', {
-			resolver: name => `https://cdn.jsdelivr.net/npm/ionicons@5.1.2/dist/ionicons/svg/${name}.svg`,
-			mutator: svg => {
-				svg.setAttribute('fill', 'currentColor');
-				svg.setAttribute('stroke', 'currentColor');
-				[...svg.querySelectorAll('.ionicon-fill-none')].map(el => el.setAttribute('fill', 'none'));
-				[...svg.querySelectorAll('.ionicon-stroke-width')].map(el => el.setAttribute('stroke-width', '32px'));
-			}
-		});
-	</script>
+		src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.78/dist/shoelace.js"></script>
 	%sveltekit.head%
 </head>
 
