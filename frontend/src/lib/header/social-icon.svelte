@@ -7,7 +7,7 @@
 </script>
 
 <sl-button variant="default" size="medium" {href} target="_blank" {label}>
-	<sl-icon slot="prefix" name={icon} />
+	<sl-icon slot="prefix" name={icon} library="default"/>
 	{showText ? text : ''}
 </sl-button>
 

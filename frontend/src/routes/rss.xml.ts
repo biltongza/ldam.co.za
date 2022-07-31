@@ -2,7 +2,7 @@ import { getBlogPosts } from '$lib/getBlogPosts';
 import { website } from '$lib/info';
 import type { RequestHandler } from '@sveltejs/kit';
 
-export const get: RequestHandler = async function () {
+export const GET: RequestHandler = async function () {
     const headers = {
         'Cache-Control': 'max-age=0, s-maxage=3600',
         'Content-Type': 'application/xml',

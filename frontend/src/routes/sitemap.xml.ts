@@ -7,7 +7,7 @@ import type { RequestHandler } from '@sveltejs/kit/types/endpoint';
 import fs from 'fs';
 import glob from 'glob';
 
-export const get: RequestHandler = async function () {
+export const GET: RequestHandler = async function () {
 	const headers = {
 		'Cache-Control': 'max-age=0, s-maxage=3600',
 		'Content-Type': 'application/xml'
