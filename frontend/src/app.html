@@ -24,7 +24,8 @@
 	<link rel="apple-touch-icon" sizes="76x76" href="/favicon-76.png">
 	<link rel="apple-touch-icon" sizes="152x152" href="/favicon-152.png">
 	<link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png">
-	<link rel="alternate" type="application/rss+xml" title="Logan Dam's blog on technology and life" href="https://ldam.co.za/rss.xml">
+	<link rel="alternate" type="application/rss+xml" title="Logan Dam's blog on technology and life"
+		href="https://ldam.co.za/rss.xml">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<meta name="description" content="Logan Dam's portfolio of photography and code." />
 	<meta name="author" content="Logan Dam" />
@@ -75,6 +76,19 @@
 	</script>
 	<script type="module"
 		src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.78/dist/shoelace.js"></script>
+	<script type="module">
+		import { registerIconLibrary } from 'https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.0.0-beta.78/dist/utilities/icon-library.js';
+
+		registerIconLibrary('ionicons', {
+			resolver: name => `https://cdn.jsdelivr.net/npm/ionicons@5.1.2/dist/ionicons/svg/${name}.svg`,
+			mutator: svg => {
+				svg.setAttribute('fill', 'currentColor');
+				svg.setAttribute('stroke', 'currentColor');
+				[...svg.querySelectorAll('.ionicon-fill-none')].map(el => el.setAttribute('fill', 'none'));
+				[...svg.querySelectorAll('.ionicon-stroke-width')].map(el => el.setAttribute('stroke-width', '32px'));
+			}
+		});
+	</script>
 	%sveltekit.head%
 </head>
 
