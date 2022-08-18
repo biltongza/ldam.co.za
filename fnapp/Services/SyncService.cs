@@ -18,6 +18,7 @@ public class SyncService
 
     public const string JpgMimeType = "image/jpeg";
     public const string JsonMimeType = "application/json";
+    private const string ManifestName = "manifest.json";
 
     public SyncService(
         ILightroomService lightroomService,
@@ -41,122 +42,144 @@ public class SyncService
         {
             logger.LogInformation("Forcing full refresh");
         }
-        var albumIdsToSync = options.Value.AlbumIds.Split(',');
+        var portfolioAlbumId = options.Value.PortfolioAlbumId;
+        var collectionsContainerAlbumId = options.Value.CollectionsContainerAlbumId;
         var sizesToSync = options.Value.SizesToSync.Split(',');
+        
+        (Manifest manifest, bool syncManifest) = await GetOrCreateManifest(ManifestName, force);
 
-        Manifest manifest = null;
-        bool manifestModified = false;
-        var manifestName = "manifest.json";
-        using (var manifestStream = await storageService.Get(manifestName))
-        {
-            if (manifestStream == Stream.Null || force)
-            {
-                manifest = new Manifest();
-                manifestModified = true;
-            }
-            else
-            {
-                manifest = await JsonSerializer.DeserializeAsync(manifestStream, typeof(Manifest), ManifestSerializerContext.Default) as Manifest;
-            }
-        }
-
-        if(manifest == null)
+        if (manifest == null)
         {
             throw new InvalidOperationException("Manifest is null! Is the json in storage valid?");
         }
 
-        var albumsToSync = await lightroomService.GetAlbums()
-            .Where(album => albumIdsToSync.Contains(album.Key))
-            .ToListAsync();
+        var allAlbums = await lightroomService.GetAlbums().ToListAsync();
 
-        var tasks = albumsToSync.Select(async album =>
-        {
-            if (!manifest.Albums.TryGetValue(album.Key, out var manifestAlbum))
-            {
-                logger.LogInformation("Album {albumId} not present in manifest, syncing", album);
-                manifestAlbum = new Album
-                {
-                    Id = album.Key,
-                    Title = album.Value,
-                };
-                lock (manifest.Albums)
-                {
-                    manifest.Albums.Add(album.Key, manifestAlbum);
-                }
-                manifestModified = true;
-            }
+        var albumsToSync = allAlbums
+            .Where(album => portfolioAlbumId.Equals(album.Id) || collectionsContainerAlbumId.Equals(album.ParentId));
 
-            var imageInfos = lightroomService.GetImageList(album.Key);
-            var albumImageIds = new List<string>();
-            await foreach (var batch in imageInfos.Buffer(10))
-            {
-                foreach (var imageInfo in batch)
-                {
-                    albumImageIds.Add(imageInfo.AssetId);
-                    bool syncImage = false;
-                    if (!manifestAlbum.Images.TryGetValue(imageInfo.AssetId, out var manifestImageInfo))
-                    {
-                        logger.LogInformation("Asset {assetId} is not present in manifest, syncing", imageInfo.AssetId);
+        var syncTasks = albumsToSync
+            .Select(async collection => await CreateOrUpdateCollection(manifest, collection, sizesToSync, portfolioAlbumId))
+            .ToList();
 
-                        var metadata = metadataService.MapAdobeMetadataToManifestMetadata(imageInfo);
+        syncManifest |= (await Task.WhenAll(syncTasks)).Any(x => x);
 
-                        lock (manifestAlbum.Images)
-                        {
-                            manifestAlbum.Images.Add(imageInfo.AssetId, metadata);
-                        }
-                        manifestImageInfo = metadata;
-                        manifestModified = true;
-                        syncImage = true;
-                    }
-
-                    if (manifestImageInfo.LastModified != imageInfo.LastModified)
-                    {
-                        logger.LogInformation("Timestamp of asset {assetId} does not match manifest, syncing", imageInfo.AssetId);
-                        manifestImageInfo.LastModified = imageInfo.LastModified;
-                        syncImage = true;
-                    }
-
-                    if (syncImage)
-                    {
-                        var imageSyncTasks = sizesToSync.Select(async size =>
-                        {
-                            using var imageStream = await lightroomService.GetImageStream(imageInfo.AssetId, size);
-                            logger.LogInformation("Setting image {assetId} metadata {size}", imageInfo.AssetId, size);
-                            using var updatedMetadataStream = await metadataService.SetImageMetadata(imageStream, imageInfo);
-
-                            var imageName = $"{imageInfo.AssetId}.{size}.jpg";
-                            await storageService.Store(imageName, updatedMetadataStream, JpgMimeType);
-                            manifestImageInfo.Hrefs.TryAdd(size, imageName);
-                            manifestModified = true;
-                            logger.LogInformation("Synced {imageName}", imageName);
-                        });
-                        await Task.WhenAll(imageSyncTasks);
-                    }
-                }
-            }
-            var toRemove = manifestAlbum.Images.Select(x => x.Key).Except(albumImageIds);
-            foreach (var imageId in toRemove)
-            {
-                logger.LogInformation("Image with id {imageId} exists in manifest but not in album, deleting", imageId);
-                manifestAlbum.Images.Remove(imageId);
-                manifestModified = true;
-                await storageService.DeleteBlobsStartingWith(imageId);
-            }
-        }).ToArray();
-
-        await Task.WhenAll(tasks);
-
-        if (manifestModified)
+        if (syncManifest)
         {
             manifest.LastModified = DateTime.Now;
             using var serializedStream = new MemoryStream();
             await JsonSerializer.SerializeAsync(serializedStream, manifest, ManifestSerializerContext.Default.Manifest);
             serializedStream.Seek(0, SeekOrigin.Begin);
-            await storageService.Store(manifestName, serializedStream, JsonMimeType);
-            logger.LogInformation("Manifest {manifestName} updated", manifestName);
+            await storageService.Store(ManifestName, serializedStream, JsonMimeType);
+            logger.LogInformation("Manifest {manifestName} updated", ManifestName);
             logger.LogInformation("Purging CDN cache");
             await cdnService.ClearCache("/*");
             logger.LogInformation("CDN cache purged");
         }
+    }
+
+    private async Task<(Manifest, bool)> GetOrCreateManifest(string manifestName, bool forceCreate)
+    {
+        Manifest manifest;
+        bool didCreate = false;
+        using var manifestStream = await storageService.Get(manifestName);
+        if (manifestStream == Stream.Null || forceCreate)
+        {
+            manifest = new Manifest();
+            didCreate = true;
+        }
+        else
+        {
+            manifest = await JsonSerializer.DeserializeAsync(manifestStream, typeof(Manifest), ManifestSerializerContext.Default) as Manifest;
+        }
+
+        return (manifest, didCreate);
+    }
+
+    private async Task<bool> CreateOrUpdateCollection(Manifest manifest, AlbumInfo collection, string[] sizesToSync, string portfolioAlbumId)
+    {
+        var collectionAdded = false;
+        if (!manifest.Albums.TryGetValue(collection.Id, out var manifestCollection))
+        {
+            logger.LogInformation("Collection {albumId} not present in manifest, syncing", collection);
+            manifestCollection = new Album
+            {
+                Id = collection.Id,
+                Title = collection.Title,
+                IsPortfolio = portfolioAlbumId.Equals(collection.Id),
+                Created = collection.Created,
+                Updated = collection.Updated,
+            };
+            lock (manifest.Albums)
+            {
+                manifest.Albums.Add(collection.Id, manifestCollection);
+            }
+            collectionAdded = true;
+        }
+        var collectionModified = await SyncAlbum(manifestCollection, sizesToSync);
+        return collectionAdded || collectionModified;
+    }
+
+    private async Task<bool> SyncAlbum(Album manifestAlbum, string[] sizesToSync)
+    {
+        var albumModified = false;
+        var imageInfos = lightroomService.GetImageList(manifestAlbum.Id);
+        var albumImageIds = new List<string>();
+        await foreach (var batch in imageInfos.Buffer(10))
+        {
+            foreach (var imageInfo in batch)
+            {
+                albumImageIds.Add(imageInfo.AssetId);
+                bool syncImage = false;
+                if (!manifestAlbum.Images.TryGetValue(imageInfo.AssetId, out var manifestImageInfo))
+                {
+                    logger.LogInformation("Asset {assetId} is not present in manifest, syncing", imageInfo.AssetId);
+
+                    var metadata = metadataService.MapAdobeMetadataToManifestMetadata(imageInfo);
+
+                    lock (manifestAlbum.Images)
+                    {
+                        manifestAlbum.Images.Add(imageInfo.AssetId, metadata);
+                    }
+                    manifestImageInfo = metadata;
+                    albumModified = true;
+                    syncImage = true;
+                }
+
+                if (manifestImageInfo.LastModified != imageInfo.LastModified)
+                {
+                    logger.LogInformation("Timestamp of asset {assetId} does not match manifest, syncing", imageInfo.AssetId);
+                    manifestImageInfo.LastModified = imageInfo.LastModified;
+                    syncImage = true;
+                }
+
+                if (syncImage)
+                {
+                    var imageSyncTasks = sizesToSync.Select(async size =>
+                    {
+                        using var imageStream = await lightroomService.GetImageStream(imageInfo.AssetId, size);
+                        logger.LogInformation("Setting image {assetId} metadata {size}", imageInfo.AssetId, size);
+                        using var updatedMetadataStream = await metadataService.SetImageMetadata(imageStream, imageInfo);
+
+                        var imageName = $"{imageInfo.AssetId}.{size}.jpg";
+                        await storageService.Store(imageName, updatedMetadataStream, JpgMimeType);
+                        manifestImageInfo.Hrefs.TryAdd(size, imageName);
+                        albumModified = true;
+                        logger.LogInformation("Synced {imageName}", imageName);
+                    });
+                    await Task.WhenAll(imageSyncTasks);
+                }
+            }
+        }
+        var toRemove = manifestAlbum.Images.Select(x => x.Key).Except(albumImageIds);
+        foreach (var imageId in toRemove)
+        {
+            logger.LogInformation("Image with id {imageId} exists in manifest but not in album, deleting", imageId);
+            manifestAlbum.Images.Remove(imageId);
+            albumModified = true;
+            await storageService.DeleteBlobsStartingWith(imageId);
+        }
+
+        return albumModified;
     }
 }

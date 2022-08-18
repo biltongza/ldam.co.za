@@ -4,14 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using ldam.co.za.lib;
 using ldam.co.za.fnapp.Services;
+using ldam.co.za.lib;
 using ldam.co.za.lib.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
-using Microsoft.Extensions.Options;
 
 public class ImageSyncTests
 {
@@ -27,8 +27,9 @@ public class ImageSyncTests
     {
         mockOptions.SetupGet(x => x.Value).Returns(new FunctionAppLightroomOptions
         {
-            AlbumIds = "testalbum1",
-            SizesToSync = "2048"
+            PortfolioAlbumId = "testalbum1",
+            SizesToSync = "2048",
+            CollectionsContainerAlbumId = "testCollection1",
         });
         mockMetadataService.Setup(x => x.MapAdobeMetadataToManifestMetadata(It.IsAny<ImageInfo>())).Returns(new ImageMetadata());
         syncService = new SyncService(
@@ -46,7 +47,7 @@ public class ImageSyncTests
     {
         mockLightroomService
             .Setup(x => x.GetAlbums())
-            .Returns(new Dictionary<string, string>().ToAsyncEnumerable());
+            .Returns(new List<AlbumInfo>().ToAsyncEnumerable());
 
         mockLightroomService
             .Setup(x => x.GetImageList(It.IsAny<string>()))
@@ -85,10 +86,18 @@ public class ImageSyncTests
 
         mockLightroomService
             .Setup(x => x.GetAlbums())
-            .Returns(new Dictionary<string, string>() { { "testalbum1", "Test album 1" } }.ToAsyncEnumerable());
+            .Returns(
+                new List<AlbumInfo>
+                {
+                    new AlbumInfo
+                    {
+                        Id = "testalbum1",
+                        Title = "Test album 1"
+                    }
+                }.ToAsyncEnumerable());
 
         mockLightroomService
-            .Setup(x => x.GetImageList(It.IsAny<string>()))
+            .Setup(x => x.GetImageList(It.Is<string>(x => x == "testalbum1")))
             .Returns(adobeImages.ToAsyncEnumerable());
 
         mockStorageService.Setup(x => x.Get(ManifestName)).Returns(Task.FromResult(serialisedManifest));
@@ -100,7 +109,7 @@ public class ImageSyncTests
     }
 
     [Fact]
-    public async Task ShouldUpdateManifestWhenNewAdobeImagePresent()
+    public async Task ShouldUpdateManifestWhenNewAdobeImagePresentInCollection()
     {
         var manifestImages = new Dictionary<string, ImageMetadata>
             {
@@ -126,7 +135,15 @@ public class ImageSyncTests
 
         mockLightroomService
             .Setup(x => x.GetAlbums())
-            .Returns(new Dictionary<string, string>() { { "testalbum1", "Test album 1" } }.ToAsyncEnumerable());
+            .Returns(
+                new List<AlbumInfo>
+                {
+                    new AlbumInfo
+                    {
+                        Id = "testalbum1",
+                        Title = "Test album 1"
+                    }
+                }.ToAsyncEnumerable());
 
         mockLightroomService
             .Setup(x => x.GetImageList(It.IsAny<string>()))
@@ -165,7 +182,15 @@ public class ImageSyncTests
 
         mockLightroomService
             .Setup(x => x.GetAlbums())
-            .Returns(new Dictionary<string, string>() { { "testalbum1", "Test album 1" } }.ToAsyncEnumerable());
+            .Returns(
+                new List<AlbumInfo>
+                {
+                    new AlbumInfo
+                    {
+                        Id = "testalbum1",
+                        Title = "Test album 1"
+                    }
+                }.ToAsyncEnumerable());
 
         mockLightroomService
             .Setup(x => x.GetImageList(It.IsAny<string>()))
@@ -177,6 +202,47 @@ public class ImageSyncTests
 
         mockStorageService.Verify(x => x.DeleteBlobsStartingWith("image1"), Times.Once);
         mockCdnService.Verify(x => x.ClearCache(It.IsAny<string>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task ShouldMarkPortfolioAlbum()
+    {
+        mockLightroomService
+            .Setup(x => x.GetAlbums())
+            .Returns(new List<AlbumInfo>
+                {
+                    new AlbumInfo
+                    {
+                        Id = "testalbum1",
+                    }
+                }.ToAsyncEnumerable());
+
+        mockLightroomService
+            .Setup(x => x.GetImageList(It.IsAny<string>()))
+            .Returns(new List<ImageInfo>().ToAsyncEnumerable());
+
+        var mockManifest = new Manifest();
+
+        Stream serialisedManifest = new MemoryStream(JsonSerializer.SerializeToUtf8Bytes(mockManifest, typeof(Manifest), ManifestSerializerContext.Default));
+
+        mockStorageService
+            .Setup(x => x.Get(ManifestName))
+            .Returns(Task.FromResult(serialisedManifest));
+
+        Manifest manifest = null;
+
+        mockStorageService
+            .Setup(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>()))
+            .Callback<string, Stream, string>((name, stream, contentType) =>
+            {
+                manifest = JsonSerializer.Deserialize(stream, typeof(Manifest), ManifestSerializerContext.Default) as Manifest;
+            });
+
+        await syncService.Synchronize(false);
+        mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>()), Times.Once);
+        Assert.NotNull(manifest);
+        Assert.NotEmpty(manifest.Albums);
+        Assert.True(manifest.Albums.Single(x => x.Key == "testalbum1").Value.IsPortfolio);
     }
 }
 

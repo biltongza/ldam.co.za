@@ -5,7 +5,7 @@ namespace ldam.co.za.fnapp.Services;
 
 public interface ILightroomService
 {
-    IAsyncEnumerable<KeyValuePair<string, string>> GetAlbums();
+    IAsyncEnumerable<AlbumInfo> GetAlbums();
     IAsyncEnumerable<ImageInfo> GetImageList(string albumId);
     Task<Stream> GetImageStream(string assetId, string size);
 }
@@ -20,7 +20,7 @@ public class LightroomService : ILightroomService
         catalog = new Lazy<CatalogResponse>(() => lightroomClient.GetCatalog().GetAwaiter().GetResult());
     }
 
-    public async IAsyncEnumerable<KeyValuePair<string, string>> GetAlbums()
+    public async IAsyncEnumerable<AlbumInfo> GetAlbums()
     {
         string after = null;
         do
@@ -34,7 +34,14 @@ public class LightroomService : ILightroomService
 
             foreach (var albumResponse in albumsResponse.Resources.Where(x => x.Subtype == "collection"))
             {
-                yield return new KeyValuePair<string, string>(albumResponse.Id, albumResponse.Payload.Name);
+                yield return new AlbumInfo
+                {
+                    Id = albumResponse.Id,
+                    Created = DateTime.Parse(albumResponse.Created),
+                    Updated = DateTime.Parse(albumResponse.Updated),
+                    Title = albumResponse.Payload.Name,
+                    ParentId = albumResponse.Payload.Parent?.Id,
+                };
             }
         }
         while (!string.IsNullOrEmpty(after));
