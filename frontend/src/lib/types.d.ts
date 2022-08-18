@@ -35,10 +35,13 @@ export interface ImageMetadata {
 export interface Album {
 	id: string;
 	title: string;
+	isPortfolio: boolean;
+	created: Date;
+	updated: Date;
 	images: { [key: string]: ImageMetadata };
 }
 
 export interface Manifest {
 	lastModified: Date;
-	albums: { [key: string]: Album };
+	albums: Album[];
 }

@@ -1,11 +1,12 @@
 <script context="module" lang="ts">
 	import AlbumPreview from '$lib/album/album-preview.svelte';
-	import type { Manifest } from '$lib/types';
+	import type { Album,Manifest } from '$lib/types';
 	import type { Load } from '@sveltejs/kit';
 
-	let manifest: Manifest;
+	let portfolio: Album;
 	export const load: Load = function ({ stuff }) {
-		manifest = stuff.manifest;
+		let manifest: Manifest = stuff.manifest;
+		portfolio = manifest.albums.find(x => x.isPortfolio);
 
 		return {};
 	};
@@ -13,8 +14,6 @@
 
 <div>
 	<div class="album-list">
-		{#each Object.entries(manifest.albums) as [album_key, album_value] (album_key)}
-			<AlbumPreview album={album_value} />
-		{/each}
+		<AlbumPreview album={portfolio} />
 	</div>
 </div>
