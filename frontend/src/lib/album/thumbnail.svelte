@@ -8,24 +8,28 @@
 
 <script lang="ts">
 	import type { ImageMetadata } from '$lib/types';
-	import { StorageBaseUrl, ThumbnailHrefNormalDensity } from '$lib/__consts';
+	import { StorageBaseUrl,ThumbnailHrefNormalDensity } from '$lib/__consts';
 
 	export let image: ImageMetadata = undefined;
 	let imageRoute: string;
 	let src: string;
-	let srcSet: string;
+	let srcSets: string[];
 
 	$: {
 		imageRoute = `/image/${image.id}`;
 		src = `${StorageBaseUrl}/${image.hrefs[ThumbnailHrefNormalDensity]}`;
-		srcSet = Object.entries(thumbnailSizes)
-			.map(([key, value]) => `${StorageBaseUrl}/${image.hrefs[key]} ${value}`)
-			.join(', ');
+		srcSets = Object.entries(thumbnailSizes)
+			.map(([key, value]) => `${StorageBaseUrl}/${image.hrefs[key]} ${value}`);
 	}
 </script>
 
 <a href={imageRoute}>
-	<img {src} class="thumbnail-image" loading="lazy" alt="" {srcSet} />
+	<picture>
+		{#each srcSets as srcset}
+		<source {srcset}>
+		{/each}
+		<img {src} class="thumbnail-image" loading="lazy" alt="" />
+	</picture>
 </a>
 
 <style>
