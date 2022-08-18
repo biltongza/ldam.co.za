@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 public interface ICdnService
 {
-    Task ClearCache(string path);
+    Task ClearCache(string path, CancellationToken cancellationToken = default);
 }
 
 public class CdnService : ICdnService
@@ -22,8 +22,8 @@ public class CdnService : ICdnService
         this.cdnEndpoint = armClient.GetCdnEndpointResource(endpointResourceIdentifier);
     }
 
-    public async Task ClearCache(string path)
+    public async Task ClearCache(string path, CancellationToken cancellationToken = default)
     {
-        await cdnEndpoint.PurgeContentAsync(Azure.WaitUntil.Completed, new PurgeContent(new [] { path ?? "/*"}));
+        await cdnEndpoint.PurgeContentAsync(Azure.WaitUntil.Completed, new PurgeContent(new [] { path ?? "/*"}), cancellationToken: cancellationToken);
     }
 }

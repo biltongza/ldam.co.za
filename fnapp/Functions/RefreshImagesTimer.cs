@@ -14,13 +14,13 @@ public class RefreshImagesTimer
     }
 
     [FunctionName(nameof(RefreshImagesTimer))]
-    public async Task Run([TimerTrigger("0 */30 * * * *")] TimerInfo timerInfo, ILogger logger)
+    public async Task Run([TimerTrigger("0 */30 * * * *")] TimerInfo timerInfo, ILogger logger, CancellationToken cancellationToken)
     {
         if (timerInfo.IsPastDue)
         {
             logger.LogInformation("Timer is late, skipping");
             return;
         }
-        await syncService.Synchronize(force: false);
+        await syncService.Synchronize(force: false, cancellationToken: cancellationToken);
     }
 }

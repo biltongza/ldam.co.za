@@ -46,18 +46,18 @@ public class ImageSyncTests
     public async Task ShouldCreateManifestIfItDoesNotExist()
     {
         mockLightroomService
-            .Setup(x => x.GetAlbums())
+            .Setup(x => x.GetAlbums(It.IsAny<CancellationToken>()))
             .Returns(new List<AlbumInfo>().ToAsyncEnumerable());
 
         mockLightroomService
-            .Setup(x => x.GetImageList(It.IsAny<string>()))
+            .Setup(x => x.GetImageList(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .Returns(new List<ImageInfo>().ToAsyncEnumerable());
 
         mockStorageService.Setup(x => x.Get(ManifestName)).Returns(Task.FromResult(Stream.Null));
 
         await syncService.Synchronize(false);
 
-        mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>()), Times.Once);
+        mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -76,16 +76,16 @@ public class ImageSyncTests
         var mockManifest = new Manifest
         {
             LastModified = new DateTime(2021, 8, 8),
-            Albums = new Dictionary<string, Album>
+            Albums = new List<Album>
                 {
-                    { "testalbum1", new Album { Id = "testalbum1", Images = manifestImages}},
+                    new Album { Id = "testalbum1", Images = manifestImages},
                 }
         };
 
         Stream serialisedManifest = new MemoryStream(JsonSerializer.SerializeToUtf8Bytes(mockManifest, typeof(Manifest), ManifestSerializerContext.Default));
 
         mockLightroomService
-            .Setup(x => x.GetAlbums())
+            .Setup(x => x.GetAlbums(It.IsAny<CancellationToken>()))
             .Returns(
                 new List<AlbumInfo>
                 {
@@ -97,15 +97,15 @@ public class ImageSyncTests
                 }.ToAsyncEnumerable());
 
         mockLightroomService
-            .Setup(x => x.GetImageList(It.Is<string>(x => x == "testalbum1")))
+            .Setup(x => x.GetImageList("testalbum1", It.IsAny<CancellationToken>()))
             .Returns(adobeImages.ToAsyncEnumerable());
 
         mockStorageService.Setup(x => x.Get(ManifestName)).Returns(Task.FromResult(serialisedManifest));
 
         await syncService.Synchronize(false);
 
-        mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>()), Times.Never);
-        mockCdnService.Verify(x => x.ClearCache(It.IsAny<string>()), Times.Never);
+        mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+        mockCdnService.Verify(x => x.ClearCache(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
@@ -125,16 +125,16 @@ public class ImageSyncTests
         var mockManifest = new Manifest
         {
             LastModified = new DateTime(2021, 8, 8),
-            Albums = new Dictionary<string, Album>
+            Albums = new List<Album>
                 {
-                    { "testalbum1", new Album { Id = "testalbum1", Images = manifestImages}},
+                    new Album { Id = "testalbum1", Images = manifestImages},
                 }
         };
 
         Stream serialisedManifest = new MemoryStream(JsonSerializer.SerializeToUtf8Bytes(mockManifest, typeof(Manifest), ManifestSerializerContext.Default));
 
         mockLightroomService
-            .Setup(x => x.GetAlbums())
+            .Setup(x => x.GetAlbums(It.IsAny<CancellationToken>()))
             .Returns(
                 new List<AlbumInfo>
                 {
@@ -146,17 +146,17 @@ public class ImageSyncTests
                 }.ToAsyncEnumerable());
 
         mockLightroomService
-            .Setup(x => x.GetImageList(It.IsAny<string>()))
+            .Setup(x => x.GetImageList(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .Returns(adobeImages.ToAsyncEnumerable());
 
-        mockLightroomService.Setup(x => x.GetImageStream(It.IsAny<string>(), It.IsAny<string>())).Returns(Task.FromResult<Stream>(new MemoryStream()));
+        mockLightroomService.Setup(x => x.GetImageStream(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult<Stream>(new MemoryStream()));
 
         mockStorageService.Setup(x => x.Get(ManifestName)).Returns(Task.FromResult(serialisedManifest));
 
         await syncService.Synchronize(false);
 
-        mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>()), Times.Once);
-        mockCdnService.Verify(x => x.ClearCache(It.IsAny<string>()), Times.Once);
+        mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+        mockCdnService.Verify(x => x.ClearCache(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -172,16 +172,16 @@ public class ImageSyncTests
         var mockManifest = new Manifest
         {
             LastModified = new DateTime(2021, 8, 8),
-            Albums = new Dictionary<string, Album>
+            Albums = new List<Album>
                 {
-                    { "testalbum1", new Album { Id = "testalbum1", Images = manifestImages}},
+                    new Album { Id = "testalbum1", Images = manifestImages},
                 }
         };
 
         Stream serialisedManifest = new MemoryStream(JsonSerializer.SerializeToUtf8Bytes(mockManifest, typeof(Manifest), ManifestSerializerContext.Default));
 
         mockLightroomService
-            .Setup(x => x.GetAlbums())
+            .Setup(x => x.GetAlbums(It.IsAny<CancellationToken>()))
             .Returns(
                 new List<AlbumInfo>
                 {
@@ -193,22 +193,22 @@ public class ImageSyncTests
                 }.ToAsyncEnumerable());
 
         mockLightroomService
-            .Setup(x => x.GetImageList(It.IsAny<string>()))
+            .Setup(x => x.GetImageList(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .Returns(adobeImages.ToAsyncEnumerable());
 
         mockStorageService.Setup(x => x.Get(ManifestName)).Returns(Task.FromResult(serialisedManifest));
 
         await syncService.Synchronize(false);
 
-        mockStorageService.Verify(x => x.DeleteBlobsStartingWith("image1"), Times.Once);
-        mockCdnService.Verify(x => x.ClearCache(It.IsAny<string>()), Times.Once);
+        mockStorageService.Verify(x => x.DeleteBlobsStartingWith("image1", It.IsAny<CancellationToken>()), Times.Once);
+        mockCdnService.Verify(x => x.ClearCache(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
     public async Task ShouldMarkPortfolioAlbum()
     {
         mockLightroomService
-            .Setup(x => x.GetAlbums())
+            .Setup(x => x.GetAlbums(It.IsAny<CancellationToken>()))
             .Returns(new List<AlbumInfo>
                 {
                     new AlbumInfo
@@ -218,7 +218,7 @@ public class ImageSyncTests
                 }.ToAsyncEnumerable());
 
         mockLightroomService
-            .Setup(x => x.GetImageList(It.IsAny<string>()))
+            .Setup(x => x.GetImageList(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .Returns(new List<ImageInfo>().ToAsyncEnumerable());
 
         var mockManifest = new Manifest();
@@ -232,17 +232,17 @@ public class ImageSyncTests
         Manifest manifest = null;
 
         mockStorageService
-            .Setup(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>()))
-            .Callback<string, Stream, string>((name, stream, contentType) =>
+            .Setup(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .Callback<string, Stream, string, CancellationToken>((_, stream, _, _) =>
             {
                 manifest = JsonSerializer.Deserialize(stream, typeof(Manifest), ManifestSerializerContext.Default) as Manifest;
             });
 
         await syncService.Synchronize(false);
-        mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>()), Times.Once);
+        mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
         Assert.NotNull(manifest);
         Assert.NotEmpty(manifest.Albums);
-        Assert.True(manifest.Albums.Single(x => x.Key == "testalbum1").Value.IsPortfolio);
+        Assert.True(manifest.Albums.Single(x => x.Id == "testalbum1").IsPortfolio);
     }
 }
 

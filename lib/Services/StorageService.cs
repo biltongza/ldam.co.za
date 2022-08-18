@@ -9,9 +9,9 @@ namespace ldam.co.za.lib.Services;
 
 public interface IStorageService
 {
-    Task Store(string name, Stream stream, string contentType = null);
+    Task Store(string name, Stream stream, string contentType = null, CancellationToken cancellationToken = default);
     Task<Stream> Get(string name);
-    Task DeleteBlobsStartingWith(string startsWith);
+    Task DeleteBlobsStartingWith(string startsWith, CancellationToken cancellationToken = default);
 }
 
 public class StorageService : IStorageService
@@ -25,12 +25,12 @@ public class StorageService : IStorageService
         this.blobContainerClient = blobServiceClient.GetBlobContainerClient(options.Value.BlobContainer);
     }
 
-    public async Task Store(string name, Stream stream, string contentType = null)
+    public async Task Store(string name, Stream stream, string contentType = null, CancellationToken cancellationToken = default)
     {
         this.logger.LogInformation("Storing blob with name {name} and content type {contentType}", name, contentType);
         var blobClient = this.blobContainerClient.GetBlobClient(name);
         var blobHeaders = new BlobHttpHeaders { ContentType = contentType };
-        await blobClient.UploadAsync(stream, options: new BlobUploadOptions { HttpHeaders = blobHeaders });
+        await blobClient.UploadAsync(stream, options: new BlobUploadOptions { HttpHeaders = blobHeaders }, cancellationToken);
     }
 
     public async Task<Stream> Get(string name)
@@ -50,14 +50,14 @@ public class StorageService : IStorageService
         return stream;
     }
 
-    public async Task DeleteBlobsStartingWith(string startsWith)
+    public async Task DeleteBlobsStartingWith(string startsWith, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("Deleting blobs starting with {startsWith}", startsWith);
-        var blobs = this.blobContainerClient.GetBlobsAsync(prefix: startsWith);
+        var blobs = this.blobContainerClient.GetBlobsAsync(prefix: startsWith, cancellationToken: cancellationToken);
         await foreach (var blob in blobs)
         {
             logger.LogInformation("Deleting blob {name}", blob.Name);
-            await this.blobContainerClient.DeleteBlobIfExistsAsync(blob.Name);
+            await this.blobContainerClient.DeleteBlobIfExistsAsync(blob.Name, cancellationToken: cancellationToken);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using ldam.co.za.lib;
 using ldam.co.za.lib.Lightroom;
 
@@ -5,9 +6,9 @@ namespace ldam.co.za.fnapp.Services;
 
 public interface ILightroomService
 {
-    IAsyncEnumerable<AlbumInfo> GetAlbums();
-    IAsyncEnumerable<ImageInfo> GetImageList(string albumId);
-    Task<Stream> GetImageStream(string assetId, string size);
+    IAsyncEnumerable<AlbumInfo> GetAlbums(CancellationToken cancellationToken = default);
+    IAsyncEnumerable<ImageInfo> GetImageList(string albumId, CancellationToken cancellationToken = default);
+    Task<Stream> GetImageStream(string assetId, string size, CancellationToken cancellationToken = default);
 }
 
 public class LightroomService : ILightroomService
@@ -20,12 +21,13 @@ public class LightroomService : ILightroomService
         catalog = new Lazy<CatalogResponse>(() => lightroomClient.GetCatalog().GetAwaiter().GetResult());
     }
 
-    public async IAsyncEnumerable<AlbumInfo> GetAlbums()
+    public async IAsyncEnumerable<AlbumInfo> GetAlbums([EnumeratorCancellation]CancellationToken cancellationToken = default)
     {
         string after = null;
         do
         {
-            var albumsResponse = await lightroomClient.GetAlbums(this.catalog.Value.Id, after);
+            cancellationToken.ThrowIfCancellationRequested();
+            var albumsResponse = await lightroomClient.GetAlbums(this.catalog.Value.Id, after, cancellationToken);
             Link next = null;
             albumsResponse.Links?.TryGetValue("next", out next);
             var afterHref = next?.Href;
@@ -34,6 +36,8 @@ public class LightroomService : ILightroomService
 
             foreach (var albumResponse in albumsResponse.Resources.Where(x => x.Subtype == "collection"))
             {
+                cancellationToken.ThrowIfCancellationRequested();
+
                 yield return new AlbumInfo
                 {
                     Id = albumResponse.Id,
@@ -46,18 +50,20 @@ public class LightroomService : ILightroomService
         }
         while (!string.IsNullOrEmpty(after));
     }
-    public async IAsyncEnumerable<ImageInfo> GetImageList(string albumId)
+    public async IAsyncEnumerable<ImageInfo> GetImageList(string albumId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         string after = null;
         do
         {
-            var albumAssetResponse = await lightroomClient.GetAlbumAssets(this.catalog.Value.Id, albumId, after);
+            cancellationToken.ThrowIfCancellationRequested();
+            var albumAssetResponse = await lightroomClient.GetAlbumAssets(this.catalog.Value.Id, albumId, after, cancellationToken);
             Link next = null;
             albumAssetResponse.Links?.TryGetValue("next", out next);
             var afterHref = next?.Href;
             after = !string.IsNullOrWhiteSpace(afterHref) ? afterHref[afterHref.IndexOf('=')..] : null;
             foreach (var asset in albumAssetResponse.Resources)
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 var make = asset.Asset.Payload.Xmp.Tiff.Make;
                 var model = asset.Asset.Payload.Xmp.Tiff.Model;
                 yield return new ImageInfo
@@ -84,9 +90,9 @@ public class LightroomService : ILightroomService
         while (!string.IsNullOrEmpty(after));
     }
 
-    public async Task<Stream> GetImageStream(string assetId, string size)
+    public async Task<Stream> GetImageStream(string assetId, string size, CancellationToken cancellationToken = default)
     {
-        var stream = await lightroomClient.GetImageStream(this.catalog.Value.Id, assetId, size);
+        var stream = await lightroomClient.GetImageStream(this.catalog.Value.Id, assetId, size, cancellationToken);
 
         return stream;
     }

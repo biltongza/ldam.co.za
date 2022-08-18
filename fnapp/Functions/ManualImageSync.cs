@@ -16,12 +16,12 @@ public class ManualImageSync
     }
 
     [FunctionName(nameof(ManualImageSync))]
-    public async Task Run([HttpTrigger(authLevel: AuthorizationLevel.Function, "post")] HttpRequest req, ILogger logger)
+    public async Task Run([HttpTrigger(authLevel: AuthorizationLevel.Function, "post")] HttpRequest req, ILogger logger, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("Manual sync requested");
         #pragma warning disable CA1806
         bool.TryParse(req.Query["force"], out bool force);
         #pragma warning restore CA1806
-        await syncService.Synchronize(force);
+        await syncService.Synchronize(force, cancellationToken);
     }
 }

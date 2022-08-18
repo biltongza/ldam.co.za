@@ -47,23 +47,23 @@ public class LightroomClient : ILightroomClient, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    public async Task<CatalogResponse> GetCatalog()
+    public async Task<CatalogResponse> GetCatalog(CancellationToken cancellationToken = default)
     {
         var request = await PrepareRequest(HttpMethod.Get, "v2/catalog");
-        var response = await httpClient.SendAsync(request);
+        var response = await httpClient.SendAsync(request, cancellationToken: cancellationToken);
         var result = await HandleResponse<CatalogResponse>(response);
         return result;
     }
 
-    public async Task<HealthResponse> GetHealth()
+    public async Task<HealthResponse> GetHealth(CancellationToken cancellationToken = default)
     {
         var request = await PrepareRequest(HttpMethod.Get, "v2/health");
-        var response = await httpClient.SendAsync(request);
+        var response = await httpClient.SendAsync(request, cancellationToken: cancellationToken);
         var result = await HandleResponse<HealthResponse>(response);
         return result;
     }
 
-    public async Task<AlbumsResponse> GetAlbums(string catalogId, string after = null)
+    public async Task<AlbumsResponse> GetAlbums(string catalogId, string after = null, CancellationToken cancellationToken = default)
     {
         var builder = new StringBuilder();
         builder.Append("v2/catalogs/");
@@ -75,12 +75,12 @@ public class LightroomClient : ILightroomClient, IDisposable
             builder.Append(after);
         }
         var request = await PrepareRequest(HttpMethod.Get, builder.ToString());
-        var response = await httpClient.SendAsync(request);
+        var response = await httpClient.SendAsync(request, cancellationToken: cancellationToken);
         var result = await HandleResponse<AlbumsResponse>(response);
         return result;
     }
 
-    public async Task<AlbumAssetResponse> GetAlbumAssets(string catalogId, string albumId, string after = null)
+    public async Task<AlbumAssetResponse> GetAlbumAssets(string catalogId, string albumId, string after = null, CancellationToken cancellationToken = default)
     {
         var builder = new StringBuilder();
         builder.Append("v2/catalogs/");
@@ -94,20 +94,20 @@ public class LightroomClient : ILightroomClient, IDisposable
             builder.Append(after);
         }
         var request = await PrepareRequest(HttpMethod.Get, builder.ToString());
-        var response = await httpClient.SendAsync(request);
+        var response = await httpClient.SendAsync(request, cancellationToken: cancellationToken);
         var result = await HandleResponse<AlbumAssetResponse>(response);
         return result;
     }
 
-    public async Task<AssetResponse> GetAsset(string catalogId, string assetId)
+    public async Task<AssetResponse> GetAsset(string catalogId, string assetId, CancellationToken cancellationToken = default)
     {
         var request = await PrepareRequest(HttpMethod.Get, $"v2/catalogs/{catalogId}/assets/{assetId}");
-        var response = await httpClient.SendAsync(request);
+        var response = await httpClient.SendAsync(request, cancellationToken: cancellationToken);
         var result = await HandleResponse<AssetResponse>(response);
         return result;
     }
 
-    public async Task<Stream> GetImageStream(string catalogId, string assetId, string size)
+    public async Task<Stream> GetImageStream(string catalogId, string assetId, string size, CancellationToken cancellationToken = default)
     {
         var asset = await GetAsset(catalogId, assetId);
 
@@ -124,8 +124,8 @@ public class LightroomClient : ILightroomClient, IDisposable
         builder.Append(href);
 
         var request = await PrepareRequest(HttpMethod.Get, builder.ToString());
-        var response = await httpClient.SendAsync(request);
+        var response = await httpClient.SendAsync(request, cancellationToken: cancellationToken);
         response.EnsureSuccessStatusCode();
-        return await response.Content.ReadAsStreamAsync();
+        return await response.Content.ReadAsStreamAsync(cancellationToken: cancellationToken);
     }
 }
