@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
-	import { metaStore, titleStore } from '$lib/stores';
-	import type { ImageMetadata, Manifest } from '$lib/types';
-	import { HighResHref, HighResMaxDimension, StorageBaseUrl } from '$lib/__consts';
+	import { metaStore,titleStore } from '$lib/stores';
+	import type { ImageMetadata,Manifest } from '$lib/types';
+	import { HighResHref,HighResMaxDimension,StorageBaseUrl } from '$lib/__consts';
 	import type { Load } from '@sveltejs/kit';
 	import { onDestroy } from 'svelte';
 
@@ -21,7 +21,7 @@
 		}
 		[, metadata] = match;
 		const href = metadata.hrefs[HighResHref];
-		src = `${StorageBaseUrl}/${href}`;
+		src = `${StorageBaseUrl}/${href}.jpg`;
 		titleStore.set(metadata.title);
 		const [widthRatio, heightRatio] = metadata.aspectRatio.split(':').map((x) => Number(x));
 		const width =

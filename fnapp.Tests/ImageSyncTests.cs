@@ -22,6 +22,7 @@ public class ImageSyncTests
     private readonly Mock<ILogger<SyncService>> mockLogger = new();
     private readonly Mock<IMetadataService> mockMetadataService = new();
     private readonly Mock<ICdnService> mockCdnService = new();
+    private readonly Mock<IWebPEncoderService> mockWebpEncoderService = new();
     private readonly SyncService syncService;
     public ImageSyncTests()
     {
@@ -38,7 +39,8 @@ public class ImageSyncTests
             mockStorageService.Object,
             mockLogger.Object,
             mockMetadataService.Object,
-            mockCdnService.Object
+            mockCdnService.Object,
+            mockWebpEncoderService.Object
         );
     }
 
@@ -152,6 +154,9 @@ public class ImageSyncTests
         mockLightroomService.Setup(x => x.GetImageStream(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult<Stream>(new MemoryStream()));
 
         mockStorageService.Setup(x => x.Get(ManifestName)).Returns(Task.FromResult(serialisedManifest));
+        mockMetadataService
+            .Setup(x => x.SetImageMetadata(It.IsAny<Stream>(), It.IsAny<ImageInfo>()))
+            .Returns((Stream value, ImageInfo _) => Task.FromResult(value));
 
         await syncService.Synchronize(false);
 

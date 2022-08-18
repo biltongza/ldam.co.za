@@ -38,6 +38,7 @@ public class Startup : FunctionsStartup
         services.AddTransient<SyncService>();
         services.AddTransient<ILightroomTokenService, LightroomTokenService>();
         services.AddTransient<IMetadataService, MetadataService>();
+        services.AddTransient<IWebPEncoderService, WebPEncoderService>();
         services.AddSingleton<TokenCredential>((_) =>
                 new ChainedTokenCredential(
 #if DEBUG

@@ -14,8 +14,10 @@ public class SyncService
     private readonly ILogger logger;
     private readonly IMetadataService metadataService;
     private readonly ICdnService cdnService;
+    private readonly IWebPEncoderService webPEncoderService;
 
     public const string JpgMimeType = "image/jpeg";
+    public const string WebpMimeType = "image/webp";
     public const string JsonMimeType = "application/json";
     private const string ManifestName = "manifest.json";
 
@@ -25,7 +27,8 @@ public class SyncService
         IStorageService storageService,
         ILogger<SyncService> logger,
         IMetadataService metadataService,
-        ICdnService cdnService)
+        ICdnService cdnService,
+        IWebPEncoderService webPEncoderService)
     {
         this.lightroomService = lightroomService;
         this.options = options;
@@ -33,6 +36,7 @@ public class SyncService
         this.logger = logger;
         this.metadataService = metadataService;
         this.cdnService = cdnService;
+        this.webPEncoderService = webPEncoderService;
     }
 
     public async Task Synchronize(bool force, CancellationToken cancellationToken = default)
@@ -162,12 +166,21 @@ public class SyncService
                     var imageSyncTasks = sizesToSync.Select(async size =>
                     {
                         cancellationToken.ThrowIfCancellationRequested();
-                        using var imageStream = await lightroomService.GetImageStream(imageInfo.AssetId, size);
+                        using var jpgImageStream = await lightroomService.GetImageStream(imageInfo.AssetId, size);
                         logger.LogInformation("Setting image {assetId} metadata {size}", imageInfo.AssetId, size);
-                        using var updatedMetadataStream = await metadataService.SetImageMetadata(imageStream, imageInfo);
+                        using var updatedMetadataJpgStream = await metadataService.SetImageMetadata(jpgImageStream, imageInfo);
 
-                        var imageName = $"{imageInfo.AssetId}.{size}.jpg";
-                        await storageService.Store(imageName, updatedMetadataStream, JpgMimeType, cancellationToken);
+                        var imageName = $"{imageInfo.AssetId}.{size}";
+
+                        await storageService.Store($"{imageName}.jpg", updatedMetadataJpgStream, JpgMimeType, cancellationToken);
+                        updatedMetadataJpgStream.Seek(0, SeekOrigin.Begin);
+                        
+                        using var webpStream = new MemoryStream();
+                        await webPEncoderService.Encode(updatedMetadataJpgStream, webpStream, cancellationToken); 
+                        webpStream.Seek(0, SeekOrigin.Begin);
+                        
+                        await storageService.Store($"{imageName}.webp", webpStream, WebpMimeType, cancellationToken);
+                        
                         manifestImageInfo.Hrefs.TryAdd(size, imageName);
                         albumModified = true;
                         logger.LogInformation("Synced {imageName}", imageName);

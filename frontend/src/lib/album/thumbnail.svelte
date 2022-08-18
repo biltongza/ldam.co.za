@@ -4,6 +4,10 @@
 		'640': '640w',
 		'1280': '1280w'
 	};
+	const formats = {
+		jpg: 'image/jpeg',
+		webp: 'image/webp'
+	};
 </script>
 
 <script lang="ts">
@@ -13,20 +17,24 @@
 	export let image: ImageMetadata = undefined;
 	let imageRoute: string;
 	let src: string;
-	let srcSets: string[];
+	let srcSets: { srcSet: string; mime: string }[];
 
 	$: {
 		imageRoute = `/image/${image.id}`;
-		src = `${StorageBaseUrl}/${image.hrefs[ThumbnailHrefNormalDensity]}`;
-		srcSets = Object.entries(thumbnailSizes)
-			.map(([key, value]) => `${StorageBaseUrl}/${image.hrefs[key]} ${value}`);
+		src = `${StorageBaseUrl}/${image.hrefs[ThumbnailHrefNormalDensity]}.webp`;
+		srcSets = Object.entries(thumbnailSizes).flatMap(([sizeKey, maxWidth]) =>
+			Object.entries(formats).map(([extension, mime]) => ({
+				srcSet: `${StorageBaseUrl}/${image.hrefs[sizeKey]}.${extension} ${maxWidth}`,
+				mime
+			}))
+		);
 	}
 </script>
 
 <a href={imageRoute}>
 	<picture>
 		{#each srcSets as srcset}
-		<source {srcset}>
+			<source srcset={srcset.srcSet} type={srcset.mime} />
 		{/each}
 		<img {src} class="thumbnail-image" loading="lazy" alt="" />
 	</picture>
