@@ -4,9 +4,11 @@
 		'640': '640w',
 		'1280': '1280w'
 	};
+	
+	// order is important here apparently
 	const formats = {
+		webp: 'image/webp',
 		jpg: 'image/jpeg',
-		webp: 'image/webp'
 	};
 </script>
 
