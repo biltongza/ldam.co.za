@@ -2,23 +2,20 @@
 	export const prerender = true;
 </script>
 
-<script>
-	let yearsInField = new Date().getFullYear() - 2013;
-</script>
-
 <div class="content">
 	<div class="blurb">
 		<h2>Hi. I'm Logan.</h2>
 		<p>
-			I'm a full time software engineer, with {yearsInField} years in the industry, with a strong technical
+			I'm a full time software engineer, starting in 2013, with a strong technical
 			background in .NET and MSSQL. I have a passion for helping others realise their potential and enjoy
 			mentorship and elevating the abilities of my peers.
 		</p>
+		<p>Born in Johannesburg, South Africa, I relocated to Amsterdam, Netherlands in 2022.</p>
 		<p>
-			I am presently employed as a Technical Lead at <a
-				href="https://entelect.co.za/"
+			I am presently employed as a Senior Software Engineer at <a
+				href="https://entelect.nl/"
 				rel="nofollow noopener"
-				target="">Entelect</a
+				target="_blank">Entelect Netherlands</a
 			> but this website and the views depicted on it are entirely my own.
 		</p>
 		<p>
@@ -56,7 +53,6 @@
 			enjoying it as a hobby since.
 		</p>
 		<p>
-			My photographic work has been described as abstract, though I'm not certain I agree entirely.
 			I enjoy capturing images that give me inspiration and let me express my feelings.
 		</p>
 		<h3>Portfolio</h3>
