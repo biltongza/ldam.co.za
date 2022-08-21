@@ -249,5 +249,71 @@ public class ImageSyncTests
         Assert.NotEmpty(manifest.Albums);
         Assert.True(manifest.Albums.Single(x => x.Id == "testalbum1").IsPortfolio);
     }
+
+    [Fact]
+    public async Task RemovesCollectionInManifestNotPresentInAdobe()
+    {
+        var manifestImages = new Dictionary<string, ImageMetadata>
+            {
+                { "image1", new ImageMetadata { Id = "image1" } },
+            };
+
+        var manifestImagesToRemove = new Dictionary<string, ImageMetadata>
+            {
+                { "image2", new ImageMetadata { Id = "image2"}},
+            };
+
+        var adobeImages = new List<ImageInfo>
+            {
+                new ImageInfo { AssetId = "image1", Width = 1, Height = 1, ShutterSpeed = new int[2] {1,1}, FNumber = new int[2] {1,1}, CaptureDate = default },
+            };
+
+        var mockManifest = new Manifest
+        {
+            LastModified = new DateTime(2021, 8, 8),
+            Albums = new List<Album>
+                {
+                    new Album { Id = "testalbum1", Images = manifestImages },
+                    new Album { Id = "testalbum2", Images = manifestImagesToRemove },
+                }
+        };
+
+        Stream serialisedManifest = new MemoryStream(JsonSerializer.SerializeToUtf8Bytes(mockManifest, typeof(Manifest), ManifestSerializerContext.Default));
+
+        mockLightroomService
+            .Setup(x => x.GetAlbums(It.IsAny<CancellationToken>()))
+            .Returns(
+                new List<AlbumInfo>
+                {
+                    new AlbumInfo
+                    {
+                        Id = "testalbum1",
+                        Title = "Test album 1"
+                    }
+                }.ToAsyncEnumerable());
+
+        mockLightroomService
+            .Setup(x => x.GetImageList(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .Returns(adobeImages.ToAsyncEnumerable());
+
+        mockLightroomService.Setup(x => x.GetImageStream(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>())).Returns(Task.FromResult<Stream>(new MemoryStream()));
+
+        mockStorageService
+            .Setup(x => x.Get(ManifestName))
+            .Returns(Task.FromResult(serialisedManifest));
+        mockMetadataService
+            .Setup(x => x.SetImageMetadata(It.IsAny<Stream>(), It.IsAny<ImageInfo>()))
+            .Returns((Stream value, ImageInfo _) => Task.FromResult(value));
+
+        mockStorageService
+            .Setup(x => x.DeleteBlobsStartingWith(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
+        await syncService.Synchronize(false);
+
+        mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+        mockStorageService.Verify(x => x.DeleteBlobsStartingWith("image2", It.IsAny<CancellationToken>()), Times.Once);
+        mockCdnService.Verify(x => x.ClearCache(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+    }
 }
 

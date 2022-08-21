@@ -109,7 +109,7 @@ public class LightroomClient : ILightroomClient, IDisposable
 
     public async Task<Stream> GetImageStream(string catalogId, string assetId, string size, CancellationToken cancellationToken = default)
     {
-        var asset = await GetAsset(catalogId, assetId);
+        var asset = await GetAsset(catalogId, assetId, cancellationToken);
 
         var href = asset.Links[$"/rels/rendition_type/{size}"]?.Href;
         if (string.IsNullOrWhiteSpace(href))

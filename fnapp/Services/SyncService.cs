@@ -60,11 +60,21 @@ public class SyncService
             .Where(album => portfolioAlbumId.Equals(album.Id) || collectionsContainerAlbumId.Equals(album.ParentId))
             .ToListAsync(cancellationToken);
 
+        var albumRemovalTasks = manifest.Albums
+            .Select(x => x.Id)
+            .Except(albumsToSync.Select(x => x.Id))
+            .ToList()
+            .Select(async albumId =>
+            {
+                await RemoveCollection(manifest, albumId, cancellationToken);
+                return true;
+            });
+
         var syncTasks = albumsToSync
             .Select(async collection => await CreateOrUpdateCollection(manifest, collection, sizesToSync, portfolioAlbumId, cancellationToken))
             .ToList();
 
-        syncManifest |= (await Task.WhenAll(syncTasks)).Any(x => x);
+        syncManifest |= (await Task.WhenAll(syncTasks.Concat(albumRemovalTasks))).Any(x => x);
 
         if (syncManifest)
         {
@@ -126,6 +136,26 @@ public class SyncService
         return collectionAdded || collectionModified;
     }
 
+    private async Task RemoveCollection(Manifest manifest, string albumIdToRemove, CancellationToken cancellationToken)
+    {
+        Album album = null;
+        lock (manifest.Albums)
+        {
+            album = manifest.Albums.Single(x => x.Id.Equals(albumIdToRemove));
+            manifest.Albums.Remove(album);
+        }
+
+        logger.LogInformation("Removing album {albumId}", albumIdToRemove);
+
+        var tasks = album.Images.Select(async image =>
+        {
+            logger.LogInformation("Removing image {imageId}", image.Key);
+            await storageService.DeleteBlobsStartingWith(image.Key, cancellationToken);
+        });
+
+        await Task.WhenAll(tasks);
+    }
+
     private async Task<bool> SyncAlbum(Album manifestAlbum, string[] sizesToSync, CancellationToken cancellationToken = default)
     {
         var albumModified = false;
@@ -174,13 +204,13 @@ public class SyncService
 
                         await storageService.Store($"{imageName}.jpg", updatedMetadataJpgStream, JpgMimeType, cancellationToken);
                         updatedMetadataJpgStream.Seek(0, SeekOrigin.Begin);
-                        
+
                         using var webpStream = new MemoryStream();
-                        await webPEncoderService.Encode(updatedMetadataJpgStream, webpStream, cancellationToken); 
+                        await webPEncoderService.Encode(updatedMetadataJpgStream, webpStream, cancellationToken);
                         webpStream.Seek(0, SeekOrigin.Begin);
-                        
+
                         await storageService.Store($"{imageName}.webp", webpStream, WebpMimeType, cancellationToken);
-                        
+
                         manifestImageInfo.Hrefs.TryAdd(size, imageName);
                         albumModified = true;
                         logger.LogInformation("Synced {imageName}", imageName);
