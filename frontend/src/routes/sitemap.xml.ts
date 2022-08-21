@@ -15,7 +15,11 @@ export const GET: RequestHandler = async function () {
 
 	const manifest = await getManifest();
 
-	const routes = { about: 'src/routes/about.svelte', blog: 'src/routes/blog/index.svelte' };
+	const routes = { 
+		about: 'src/routes/about.svelte', 
+		collections: 'src/routes/collections/index.svelte',
+		blog: 'src/routes/blog/index.svelte' 
+	};
 	const files = Object.entries(routes).map(([route, path]) => {
 		const lastModified = metadata.find((x) => x.path === path).lastModified;
 		return { route, lastModified: new Date(lastModified).toISOString() };

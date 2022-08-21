@@ -18,6 +18,7 @@
 
 	const routes = [
 		{ label: 'About', path: '/about' },
+		{ label: 'Collections', path: '/collections' },
 		{ label: 'Blog', path: '/blog' }
 	];
 
