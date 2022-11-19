@@ -1,23 +1,7 @@
 <script context="module" lang="ts">
-	import { getManifest } from '$lib/getManifest';
 	import Header from '$lib/header/header.svelte';
 	import { metaStore, titleStore } from '$lib/stores';
-	import type { Manifest } from '$lib/types';
 	import { defaultMetadata } from '$lib/__consts';
-	import type { Load } from '@sveltejs/kit';
-
-	let manifest: Manifest;
-	export const load: Load = async function () {
-		if (!manifest) {
-			manifest = await getManifest();
-		}
-
-		return {
-			stuff: {
-				manifest
-			}
-		};
-	};
 </script>
 
 <script lang="ts">

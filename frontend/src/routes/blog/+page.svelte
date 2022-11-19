@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import type { BlogMetadata } from '$lib/types';
 	import { DateFormat } from '$lib/__consts';
 	import dayjs from 'dayjs';
+	import type { PageData } from './$types';
+	export let data: PageData;
 
-	export let posts: BlogMetadata[] = [];
+	export let {posts} = data;
 </script>
 
 <div>

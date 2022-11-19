@@ -1,7 +1,3 @@
-<script context="module">
-	export const prerender = true;
-</script>
-
 <div class="content">
 	<div class="blurb">
 		<h2>Hi. I'm Logan.</h2>

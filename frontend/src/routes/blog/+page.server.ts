@@ -1,14 +1,12 @@
 import { getBlogPosts } from '$lib/getBlogPosts';
 import type { BlogMetadata } from '$lib/types';
-import type { RequestHandler } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
 
-export const GET: RequestHandler = function () {
+export const load: PageServerLoad = function () {
 	
-	const result: Typify<BlogMetadata[]> = getBlogPosts();
+	const result: BlogMetadata[] = getBlogPosts();
 
 	return {
-		body: {
-			posts: result
-		},
+		posts: result
 	};
 };

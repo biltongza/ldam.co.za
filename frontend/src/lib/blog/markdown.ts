@@ -17,7 +17,7 @@ const parser = unified().use(parse).use(gfm).use(frontmatter, ['yaml']);
 const runner = unified()
 	.use(remark2rehype)
 	.use(highlight)
-	.use(rehypeExternalLinks, { target: false, rel: ['nofollow', 'noopener'] })
+	.use(rehypeExternalLinks, { rel: ['nofollow', 'noopener'] })
 	.use(rehypeStringify)
 	.use(remarkUnwrapImages);
 
@@ -28,14 +28,14 @@ export function process(filename: string): { metadata: BlogMetadata; content: st
 	if (tree.children.length > 0 && tree.children[0].type == 'yaml') {
 		metadata = yaml.load(tree.children[0].value) as BlogMetadata;
 		tree.children = tree.children.slice(1, tree.children.length);
-		metadata.date = dayjs(metadata.date);
+		metadata.date = dayjs(metadata.date).valueOf();
 		metadata.slug = slug;
 	}
 	let content = runner.stringify(runner.runSync(tree));
 	if (!metadata) {
 		metadata = {
 			title: 'Error!',
-			date: dayjs(),
+			date: dayjs().valueOf(),
 			excerpt: 'Missing Frontmatter! Expected at least a title and a date!',
 			slug: slug,
 			tags: []

@@ -1,13 +1,14 @@
 import { getBlogPosts } from '$lib/getBlogPosts';
 import { website } from '$lib/info';
 import type { RequestHandler } from '@sveltejs/kit';
+import { json } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async function () {
-    const headers = {
-        'Cache-Control': 'max-age=0, s-maxage=3600',
-        'Content-Type': 'application/xml',
-    }
-    const posts = getBlogPosts();
+	const headers = {
+		'Cache-Control': 'max-age=0, s-maxage=3600',
+		'Content-Type': 'application/xml'
+	};
+	const posts = getBlogPosts();
 	const rss = `<?xml version="1.0" encoding="UTF-8" ?>
     <rss xmlns:dc="https://purl.org/dc/elements/1.1/" 
             xmlns:content="https://purl.org/rss/1.0/modules/content/" 
@@ -21,19 +22,24 @@ export const GET: RequestHandler = async function () {
                 <generator>SvelteKit</generator>
                 <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
                 <language>en</language>
-                ${posts.map(post => 
-                    `<item>
+                ${posts
+									.map(
+										(post) =>
+											`<item>
                     <title><![CDATA[${post.title}]]></title>
                     <description><![CDATA[${post.excerpt}]]></description>
                     <link>${website}/blog/${post.slug}</link>
                     <guid isPermaLink="false">${website}/blog/${post.slug}</guid>
                     <pubDate>${post.date}</pubDate>
-                    ${post.tags.map(tag => `<category><![CDATA[${tag}]]></category>`).join('')}
-                    </item>`).join('')}
+                    ${post.tags.map((tag) => `<category><![CDATA[${tag}]]></category>`).join('')}
+                    </item>`
+									)
+									.join('')}
             </channel>
             </rss>`;
-	return {
-        headers,
-		body: rss,
-	};
+
+	
+	return json(rss, {
+		headers: headers
+	});
 };

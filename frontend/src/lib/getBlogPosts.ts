@@ -1,4 +1,5 @@
 import { process } from '$lib/blog/markdown';
+import dayjs from 'dayjs';
 import fs from 'fs';
 
 
@@ -11,7 +12,7 @@ export const getBlogPosts = function () {
 			return metadata;
 		});
 	// sort the posts by create date.
-	posts.sort((a, b) => b.date.valueOf() - a.date.valueOf());
+	posts.sort((a, b) => dayjs(b.date).valueOf() - dayjs(a.date).valueOf());
 
     return posts;
 }

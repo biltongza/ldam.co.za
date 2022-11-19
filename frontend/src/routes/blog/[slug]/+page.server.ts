@@ -1,17 +1,14 @@
 import { process } from '$lib/blog/markdown';
 import type { BlogResponse } from '$lib/types';
-import type { RequestHandler } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
 
-export const GET: RequestHandler = async function ({ params }) {
+export const load: PageServerLoad = async function ({ params }) {
 	// we could get the dynamic slug from the parameter of get.
 	const { slug } = params;
 
-	const blogResponse: BlogResponse = process(`src/posts/${slug}.md`);
-	const result: Typify<BlogResponse> = blogResponse;
+	const post: BlogResponse = process(`src/posts/${slug}.md`);
 
 	return {
-		body: {
-			post: result
-		}
+		post
 	};
 };

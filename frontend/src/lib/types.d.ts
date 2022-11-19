@@ -1,8 +1,6 @@
-import type { Dayjs } from 'dayjs';
-
 export interface BlogMetadata {
 	title: string;
-	date: Dayjs;
+	date: number;
 	excerpt: string;
 	slug: string;
 	tags: string[];

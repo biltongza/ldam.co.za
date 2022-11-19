@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { metaStore,titleStore } from '$lib/stores';
-	import type { BlogResponse } from '$lib/types';
+	import { metaStore, titleStore } from '$lib/stores';
 	import { DateFormat } from '$lib/__consts';
 	import dayjs from 'dayjs';
 	import { onDestroy } from 'svelte';
-	export let post: BlogResponse;
+	import type { PageData } from './$types';
+	export let data: PageData;
+	export let { post } = data;
 
 	titleStore.set(post.metadata.title);
 	metaStore.set({

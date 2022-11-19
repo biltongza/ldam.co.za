@@ -1,53 +1,9 @@
-<script context="module" lang="ts">
-	import { metaStore,titleStore } from '$lib/stores';
-	import type { ImageMetadata,Manifest } from '$lib/types';
-	import { HighResHref,HighResMaxDimension,StorageBaseUrl } from '$lib/__consts';
-	import type { Load } from '@sveltejs/kit';
-	import { onDestroy } from 'svelte';
-
-	let src: string;
-	let metadata: ImageMetadata;
-	let date: Date;
-	export const load: Load = function ({ params, stuff }) {
-		const manifest: Manifest = stuff.manifest;
-		const imageId = params.imageId;
-		const match = Object.entries(manifest.albums || {})
-			.flatMap(([_, album]) => Object.entries(album.images || {}))
-			.find(([key]) => key === imageId);
-		if (!match) {
-			return {
-				status: 404
-			};
-		}
-		[, metadata] = match;
-		const href = metadata.hrefs[HighResHref];
-		src = `${StorageBaseUrl}/${href}.jpg`;
-		titleStore.set(metadata.title);
-		const [widthRatio, heightRatio] = metadata.aspectRatio.split(':').map((x) => Number(x));
-		const width =
-			widthRatio > heightRatio
-				? HighResMaxDimension
-				: (widthRatio / heightRatio) * HighResMaxDimension;
-		const height =
-			heightRatio > widthRatio
-				? HighResMaxDimension
-				: (heightRatio / widthRatio) * HighResMaxDimension;
-		metaStore.set({
-			'twitter:card': 'summary_large_image',
-			'og:type': 'article',
-			'og:image': src,
-			'og:title': metadata.title,
-			'og:description': 'Photography by Logan Dam',
-			'og:image:width': width.toString(),
-			'og:image:height': height.toString(),
-			'og:image:alt': metadata.caption
-		});
-		date = new Date(metadata.captureDate);
-		return {};
-	};
-</script>
-
 <script lang="ts">
+	import { metaStore, titleStore } from '$lib/stores';
+	import { onDestroy } from 'svelte';
+	import type { PageData } from './$types';
+	export let data: PageData;
+	export let {src, metadata, date} = data;
 	onDestroy(() => {
 		titleStore.set(undefined);
 		metaStore.set(undefined);
