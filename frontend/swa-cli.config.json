@@ -2,7 +2,7 @@
   "configurations": {
     "frontend": {
       "appLocation": ".",
-      "apiLocation": "api",
+      "apiLocation": "build/server",
       "outputLocation": "build/static",
       "appBuildCommand": "npm run build"
     }
