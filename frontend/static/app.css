@@ -37,3 +37,7 @@ a:hover {
 h3 {
 	font-style: italic;
 }
+
+.svelte {
+	display: flex;
+}

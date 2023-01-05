@@ -33,7 +33,6 @@
 		margin-left: var(--sl-spacing-small);
 		margin-right: var(--sl-spacing-small);
 		margin-bottom: var(--sl-spacing-large);
-		display: flex;
 		flex: 1;
 	}
 
