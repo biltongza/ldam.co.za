@@ -2,8 +2,8 @@
 	<div class="blurb">
 		<h2>Hi. I'm Logan.</h2>
 		<p>
-			I'm a full time software engineer, starting in 2013, with a strong technical
-			background in .NET and MSSQL. I have a passion for helping others realise their potential and enjoy
+			I'm a full time software engineer, starting in 2013, with a strong technical background in
+			.NET and MSSQL. I have a passion for helping others realise their potential and enjoy
 			mentorship and elevating the abilities of my peers.
 		</p>
 		<p>Born in Johannesburg, South Africa, I relocated to Amsterdam, Netherlands in 2022.</p>
@@ -48,9 +48,7 @@
 			as well. I bought my first DSLR (A Canon EOS 1200D) for a trip to Europe in 2014 and have been
 			enjoying it as a hobby since.
 		</p>
-		<p>
-			I enjoy capturing images that give me inspiration and let me express my feelings.
-		</p>
+		<p>I enjoy capturing images that give me inspiration and let me express my feelings.</p>
 		<h3>Portfolio</h3>
 		<p>
 			This website is intended to be a portfolio of my creative work. It is entirely written by
@@ -70,8 +68,22 @@
 			> because I'm lazy and don't like having to manage image files :)
 		</p>
 	</div>
-
-	<img src="/Selfie.jpg" class="selfie" alt="Portrait of Logan Dam" />
+	<div class="secondary">
+		<img src="/Selfie.jpg" class="selfie" alt="Portrait of Logan Dam" />
+		<div class="badges">
+			<div
+				data-iframe-width="150"
+				data-iframe-height="270"
+				data-share-badge-id="34a1f527-c255-4aba-a7cf-02489df0e272"
+				data-share-badge-host="https://www.credly.com"
+			/>
+			<script
+				type="text/javascript"
+				async
+				src="//cdn.credly.com/assets/utilities/embed.js"
+			></script>
+		</div>
+	</div>
 </div>
 
 <style>
@@ -90,10 +102,18 @@
 	}
 
 	.selfie {
-		max-width: 400px;
+		max-width: 100%;
 		max-height: 70vh;
 		object-fit: cover;
 		margin-left: auto;
 		margin-right: auto;
+	}
+
+	.secondary {
+		width:100%;
+		text-align:center;
+	}
+	.badges {
+		display: inline-block;
 	}
 </style>
