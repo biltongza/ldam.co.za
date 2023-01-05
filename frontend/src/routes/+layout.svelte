@@ -1,4 +1,5 @@
 <script context="module" lang="ts">
+	import Footer from '$lib/footer/footer.svelte';
 	import Header from '$lib/header/header.svelte';
 	import { metaStore, titleStore } from '$lib/stores';
 	import { defaultMetadata } from '$lib/__consts';
@@ -25,12 +26,15 @@
 <main class="content">
 	<slot />
 </main>
+<Footer />
 
 <style lang="scss">
 	.content {
 		margin-left: var(--sl-spacing-small);
 		margin-right: var(--sl-spacing-small);
 		margin-bottom: var(--sl-spacing-large);
+		display: flex;
+		flex: 1;
 	}
 
 	@media only screen and (min-width: 1224px) {
