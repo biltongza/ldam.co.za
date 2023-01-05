@@ -5,7 +5,7 @@
 
 <div class="footer">
 	<p>
-		made by <a href="https://github.com/biltongza/ldam.co.za" target="_blank" rel="noreferrer">me</a
+		made by <a href="https://github.com/biltongza/ldam.co.za" target="_blank" rel="nofollow noopener">me</a
 		>
 	</p>
 	<div class="version"><span>{appver}</span>&nbsp;|<span>&nbsp;{lastmod}</span></div>
