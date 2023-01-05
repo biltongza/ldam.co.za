@@ -8,9 +8,9 @@ tags:
   - azure
 ---
 
-### Serverless is cool!
+_Serverless is cool!_
 
-#### Paradigms and buzzwords
+### Paradigms and buzzwords
 
 The serverless buzzword is quite a misnomer. The current web does not exist without servers. There is always some sort of system that acts as a host, providing resources to clients that request them.
 
@@ -24,7 +24,7 @@ Going serverless is moving away from the idea of "reserving" compute power. In a
 
 The serverless model instead gives you compute power on demand without any form of upfront reservation. If your functions aren't executing, you aren't paying for them. They are by and large billed by how much _memory_ and _time_ your functions use (at least Azure does, other providers might do things differently).
 
-#### What's this got to do with me?
+### What's this got to do with me?
 
 A core idea while building this website was that I wanted nothing to do with managing servers, because a) I'm lazy and b) I'm cheap. I do not expect this site to get a lot of traffic, so it's a bit hard to justify the monthly cost of a server running all the time.
 
@@ -42,7 +42,7 @@ That's basically it. The manifest and the images are now in a blob storage accou
 
 Now the client SPA just needs to fetch that manifest, and render everything it describes in a pretty way. As I have previously mentioned, the first iteration was done in Blazor WebAssembly, which I hosted on an [Azure Static WebApp](https://azure.microsoft.com/en-us/services/app-service/static/).
 
-#### Return of the server
+### Return of the server
 
 When I decided that the cold startup time for Blazor WebAssembly was just too long (especially since it was complete overkill, I just wanted it to render some images), I ported the site over to SvelteKit. I don't really have a good reason for picking SvelteKit, other than it wasn't Angular, Vue, or React. I like that it tries to do as much of the heavy lifting as it can as part of the compile step, instead of leaving that to happen at runtime, although it's not the only one to do it (see [Nuxt](https://nuxtjs.org/) for the Vue version, and [Remix](https://remix.run/) for the React version).
 
@@ -54,7 +54,7 @@ I happened to come across a SvelteKit adapter for Azure Static WebApps, [svelte-
 
 After a bit of hacking over Christmas 2021, I now have server side rendering, but without any servers. Dope!
 
-#### At what cost?
+### At what cost?
 
 The only thing this entire site has cost me (other than the domain registration) is my own time that I would otherwise be spending playing games or watching YouTube videos.
 
@@ -63,7 +63,7 @@ I'm not joking, it has cost me less than R5 since I started it all.
 
 In the most expensive month so far, KeyVault cost me 38 cents, while the remaining portion of the R1.89 (excl VAT) was accrued by Storage Account writes and CDN usage. Static WebApps have a free tier that is more than enough for my needs, and the rest of this costs so little it is entirely inconsequential. In fact I'm pretty sure the cost of my service usage is lower than the cost of actually billing me.
 
-#### Final word
+### Final word
 
 This is just one example of using the many tools available to me as a developer. I evaluated my needs, and decided that the serverless route would make sense for what I wanted to accomplish. It's certainly not the only way, in fact Azure also offers a free tier for App Services, which could have done exactly the same thing with a traditional server platform (though app services do remove a large part of the annoying server bits too!).
 

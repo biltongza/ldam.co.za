@@ -3,6 +3,7 @@ html,
 body {
 	font-family: 'Recursive', monospace;
 	background-color: var(--sl-color-neutral-50);
+	line-height: 1.5;
 }
 
 .header a,
@@ -28,4 +29,8 @@ a:hover {
 .blog p > img {
 	object-fit: contain;
 	max-width: 100%;
+}
+
+h3 {
+	font-style: italic;
 }
