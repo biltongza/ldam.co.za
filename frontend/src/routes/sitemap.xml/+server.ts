@@ -1,9 +1,9 @@
 import { metadata } from '$lib/.metadata.js';
+import { StorageBaseUrl } from '$lib/__consts';
 import { getManifest } from '$lib/getManifest';
 import { website } from '$lib/info';
 import type { ImageMetadata } from '$lib/types';
-import { StorageBaseUrl } from '$lib/__consts';
-import type { RequestHandler } from '@sveltejs/kit/types/endpoint';
+import type { RequestHandler } from '@sveltejs/kit';
 import fs from 'fs';
 import glob from 'glob';
 
