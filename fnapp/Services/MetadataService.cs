@@ -3,6 +3,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Metadata.Profiles.Exif;
 using SixLabors.ImageSharp.Metadata.Profiles.Iptc;
+using ImageInfo = ldam.co.za.lib.ImageInfo;
 
 namespace ldam.co.za.fnapp.Services;
 

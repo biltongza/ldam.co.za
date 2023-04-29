@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;
 using ldam.co.za.lib;
 using ldam.co.za.lib.Lightroom;
+using ImageInfo = ldam.co.za.lib.ImageInfo;
 
 namespace ldam.co.za.fnapp.Services;
 
