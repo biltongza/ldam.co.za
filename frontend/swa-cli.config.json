@@ -4,7 +4,8 @@
       "appLocation": ".",
       "apiLocation": "build/server",
       "outputLocation": "build/static",
-      "appBuildCommand": "npm run build"
+      "appBuildCommand": "npm run build",
+      "host": "127.0.0.1"
     }
   }
 }
