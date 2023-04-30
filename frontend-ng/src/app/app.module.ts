@@ -12,6 +12,8 @@ import { SocialIconComponent } from "./components/social-icon/social-icon.compon
 import { ThumbnailComponent } from "./components/thumbnail/thumbnail.component";
 import { PortfolioAlbumComponent } from './components/portfolio-album/portfolio-album.component';
 import { ImageComponent } from './components/image/image.component';
+import { AboutComponent } from './components/about/about.component';
+import { ErrorComponent } from './components/error/error.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { ImageComponent } from './components/image/image.component';
     AlbumPreviewComponent,
     ThumbnailComponent,
     PortfolioAlbumComponent,
-    ImageComponent
+    ImageComponent,
+    AboutComponent,
+    ErrorComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [],
