@@ -1,0 +1,11 @@
+.footer {
+    padding-top: 2em;
+    padding-bottom: 2em;
+    display: flex;
+    background-color: var(--sl-color-neutral-100);
+    flex-direction: column;
+    align-items: center;
+    color: var(--sl-color-neutral-600);
+    font-size: var(--sl-font-size-x-small);
+    font-weight: var(--sl-font-weight-light);
+}

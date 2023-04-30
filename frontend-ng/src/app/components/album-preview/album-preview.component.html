@@ -1,0 +1,9 @@
+<section class="album-container" *ngIf="album">
+    <h2>{{album.title}}</h2>
+    <div class="thumbnails">
+        <div *ngFor="let image of images;" [class]="getClassList(image)">
+            <app-thumbnail [image]="image" />
+        </div>
+
+    </div>
+</section>
