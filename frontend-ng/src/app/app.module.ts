@@ -14,6 +14,7 @@ import { PortfolioAlbumComponent } from './components/portfolio-album/portfolio-
 import { ImageComponent } from './components/image/image.component';
 import { AboutComponent } from './components/about/about.component';
 import { ErrorComponent } from './components/error/error.component';
+import { CollectionsComponent } from './components/collections/collections.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ErrorComponent } from './components/error/error.component';
     PortfolioAlbumComponent,
     ImageComponent,
     AboutComponent,
-    ErrorComponent
+    ErrorComponent,
+    CollectionsComponent
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [],
