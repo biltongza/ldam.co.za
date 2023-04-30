@@ -1,0 +1,54 @@
+.image {
+    object-fit: contain;
+    justify-content: center;
+    background-image: url('/assets/tail-spin.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100%;
+    width: 100%;
+    max-height: 85vh;
+}
+
+.metadata {
+    flex: 1 1 auto;
+}
+
+.image-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2em;
+}
+@media only screen and (min-width: 768px) {
+    .image-container {
+        flex-direction: row;
+        height: 90vh;
+    }
+}
+
+.metadata {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.metadata > * > sl-icon {
+    font-size: var(--sl-font-size-large);
+}
+
+.camera-info,
+.exposure-info,
+.date-info {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 1em;
+}
+
+.exposure-info > .content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    gap: 1em;
+}
