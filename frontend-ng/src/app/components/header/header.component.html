@@ -6,7 +6,7 @@
         <nav [class.expanded]="smol && expanded">
             <ul>
                 <li *ngIf="smol"><app-router-link path="/">Home</app-router-link></li>
-                <li *ngFor="let route of routes"><app-routerlink [path]="route.path">{{route.label}}</app-routerlink>
+                <li *ngFor="let route of routes"><app-router-link [path]="route.path">{{route.label}}</app-router-link>
                 </li>
                 <li *ngFor="let social of socials">
                     <app-social-icon [text]="social.text" [label]="social.label" [href]="social.href"
