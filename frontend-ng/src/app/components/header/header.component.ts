@@ -12,7 +12,8 @@ export class HeaderComponent {
   routes = [
 		{ label: 'About', path: '/about' },
 		{ label: 'Collections', path: '/collections' },
-		{ label: 'Blog', path: '/blog' }
+		// TODO: reinstate when blogs are on an API
+		//{ label: 'Blog', path: '/blog' }
 	];
 
 	socials = [
