@@ -1,10 +1,18 @@
 import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
 import { Album, ImageMetadata } from "src/app/types";
+import { ThumbnailComponent } from "../thumbnail/thumbnail.component";
+import { NgIf, NgFor } from "@angular/common";
 
 @Component({
-  selector: "app-album-preview",
-  templateUrl: "./album-preview.component.html",
-  styleUrls: ["./album-preview.component.scss"],
+    selector: "app-album-preview",
+    templateUrl: "./album-preview.component.html",
+    styleUrls: ["./album-preview.component.scss"],
+    standalone: true,
+    imports: [
+        NgIf,
+        NgFor,
+        ThumbnailComponent,
+    ],
 })
 export class AlbumPreviewComponent implements OnChanges {
   @Input() album?: Album;

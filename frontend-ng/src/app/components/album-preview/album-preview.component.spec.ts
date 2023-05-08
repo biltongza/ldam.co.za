@@ -8,8 +8,8 @@ describe('AlbumPreviewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AlbumPreviewComponent ]
-    })
+    imports: [AlbumPreviewComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(AlbumPreviewComponent);

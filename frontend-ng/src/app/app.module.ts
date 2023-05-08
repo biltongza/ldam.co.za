@@ -17,23 +17,20 @@ import { ErrorComponent } from './components/error/error.component';
 import { CollectionsComponent } from './components/collections/collections.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    RouterLinkComponent,
-    SocialIconComponent,
-    FooterComponent,
-    AlbumPreviewComponent,
-    ThumbnailComponent,
-    PortfolioAlbumComponent,
-    ImageComponent,
-    AboutComponent,
-    ErrorComponent,
-    CollectionsComponent
-  ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
-  providers: [],
-  bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    declarations: [AppComponent],
+    imports: [BrowserModule, AppRoutingModule, HttpClientModule, HeaderComponent,
+        RouterLinkComponent,
+        SocialIconComponent,
+        FooterComponent,
+        AlbumPreviewComponent,
+        ThumbnailComponent,
+        PortfolioAlbumComponent,
+        ImageComponent,
+        AboutComponent,
+        ErrorComponent,
+        CollectionsComponent],
+    providers: [],
+    bootstrap: [AppComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppModule {}

@@ -1,9 +1,15 @@
-import { Component } from '@angular/core';
+import { NgFor, NgIf } from '@angular/common';
+import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
+import { RouterLinkComponent } from '../router-link/router-link.component';
+import { SocialIconComponent } from '../social-icon/social-icon.component';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss'],
+    standalone: true,
+    imports: [NgIf, RouterLinkComponent, NgFor, SocialIconComponent],
+	schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class HeaderComponent {
   smol = false;

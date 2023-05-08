@@ -8,8 +8,8 @@ describe('RouterLinkComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RouterLinkComponent ]
-    })
+    imports: [RouterLinkComponent]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(RouterLinkComponent);

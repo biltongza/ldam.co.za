@@ -1,12 +1,16 @@
-import { Component } from "@angular/core";
+import { NgIf } from "@angular/common";
+import { CUSTOM_ELEMENTS_SCHEMA, Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { HighResHref, HighResMaxDimension, StorageBaseUrl } from 'src/app/consts';
 import { ImageMetadata } from "src/app/types";
 
 @Component({
-  selector: "app-image",
-  templateUrl: "./image.component.html",
-  styleUrls: ["./image.component.scss"],
+    selector: "app-image",
+    templateUrl: "./image.component.html",
+    styleUrls: ["./image.component.scss"],
+    standalone: true,
+    imports: [NgIf],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class ImageComponent {
   src: string;
