@@ -1,21 +1,31 @@
 <header class="header">
-    <div class="nav-container">
-        <a class="brand" href="/">
-            <h1>Logan Dam</h1>
-        </a>
-        <nav [class.expanded]="smol && expanded">
-            <ul>
-                <li *ngIf="smol"><app-router-link path="/">Home</app-router-link></li>
-                <li *ngFor="let route of routes"><app-router-link [path]="route.path">{{route.label}}</app-router-link>
-                </li>
-                <li *ngFor="let social of socials">
-                    <app-social-icon [text]="social.text" [label]="social.label" [href]="social.href"
-                        [icon]="social.icon" [showText]="smol && expanded" />
-                </li>
-
-            </ul>
-        </nav>
-    </div>
-    <sl-icon-button *ngIf="smol" class="menu-button" [class.expanded]="expanded" name="chevron-double-down"
-        [onClick]="toggle()" />
+	<div class="nav-container">
+		<a class="brand" href="/">
+			<h1>Logan Dam</h1>
+		</a>
+		<nav [class.expanded]="smol && expanded">
+			<ul>
+				<li *ngIf="smol"><app-router-link path="/">Home</app-router-link></li>
+				<li *ngFor="let route of routes">
+					<app-router-link [path]="route.path">{{ route.label }}</app-router-link>
+				</li>
+				<li *ngFor="let social of socials">
+					<app-social-icon
+						[text]="social.text"
+						[label]="social.label"
+						[href]="social.href"
+						[icon]="social.icon"
+						[showText]="smol && expanded"
+					/>
+				</li>
+			</ul>
+		</nav>
+	</div>
+	<sl-icon-button
+		*ngIf="smol"
+		class="menu-button"
+		[class.expanded]="expanded"
+		name="chevron-double-down"
+		[onClick]="toggle()"
+	/>
 </header>

@@ -6,17 +6,16 @@ import { AlbumPreviewComponent } from '../album-preview/album-preview.component'
 import { NgFor } from '@angular/common';
 
 @Component({
-    selector: 'app-collections',
-    templateUrl: './collections.component.html',
-    styleUrls: ['./collections.component.scss'],
-    standalone: true,
-    imports: [NgFor, AlbumPreviewComponent]
+	selector: 'app-collections',
+	templateUrl: './collections.component.html',
+	styleUrls: ['./collections.component.scss'],
+	standalone: true,
+	imports: [NgFor, AlbumPreviewComponent]
 })
 export class CollectionsComponent {
-  albums: Album[];
-  constructor(route: ActivatedRoute) {
-    const manifest: Manifest = getRouteData(route.snapshot, 'manifest');
-    this.albums = manifest.albums.filter(x => !x.isPortfolio);
-  }
-
+	albums: Album[];
+	constructor(route: ActivatedRoute) {
+		const manifest: Manifest = getRouteData(route.snapshot, 'manifest');
+		this.albums = manifest.albums.filter((x) => !x.isPortfolio);
+	}
 }

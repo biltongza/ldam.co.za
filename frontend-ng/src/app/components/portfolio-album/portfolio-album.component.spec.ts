@@ -3,21 +3,20 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PortfolioAlbumComponent } from './portfolio-album.component';
 
 describe('PortfolioAlbumComponent', () => {
-  let component: PortfolioAlbumComponent;
-  let fixture: ComponentFixture<PortfolioAlbumComponent>;
+	let component: PortfolioAlbumComponent;
+	let fixture: ComponentFixture<PortfolioAlbumComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-    imports: [PortfolioAlbumComponent]
-})
-    .compileComponents();
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({
+			imports: [PortfolioAlbumComponent]
+		}).compileComponents();
 
-    fixture = TestBed.createComponent(PortfolioAlbumComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+		fixture = TestBed.createComponent(PortfolioAlbumComponent);
+		component = fixture.componentInstance;
+		fixture.detectChanges();
+	});
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+	it('should create', () => {
+		expect(component).toBeTruthy();
+	});
 });

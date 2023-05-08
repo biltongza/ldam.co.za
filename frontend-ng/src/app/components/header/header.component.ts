@@ -4,20 +4,20 @@ import { RouterLinkComponent } from '../router-link/router-link.component';
 import { SocialIconComponent } from '../social-icon/social-icon.component';
 
 @Component({
-    selector: 'app-header',
-    templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss'],
-    standalone: true,
-    imports: [NgIf, RouterLinkComponent, NgFor, SocialIconComponent],
+	selector: 'app-header',
+	templateUrl: './header.component.html',
+	styleUrls: ['./header.component.scss'],
+	standalone: true,
+	imports: [NgIf, RouterLinkComponent, NgFor, SocialIconComponent],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class HeaderComponent {
-  smol = false;
-  expanded = false;
+	smol = false;
+	expanded = false;
 
-  routes = [
+	routes = [
 		{ label: 'About', path: '/about' },
-		{ label: 'Collections', path: '/collections' },
+		{ label: 'Collections', path: '/collections' }
 		// TODO: reinstate when blogs are on an API
 		//{ label: 'Blog', path: '/blog' }
 	];
