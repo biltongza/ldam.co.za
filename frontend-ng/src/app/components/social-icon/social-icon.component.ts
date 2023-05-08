@@ -8,9 +8,9 @@ import { CUSTOM_ELEMENTS_SCHEMA, Component, Input } from '@angular/core';
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SocialIconComponent {
-	@Input() text: string = '';
-	@Input() label: string = '';
-	@Input() icon: string = '';
-	@Input() href: string = ''
-  @Input() showText: boolean = false;
+	@Input() text = '';
+	@Input() label = '';
+	@Input() icon = '';
+	@Input() href = ''
+  @Input() showText = false;
 }

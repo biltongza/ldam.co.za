@@ -10,5 +10,5 @@ import { RouterLinkActive, RouterLink } from '@angular/router';
 })
 export class RouterLinkComponent {
   matches = false;
-  @Input() path: string = '';
+  @Input() path = '';
 }
