@@ -1,5 +1,7 @@
-import { NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Observable, fromEvent, map, startWith } from 'rxjs';
 import { RouterLinkComponent } from '../router-link/router-link.component';
 import { SocialIconComponent } from '../social-icon/social-icon.component';
 
@@ -8,11 +10,11 @@ import { SocialIconComponent } from '../social-icon/social-icon.component';
 	templateUrl: './header.component.html',
 	styleUrls: ['./header.component.scss'],
 	standalone: true,
-	imports: [NgIf, RouterLinkComponent, NgFor, SocialIconComponent],
+	imports: [NgIf, RouterLinkComponent, NgFor, SocialIconComponent, AsyncPipe],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class HeaderComponent {
-	smol = false;
+	smol$: Observable<boolean>;
 	expanded = false;
 
 	routes = [
@@ -38,6 +40,15 @@ export class HeaderComponent {
 		},
 		{ text: 'Twitter', label: 'twitter', href: 'https://twitter.com/TheBiltong', icon: 'twitter' }
 	];
+
+	constructor() {
+		const mql = window.matchMedia('(max-width: 480px)');
+		this.smol$ = fromEvent<MediaQueryList>(mql, 'onchange').pipe(
+			startWith(mql),
+			map((x) => x.matches),
+			takeUntilDestroyed()
+		);
+	}
 
 	toggle() {
 		this.expanded = !this.expanded;

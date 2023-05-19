@@ -3,9 +3,9 @@
 		<a class="brand" href="/">
 			<h1>Logan Dam</h1>
 		</a>
-		<nav [class.expanded]="smol && expanded">
+		<nav [class.expanded]="(smol$ | async) && expanded">
 			<ul>
-				<li *ngIf="smol"><app-router-link path="/">Home</app-router-link></li>
+				<li *ngIf="smol$ | async"><app-router-link path="/">Home</app-router-link></li>
 				<li *ngFor="let route of routes">
 					<app-router-link [path]="route.path">{{ route.label }}</app-router-link>
 				</li>
@@ -15,17 +15,17 @@
 						[label]="social.label"
 						[href]="social.href"
 						[icon]="social.icon"
-						[showText]="smol && expanded"
+						[showText]="(smol$ | async)! && expanded"
 					/>
 				</li>
 			</ul>
 		</nav>
 	</div>
 	<sl-icon-button
-		*ngIf="smol"
+		*ngIf="smol$ | async"
 		class="menu-button"
 		[class.expanded]="expanded"
 		name="chevron-double-down"
-		[onClick]="toggle()"
+		(click)="toggle()"
 	/>
 </header>
