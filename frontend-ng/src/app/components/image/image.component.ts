@@ -2,6 +2,7 @@ import { NgIf } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HighResHref, HighResMaxDimension, StorageBaseUrl } from 'src/app/consts';
+import { MetadataService } from 'src/app/services/metadata.service';
 import { TitleService } from 'src/app/services/title.service';
 import { ImageMetadata } from 'src/app/types';
 
@@ -18,7 +19,11 @@ export class ImageComponent implements OnInit, OnDestroy {
   metadata: ImageMetadata;
   date: Date;
 
-  constructor(route: ActivatedRoute, private readonly titleService: TitleService) {
+  constructor(
+    route: ActivatedRoute,
+    private readonly titleService: TitleService,
+    private readonly metaService: MetadataService
+  ) {
     this.metadata = route.snapshot.data['metadata'];
 
     const href = this.metadata.hrefs[HighResHref];
@@ -35,11 +40,23 @@ export class ImageComponent implements OnInit, OnDestroy {
       heightRatio > widthRatio
         ? HighResMaxDimension
         : (heightRatio / widthRatio) * HighResMaxDimension;
+
+    this.metaService.updateMetadata({
+      'twitter:card': 'summary_large_image',
+      'og:type': 'article',
+      'og:image': this.src,
+      'og:title': this.metadata.title,
+      'og:description': 'Photography by Logan Dam',
+      'og:image:width': width.toString(),
+      'og:image:height': height.toString(),
+      'og:image:alt': this.metadata.caption
+    });
   }
   ngOnInit(): void {
     this.titleService.setTitle(this.metadata.title);
   }
   ngOnDestroy(): void {
     this.titleService.clearTitle();
+    this.metaService.clearMetadata();
   }
 }
