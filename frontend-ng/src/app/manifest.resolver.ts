@@ -6,6 +6,6 @@ import { StorageBaseUrl } from './consts';
 import { Manifest } from './types';
 
 export const manifestResolver: ResolveFn<Manifest> = () => {
-	const httpClient = inject(HttpClient);
-	return httpClient.get(`${StorageBaseUrl}/manifest.json`).pipe(map((res) => res as Manifest));
+  const httpClient = inject(HttpClient);
+  return httpClient.get(`${StorageBaseUrl}/manifest.json`).pipe(map((res) => res as Manifest));
 };

@@ -8,8 +8,8 @@ import { AppComponent } from './app/app.component';
 setBasePath('https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.4.0/dist/');
 
 bootstrapApplication(AppComponent, {
-	providers: [
-		importProvidersFrom(BrowserModule, AppRoutingModule),
-		provideHttpClient(withInterceptorsFromDi())
-	]
+  providers: [
+    importProvidersFrom(BrowserModule, AppRoutingModule),
+    provideHttpClient(withInterceptorsFromDi())
+  ]
 }).catch((err) => console.error(err));

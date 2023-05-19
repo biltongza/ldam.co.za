@@ -1,21 +1,21 @@
-{
-	"root": true,
-	"ignorePatterns": [
+module.exports = {
+	root: true,
+	ignorePatterns: [
 		"projects/**/*"
 	],
-	"overrides": [
+	overrides: [
 		{
-			"files": [
+			files: [
 				"*.ts"
 			],
-			"extends": [
+			extends: [
 				"eslint:recommended",
 				"plugin:@typescript-eslint/recommended",
 				"plugin:@angular-eslint/recommended",
 				"plugin:@angular-eslint/template/process-inline-templates",
 				"plugin:prettier/recommended"
 			],
-			"rules": {
+			rules: {
 				"@angular-eslint/directive-selector": [
 					"error",
 					{
@@ -35,35 +35,35 @@
 			}
 		},
 		{
-			"files": [
+			files: [
 				"*.html"
 			],
-			"extends": [
+			extends: [
 				"plugin:@angular-eslint/template/recommended",
 				"plugin:@angular-eslint/template/accessibility"
 			],
-			"rules": {}
+			rules: {}
 		},
 		{
-			"files": [
+			files: [
 				"*.html"
 			],
-			"extends": [
+			extends: [
 				"plugin:@angular-eslint/template/recommended"
 			],
-			"rules": {}
+			rules: {}
 		},
 		{
-			"files": [
+			files: [
 				"*.html"
 			],
-			"excludedFiles": [
+			excludedFiles: [
 				"*inline-template-*.component.html"
 			],
-			"extends": [
+			extends: [
 				"plugin:prettier/recommended"
 			],
-			"rules": {
+			rules: {
 				// NOTE: WE ARE OVERRIDING THE DEFAULT CONFIG TO ALWAYS SET THE PARSER TO ANGULAR (SEE BELOW)
 				"prettier/prettier": [
 					"error",
