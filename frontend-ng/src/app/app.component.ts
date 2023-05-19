@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { FooterComponent } from './components/footer/footer.component';
 import { RouterOutlet } from '@angular/router';
+import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
+import { TitleService } from './services/title.service';
 
 @Component({
 	selector: 'app-root',
@@ -11,5 +12,8 @@ import { HeaderComponent } from './components/header/header.component';
 	imports: [HeaderComponent, RouterOutlet, FooterComponent]
 })
 export class AppComponent {
+	constructor(titleService: TitleService) {
+		titleService.clearTitle();
+	}
 	title = 'frontend-ng';
 }

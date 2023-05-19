@@ -1,7 +1,8 @@
 import { NgIf } from '@angular/common';
-import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HighResHref, HighResMaxDimension, StorageBaseUrl } from 'src/app/consts';
+import { TitleService } from 'src/app/services/title.service';
 import { ImageMetadata } from 'src/app/types';
 
 @Component({
@@ -12,12 +13,12 @@ import { ImageMetadata } from 'src/app/types';
 	imports: [NgIf],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class ImageComponent {
+export class ImageComponent implements OnInit, OnDestroy {
 	src: string;
 	metadata: ImageMetadata;
 	date: Date;
 
-	constructor(route: ActivatedRoute) {
+	constructor(route: ActivatedRoute, private readonly titleService: TitleService) {
 		this.metadata = route.snapshot.data['metadata'];
 
 		const href = this.metadata.hrefs[HighResHref];
@@ -34,5 +35,11 @@ export class ImageComponent {
 			heightRatio > widthRatio
 				? HighResMaxDimension
 				: (heightRatio / widthRatio) * HighResMaxDimension;
+	}
+	ngOnInit(): void {
+		this.titleService.setTitle(this.metadata.title);
+	}
+	ngOnDestroy(): void {
+		this.titleService.clearTitle();
 	}
 }

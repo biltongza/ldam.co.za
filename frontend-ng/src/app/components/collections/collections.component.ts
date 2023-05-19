@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { NgFor } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { getRouteData } from 'src/app/getRouteParam.function';
+import { TitleService } from 'src/app/services/title.service';
 import { Album, Manifest } from 'src/app/types';
 import { AlbumPreviewComponent } from '../album-preview/album-preview.component';
-import { NgFor } from '@angular/common';
 
 @Component({
 	selector: 'app-collections',
@@ -12,10 +13,16 @@ import { NgFor } from '@angular/common';
 	standalone: true,
 	imports: [NgFor, AlbumPreviewComponent]
 })
-export class CollectionsComponent {
+export class CollectionsComponent implements OnInit, OnDestroy {
 	albums: Album[];
-	constructor(route: ActivatedRoute) {
+	constructor(route: ActivatedRoute, private readonly titleService: TitleService) {
 		const manifest: Manifest = getRouteData(route.snapshot, 'manifest');
 		this.albums = manifest.albums.filter((x) => !x.isPortfolio);
+	}
+	ngOnInit(): void {
+		this.titleService.setTitle('Collections');
+	}
+	ngOnDestroy(): void {
+		this.titleService.clearTitle();
 	}
 }
