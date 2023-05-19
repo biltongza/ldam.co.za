@@ -1,5 +1,5 @@
 TODO: 
 - [x] Port application shell
 - [ ] Fix social cards
-- [ ] Fix title
+- [x] Fix title
 - [ ] Add blog 
