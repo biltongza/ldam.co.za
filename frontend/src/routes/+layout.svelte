@@ -1,14 +1,14 @@
 <script context="module" lang="ts">
+	import { defaultMetadata } from '$lib/__consts';
 	import Footer from '$lib/footer/footer.svelte';
 	import Header from '$lib/header/header.svelte';
 	import { metaStore, titleStore } from '$lib/stores';
-	import { defaultMetadata } from '$lib/__consts';
 </script>
 
 <script lang="ts">
 	export let pageTitle: string;
 	export let metas: { key: string; value: string }[];
-	$: pageTitle = `${$titleStore ? $titleStore + ' - ' : ''}Logan Dam - Developer, Photographer`;
+	$: pageTitle = `${$titleStore ? $titleStore + ' - ' : ''}Logan Dam - Software Engineer, Photographer`;
 	$: metas = Object.entries({ ...defaultMetadata, ...$metaStore }).map(([key, value]) => ({
 		key,
 		value
