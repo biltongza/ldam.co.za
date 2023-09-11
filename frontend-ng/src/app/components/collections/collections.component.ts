@@ -15,7 +15,10 @@ import { AlbumPreviewComponent } from '../album-preview/album-preview.component'
 })
 export class CollectionsComponent implements OnInit, OnDestroy {
   albums: Album[];
-  constructor(route: ActivatedRoute, private readonly titleService: TitleService) {
+  constructor(
+    route: ActivatedRoute,
+    private readonly titleService: TitleService
+  ) {
     const manifest: Manifest = getRouteData(route.snapshot, 'manifest');
     this.albums = manifest.albums.filter((x) => !x.isPortfolio);
   }

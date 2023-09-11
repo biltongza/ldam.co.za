@@ -11,7 +11,7 @@ export const imageMetadataResolver: ResolveFn<ImageMetadata> = (route: Activated
 
   const allImages = manifest.albums
     .flatMap((x) => Object.entries(x.images))
-    .map(([_, metadata]) => metadata);
+    .map(([, metadata]) => metadata);
 
   const match = allImages.find((x) => x.id === id);
   if (!match) {
