@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HighResHref, HighResMaxDimension, StorageBaseUrl } from 'src/app/consts';
@@ -11,7 +10,7 @@ import { ImageMetadata } from 'src/app/types';
   templateUrl: './image.component.html',
   styleUrls: ['./image.component.scss'],
   standalone: true,
-  imports: [NgIf],
+  imports: [],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ImageComponent implements OnInit, OnDestroy {

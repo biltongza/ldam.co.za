@@ -1,4 +1,4 @@
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, fromEvent, map, startWith } from 'rxjs';
@@ -10,7 +10,7 @@ import { SocialIconComponent } from '../social-icon/social-icon.component';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: true,
-  imports: [NgIf, RouterLinkComponent, NgFor, SocialIconComponent, AsyncPipe],
+  imports: [RouterLinkComponent, SocialIconComponent, AsyncPipe],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class HeaderComponent {

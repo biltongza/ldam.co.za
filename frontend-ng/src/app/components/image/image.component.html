@@ -1,9 +1,13 @@
 <article class="image-container">
   <img [src]="src" class="image" aria-labelledby="" [alt]="metadata.caption" />
   <section class="metadata">
-    <h2 *ngIf="metadata.title" class="title">{{ metadata.title }}</h2>
+    @if (metadata.title) {
+      <h2 class="title">{{ metadata.title }}</h2>
+    }
 
-    <h3 *ngIf="metadata.caption" class="caption">{{ metadata.caption }}</h3>
+    @if (metadata.caption) {
+      <h3 class="caption">{{ metadata.caption }}</h3>
+    }
 
     <div class="date-info">
       <sl-icon name="calendar-event" />

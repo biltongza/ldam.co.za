@@ -1,4 +1,3 @@
-import { NgFor } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { getRouteData } from 'src/app/getRouteParam.function';
@@ -11,7 +10,7 @@ import { AlbumPreviewComponent } from '../album-preview/album-preview.component'
   templateUrl: './collections.component.html',
   styleUrls: ['./collections.component.scss'],
   standalone: true,
-  imports: [NgFor, AlbumPreviewComponent]
+  imports: [AlbumPreviewComponent]
 })
 export class CollectionsComponent implements OnInit, OnDestroy {
   albums: Album[];

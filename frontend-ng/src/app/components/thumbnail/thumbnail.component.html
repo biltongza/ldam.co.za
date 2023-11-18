@@ -1,6 +1,8 @@
 <a [routerLink]="imageRoute">
   <picture>
-    <source *ngFor="let srcset of srcSets" [srcset]="srcset.srcSet" [type]="srcset.mime" />
+    @for (srcset of srcSets; track srcset) {
+      <source [srcset]="srcset.srcSet" [type]="srcset.mime" />
+    }
     <img [src]="src" class="thumbnail-image" loading="lazy" alt="" />
   </picture>
 </a>
