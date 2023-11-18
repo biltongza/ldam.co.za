@@ -5,49 +5,38 @@ import { website } from '$lib/info';
 import type { ImageMetadata } from '$lib/types';
 import type { RequestHandler } from '@sveltejs/kit';
 import fs from 'fs';
-import glob from 'glob';
+import { glob } from 'glob';
 
 export const GET: RequestHandler = async function () {
-	const headers = {
-		'Cache-Control': 'max-age=0, s-maxage=3600',
-		'Content-Type': 'application/xml'
-	};
+  const headers = {
+    'Cache-Control': 'max-age=0, s-maxage=3600',
+    'Content-Type': 'application/xml'
+  };
 
-	const manifest = await getManifest();
+  const manifest = await getManifest();
 
-	const routes = { 
-		about: 'src/routes/about.svelte', 
-		collections: 'src/routes/collections/index.svelte',
-		blog: 'src/routes/blog/index.svelte' 
-	};
-	const files = Object.entries(routes).map(([route, path]) => {
-		const lastModified = metadata.find((x) => x.path === path).lastModified;
-		return { route, lastModified: new Date(lastModified).toISOString() };
-	});
+  const routes = {
+    about: 'src/routes/about/+page.svelte',
+    collections: 'src/routes/collections/+page.svelte',
+    blog: 'src/routes/blog/+page.svelte'
+  };
+  const files = Object.entries(routes).map(([route, path]) => {
+    const lastModified = metadata.find((x) => x.path === path).lastModified;
+    return { route, lastModified: new Date(lastModified).toISOString() };
+  });
 
-	const imageRouteLastModified = metadata.find(
-		(x) => x.path === 'src/routes/image/[imageId].svelte'
-	).lastModified;
+  const imageRouteLastModified = metadata.find(
+    (x) => x.path === 'src/routes/image/[imageId]/+page.svelte'
+  ).lastModified;
 
-	const blogPosts: { file: string; url: string; lastModified: string }[] = await new Promise(
-		(resolve, reject) => {
-			glob('src/posts/*.md', (err, matches) => {
-				if (err) {
-					reject(err);
-				}
-				resolve(
-					matches.map((match) => ({
-						file: match,
-						url: `blog/${match.slice(match.lastIndexOf('/') + 1, -3)}`,
-						lastModified: fs.statSync(match).mtime.toISOString()
-					}))
-				);
-			});
-		}
-	);
+  const blogPosts = (await glob('src/posts/*.md')).map((match) => ({
+	file: match,
+	url: `blog/${match.slice(match.lastIndexOf('/') + 1, -3)}`,
+	lastModified: fs.statSync(match).mtime.toISOString()
+  }));
 
-	function generateImageNode(metadata: ImageMetadata): string {
-		return `<url>
+  function generateImageNode(metadata: ImageMetadata): string {
+    return `<url>
     <loc>${website}/image/${metadata.id}</loc>
     <image:image>
       <image:loc>${StorageBaseUrl}/${metadata.id}.2048.jpg</image:loc>
@@ -55,12 +44,13 @@ export const GET: RequestHandler = async function () {
       <image:license>http://creativecommons.org/licenses/by-nc/4.0</image:license>
     </image:image>
     <lastmod>${new Date(
-			Math.max.apply(null, [imageRouteLastModified, new Date(metadata.lastModified)])
-		).toISOString()}</lastmod>
+      Math.max.apply(null, [imageRouteLastModified, new Date(metadata.lastModified)])
+    ).toISOString()}</lastmod>
   </url>`;
-	}
+  }
 
-	return new Response(`<?xml version="1.0" encoding="UTF-8" ?>
+  return new Response(
+    `<?xml version="1.0" encoding="UTF-8" ?>
       <urlset
         xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="https://www.w3.org/1999/xhtml"
@@ -71,28 +61,30 @@ export const GET: RequestHandler = async function () {
         <lastmod>${new Date(manifest.lastModified).toISOString()}</lastmod>
       </url>
       ${files
-				.map(
-					({ route, lastModified }) => `
+        .map(
+          ({ route, lastModified }) => `
         <url>
           <loc>${website}/${route}</loc>
           <lastmod>${lastModified}</lastmod>
         </url>`
-				)
-				.join('')}
+        )
+        .join('')}
       ${Object.entries(manifest.albums)
-				.flatMap(([, album]) => {
-					return Object.entries(album.images).map(([, metadata]) => generateImageNode(metadata));
-				})
-				.join('')}
+        .flatMap(([, album]) => {
+          return Object.entries(album.images).map(([, metadata]) => generateImageNode(metadata));
+        })
+        .join('')}
 				${Object.entries(blogPosts)
-					.map(
-						([, post]) => `
+          .map(
+            ([, post]) => `
 				<url>
 				<loc>${website}/${post.url}</loc>
 				<lastmod>${post.lastModified}</lastmod>
 				</url>
 				`
-					)
-					.join('')}
-      </urlset>`, { headers: headers });
+          )
+          .join('')}
+      </urlset>`,
+    { headers: headers }
+  );
 };

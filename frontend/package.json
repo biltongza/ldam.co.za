@@ -24,7 +24,7 @@
 		"eslint": "^8.54.0",
 		"eslint-config-prettier": "^9.0.0",
 		"eslint-plugin-svelte": "^2.35.0",
-		"glob": "^8.1.0",
+		"glob": "^10.3.10",
 		"prettier": "^3.1.0",
 		"prettier-plugin-svelte": "^3.1.0",
 		"rehype-external-links": "^2.1.0",
