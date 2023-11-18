@@ -10,6 +10,9 @@ const config = {
 	kit: {
 		adapter: azure({
 			customStaticWebAppConfig: {
+				platform: {
+					apiRuntime: "node:18"
+				},
 				"globalHeaders": {
 					"X-Content-Type-Options": "nosniff",
 					"X-Frame-Options": "DENY",
