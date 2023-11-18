@@ -1,7 +1,6 @@
 import { getBlogPosts } from '$lib/getBlogPosts';
 import { website } from '$lib/info';
 import type { RequestHandler } from '@sveltejs/kit';
-import { json } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async function () {
 	const headers = {
@@ -38,8 +37,7 @@ export const GET: RequestHandler = async function () {
             </channel>
             </rss>`;
 
-	
-	return json(rss, {
-		headers: headers
-	});
+    return new Response(rss, {
+        headers
+    });
 };
