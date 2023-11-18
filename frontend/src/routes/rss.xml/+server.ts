@@ -1,6 +1,7 @@
 import { getBlogPosts } from '$lib/getBlogPosts';
 import { website } from '$lib/info';
 import type { RequestHandler } from '@sveltejs/kit';
+import dayjs from 'dayjs';
 
 export const GET: RequestHandler = async function () {
 	const headers = {
@@ -29,7 +30,7 @@ export const GET: RequestHandler = async function () {
                     <description><![CDATA[${post.excerpt}]]></description>
                     <link>${website}/blog/${post.slug}</link>
                     <guid isPermaLink="false">${website}/blog/${post.slug}</guid>
-                    <pubDate>${post.date}</pubDate>
+                    <pubDate>${dayjs(post.date).toString()}</pubDate>
                     ${post.tags.map((tag) => `<category><![CDATA[${tag}]]></category>`).join('')}
                     </item>`
 									)
