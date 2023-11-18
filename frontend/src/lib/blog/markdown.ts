@@ -31,7 +31,11 @@ export function process(filename: string): { metadata: BlogMetadata; content: st
 		metadata.date = dayjs(metadata.date).valueOf();
 		metadata.slug = slug;
 	}
-	let content = runner.stringify(runner.runSync(tree));
+
+	// the typings of remark and rehype are not compatible but remark2rehype works just fine anyway
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const remarkTree: any = runner.runSync(tree)
+	let content = runner.stringify(remarkTree);
 	if (!metadata) {
 		metadata = {
 			title: 'Error!',
