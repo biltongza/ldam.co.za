@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://beta.ldam.co.za/sitemap.xml
+Sitemap: https://ldam.co.za/sitemap.xml
