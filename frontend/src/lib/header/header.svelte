@@ -8,7 +8,7 @@
 		const matchListener = (event: MediaQueryListEvent) => {
 			smol = event.matches;
 		};
-		const mql = window.matchMedia('(max-width: 480px)');
+		const mql = window.matchMedia('(max-width: 550px)');
 		smol = mql.matches;
 		mql.addEventListener('change', matchListener);
 		return () => {
@@ -99,7 +99,7 @@
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
-		@media screen and (max-width: 480px) {
+		@media screen and (max-width: 550px) {
 			flex-direction: column;
 			align-items: flex-start;
 			font-size: var(--sl-font-size-large);
@@ -115,11 +115,11 @@
 
 	.menu-button {
 		flex: 0 0 auto;
-		margin-top: var(--sl-spacing-medium);
+		margin-top: var(--sl-spacing-large);
 	}
 
 	nav {
-		@media screen and (max-width: 480px) {
+		@media screen and (max-width: 550px) {
 			margin-bottom: var(--sl-spacing-medium);
 			display: none;
 			background-color: var(--sl-color-neutral-150);
@@ -128,7 +128,7 @@
 				width: 100%;
 				ul {
 					flex-direction: column;
-					align-items: flex-start;
+					align-items: flex-end;
 				}
 			}
 		}
@@ -150,7 +150,7 @@
 	}
 	.menu-button {
 		display: none;
-		@media only screen and (max-width: 480px) {
+		@media only screen and (max-width: 550px) {
 			display: block;
 			transform: rotate(0deg);
 			transition: all 0.25s ease-in;
