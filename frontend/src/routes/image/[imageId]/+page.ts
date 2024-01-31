@@ -14,7 +14,7 @@ export const load: PageLoad = async function ({ params, parent }) {
 		.flatMap(([, album]) => Object.entries(album.images || {}))
 		.find(([key]) => key === imageId);
 	if (!match) {
-		throw error(404);
+		error(404);
 	}
 	[, metadata] = match;
 	const href = metadata.hrefs[HighResHref];
