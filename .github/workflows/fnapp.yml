@@ -3,8 +3,8 @@ name: fnapp
 on:
   workflow_dispatch:
   push:
-    branches: [ master ]
-    paths: 
+    branches: [master]
+    paths:
       - lib/**
       - fnapp/**
       - fnapp.Tests/**
@@ -13,24 +13,24 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET 6
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-      working-directory: ./fnapp
-    - name: Build
-      run: dotnet build --no-restore -c Release -o fnapp-build
-      working-directory: ./fnapp
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-      working-directory: ./fnapp.Tests
-    - uses: actions/upload-artifact@v2
-      with:
-        name: fnapp
-        path: ./fnapp/fnapp-build
+      - uses: actions/checkout@v2
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.0.x
+      - name: Restore dependencies
+        run: dotnet restore
+        working-directory: ./fnapp
+      - name: Build
+        run: dotnet build --no-restore -c Release -o fnapp-build
+        working-directory: ./fnapp
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+        working-directory: ./fnapp.Tests
+      - uses: actions/upload-artifact@v2
+        with:
+          name: fnapp
+          path: ./fnapp/fnapp-build
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -44,7 +44,3 @@ jobs:
           app-name: fnapp
           package: .
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
-
-
-
-      
