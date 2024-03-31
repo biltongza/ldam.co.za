@@ -1,5 +1,5 @@
 using ldam.co.za.fnapp.Services;
-using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
 namespace ldam.co.za.fnapp.Functions;
@@ -7,16 +7,18 @@ namespace ldam.co.za.fnapp.Functions;
 public class RefreshAccessTokenFunc
 {
     private readonly RefreshTokenService refreshTokenService;
-    public RefreshAccessTokenFunc(RefreshTokenService refreshTokenService)
+    private readonly ILogger logger;
+
+    public RefreshAccessTokenFunc(RefreshTokenService refreshTokenService, ILogger<RefreshAccessTokenFunc> logger)
     {
         this.refreshTokenService = refreshTokenService;
+        this.logger = logger;
     }
 
-    [FunctionName(nameof(RefreshAccessTokenFunc))]
-    #pragma warning disable IDE0060
-    public async Task Run([TimerTrigger("0 */5 * * * *")] TimerInfo timerInfo, ILogger logger)
-    #pragma warning restore IDE0060
+    [Function(nameof(RefreshAccessTokenFunc))]
+    public async Task Run([TimerTrigger("0 */5 * * * *")] TimerInfo timerInfo)
     {
+        logger.LogInformation("RefreshAccessToken fired");
         await refreshTokenService.RefreshAccessToken();
     }
 }

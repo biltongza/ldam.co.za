@@ -1,5 +1,5 @@
 using ldam.co.za.fnapp.Services;
-using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
 namespace ldam.co.za.fnapp.Functions;
@@ -7,15 +7,18 @@ namespace ldam.co.za.fnapp.Functions;
 public class RefreshImagesTimer
 {
     private readonly SyncService syncService;
+    private readonly ILogger logger;
 
-    public RefreshImagesTimer(SyncService syncService)
+    public RefreshImagesTimer(SyncService syncService, ILogger<RefreshImagesTimer> logger)
     {
         this.syncService = syncService;
+        this.logger = logger;
     }
 
-    [FunctionName(nameof(RefreshImagesTimer))]
-    public async Task Run([TimerTrigger("0 */30 * * * *")] TimerInfo timerInfo, ILogger logger, CancellationToken cancellationToken)
+    [Function(nameof(RefreshImagesTimer))]
+    public async Task Run([TimerTrigger("0 */30 * * * *")] TimerInfo timerInfo, CancellationToken cancellationToken)
     {
+        logger.LogInformation("RefreshImagesTimer fired");
         if (timerInfo.IsPastDue)
         {
             logger.LogInformation("Timer is late, skipping");

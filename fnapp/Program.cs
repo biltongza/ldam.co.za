@@ -1,24 +1,22 @@
 using Azure.Core;
 using Azure.Identity;
 using Azure.ResourceManager;
+using ldam.co.za.fnapp;
 using ldam.co.za.fnapp.Services;
 using ldam.co.za.lib.Configuration;
 using ldam.co.za.lib.Lightroom;
 using ldam.co.za.lib.Services;
-using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
-[assembly: FunctionsStartup(typeof(ldam.co.za.fnapp.Startup))]
-
-namespace ldam.co.za.fnapp;
-
-public class Startup : FunctionsStartup
-{
-    public override void Configure(IFunctionsHostBuilder builder)
+var host = new HostBuilder()
+    .ConfigureFunctionsWebApplication()
+    .ConfigureServices((context, services) =>
     {
-        var services = builder.Services;
+        services.AddApplicationInsightsTelemetryWorkerService();
+        services.ConfigureFunctionsApplicationInsights();
 
-        var config = builder.GetContext().Configuration;
         services.AddMemoryCache();
         services.AddTransient<ISecretService, SecretService>();
 
@@ -48,9 +46,13 @@ public class Startup : FunctionsStartup
                 ));
         services.AddSingleton<ArmClient>();
         services.AddTransient<ICdnService, CdnService>();
+
+        var config = context.Configuration;
         services.Configure<FunctionAppAzureResourceOptions>(config.GetSection("Azure"));
         services.Configure<AzureResourceOptions>(config.GetSection("Azure"));
         services.Configure<FunctionAppLightroomOptions>(config.GetSection("Lightroom"));
         services.Configure<LightroomOptions>(config.GetSection("Lightroom"));
-    }
-}
+    })
+    .Build();
+
+host.Run();

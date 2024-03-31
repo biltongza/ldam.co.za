@@ -8,21 +8,26 @@
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<AnalysisLevel>latest</AnalysisLevel>
 		<Nullable>warnings</Nullable>
+		<OutputType>Exe</OutputType>
 	</PropertyGroup>
 	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.21.0" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.17.2" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http.AspNetCore" Version="1.2.1" />
+		<PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.22.0" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker.ApplicationInsights" Version="1.2.0" />	  
 		<PackageReference Include="AspNet.Security.OAuth.AdobeIO" Version="6.0.15" />
 		<PackageReference Include="Azure.ResourceManager.Cdn" Version="1.1.0" />
-		<PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.21.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1" />
-		<PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
 		<PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.5.0" />
 		<PackageReference Include="Azure.Identity" Version="1.10.4" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
-		<PackageReference Include="Microsoft.NET.Sdk.Functions" Version="4.2.0" />
 		<PackageReference Include="SixLabors.ImageSharp" Version="3.0.2" />
 		<PackageReference Include="System.Interactive.Async" Version="6.0.1" />
 		<PackageReference Include="System.Linq.Async" Version="6.0.1" />
 		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.34.0" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Timer" Version="4.3.0" />
 	</ItemGroup>
 	<ItemGroup>
 		<None Update="host.json">
