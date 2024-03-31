@@ -244,7 +244,7 @@ With those changes made, my project builds. It's time to test it!
 
 First, we build the project with `dotnet build`:
 
-```
+```plaintext
 MSBuild version 17.9.6+a4ecab324 for .NET
   Determining projects to restore...
 /Users/logan/projects/ldam.co.za/fnapp/fnapp.csproj : warning NU1903: Package 'SixLabors.ImageSharp' 3.0.2 has a known high severity vulnerability, https://github.com/advisories/GHSA-65x7-c272-7g7r
@@ -272,7 +272,7 @@ _I'm not worried about this security vulnerability warning, as there's no way fo
 
 Let's make sure my unit tests still work with `dotnet test`:
 
-```
+```plaintext
 Microsoft (R) Test Execution Command Line Tool Version 17.9.0 (arm64)
 Copyright (c) Microsoft Corporation.  All rights reserved.
 
@@ -286,7 +286,7 @@ All green! I didn't expect any issues here since no logic changed. Still a good 
 
 Now let's run it with `func host start`. This command dumps out a lot of output, so I won't put it all here, but I did observe a pesky warning:
 
-```
+```plaintext
 No job functions found. Try making your job classes and methods public. If you're using binding extensions (e.g. Azure Storage, ServiceBus, Timers, etc.) make sure you've called the registration method for the extension(s) in your startup code (e.g. builder.AddAzureStorage(), builder.AddServiceBus(), builder.AddTimers(), etc.).
 ```
 
@@ -294,14 +294,14 @@ I had a hunch that the version of the Azure Functions Core Tools I had on my mac
 
 In my case on macOS:
 
-```
+```plaintext
 brew tap azure/functions
 brew install azure-functions-core-tools@4
 ```
 
 Now when I start up my project with `func host start`, I can see my functions are detected:
 
-```
+```plaintext
 Functions:
 
         ManualImageSync: [POST] http://localhost:7071/api/ManualImageSync
@@ -325,7 +325,7 @@ Next, I'll go through all my Nuget packages and check for upgrades. I'm expectin
 
 So once I've updated all my projects with new versions, I can do a `dotnet clean` and a `dotnet restore`, followed by a `dotnet build` (do this at solution level to save yourself some time).
 
-```
+```plaintext
 dotnet build
 MSBuild version 17.9.6+a4ecab324 for .NET
   Determining projects to restore...
@@ -347,7 +347,7 @@ Time Elapsed 00:00:02.06
 
 All good! Now I can run tests and run my functions to check if they still work.
 
-```
+```plaintext
 dotnet test
 Test run for /Users/logan/projects/ldam.co.za/fnapp.Tests/bin/Debug/net8.0/fnapp.Tests.dll (.NETCoreApp,Version=v8.0)
 Microsoft (R) Test Execution Command Line Tool Version 17.9.0 (arm64)
