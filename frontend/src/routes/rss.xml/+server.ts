@@ -4,12 +4,12 @@ import type { RequestHandler } from '@sveltejs/kit';
 import dayjs from 'dayjs';
 
 export const GET: RequestHandler = async function () {
-	const headers = {
-		'Cache-Control': 'max-age=0, s-maxage=3600',
-		'Content-Type': 'application/xml'
-	};
-	const posts = getBlogPosts();
-	const rss = `<?xml version="1.0" encoding="UTF-8" ?>
+  const headers = {
+    'Cache-Control': 'max-age=0, s-maxage=3600',
+    'Content-Type': 'application/xml'
+  };
+  const posts = await getBlogPosts();
+  const rss = `<?xml version="1.0" encoding="UTF-8" ?>
     <rss xmlns:dc="https://purl.org/dc/elements/1.1/" 
             xmlns:content="https://purl.org/rss/1.0/modules/content/" 
             xmlns:atom="https://www.w3.org/2005/Atom" 
@@ -23,9 +23,9 @@ export const GET: RequestHandler = async function () {
                 <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
                 <language>en</language>
                 ${posts
-									.map(
-										(post) =>
-											`<item>
+                  .map(
+                    (post) =>
+                      `<item>
                     <title><![CDATA[${post.title}]]></title>
                     <description><![CDATA[${post.excerpt}]]></description>
                     <link>${website}/blog/${post.slug}</link>
@@ -33,12 +33,12 @@ export const GET: RequestHandler = async function () {
                     <pubDate>${dayjs(post.date).toString()}</pubDate>
                     ${post.tags.map((tag) => `<category><![CDATA[${tag}]]></category>`).join('')}
                     </item>`
-									)
-									.join('')}
+                  )
+                  .join('')}
             </channel>
             </rss>`;
 
-    return new Response(rss, {
-        headers
-    });
+  return new Response(rss, {
+    headers
+  });
 };
