@@ -30,9 +30,9 @@ export const GET: RequestHandler = async function () {
   ).lastModified;
 
   const blogPosts = (await glob('src/posts/*.md')).map((match) => ({
-	file: match,
-	url: `blog/${match.slice(match.lastIndexOf('/') + 1, -3)}`,
-	lastModified: fs.statSync(match).mtime.toISOString()
+    file: match,
+    url: `blog/${match.slice(match.lastIndexOf('/') + 1, -3)}`,
+    lastModified: fs.statSync(match).mtime.toISOString()
   }));
 
   function generateImageNode(metadata: ImageMetadata): string {

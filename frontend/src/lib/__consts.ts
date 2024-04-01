@@ -9,10 +9,10 @@ export const HighResMaxDimension = 2048;
 export const DateFormat = 'D MMM YYYY';
 
 export const defaultMetadata = {
-	'og:title': 'Logan Dam - Software Engineer, Photographer',
-	'og:type': 'website',
-	'og:description': "Logan Dam's portfolio of photography and code.",
-	'og:image': 'https://ldam.co.za/favicon-310.png',
-	'og:url': base,
-	'og:locale': 'en_ZA'
+  'og:title': 'Logan Dam - Software Engineer, Photographer',
+  'og:type': 'website',
+  'og:description': "Logan Dam's portfolio of photography and code.",
+  'og:image': 'https://ldam.co.za/favicon-310.png',
+  'og:url': base,
+  'og:locale': 'en_ZA'
 };

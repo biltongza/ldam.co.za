@@ -18,15 +18,15 @@ This post will be a bit of a deep dive on how the image synchronization process 
 
 ### Lightroom History
 
-If you're not familiar with Lightroom, it is Adobe's image editing and organization solution. There are two versions: Lightroom Classic, and Lightroom CC. Lightroom Classic has been around for ages, [originally introduced back in 2007](https://en.wikipedia.org/wiki/Adobe_Lightroom#Version_1.0) and is still updated [to this day](https://en.wikipedia.org/wiki/Adobe_Lightroom#Adobe_Lightroom_Classic_CC_(version_8.0+)). Lightroom CC (aka just Lightroom these days) is a ground-up cloud-based rewrite of Lightroom (it also has a mobile version!).
+If you're not familiar with Lightroom, it is Adobe's image editing and organization solution. There are two versions: Lightroom Classic, and Lightroom CC. Lightroom Classic has been around for ages, [originally introduced back in 2007](https://en.wikipedia.org/wiki/Adobe_Lightroom#Version_1.0) and is still updated [to this day](<https://en.wikipedia.org/wiki/Adobe_Lightroom#Adobe_Lightroom_Classic_CC_(version_8.0+)>). Lightroom CC (aka just Lightroom these days) is a ground-up cloud-based rewrite of Lightroom (it also has a mobile version!).
 
 The major difference these days is Lightroom Classic is much more suited for batch editing, and many professionals still prefer it for that fact. It took quite a while to reach more or less feature parity (there's still some stuff that Classic is better at doing, like image stacking) which left a lot of people (including myself) asking, why bother switching?
 
-Lightroom Classic has a cloud sync feature, but it only synchronizes specific images that you select, and only what Adobe calls "Smart Previews", which are not full resolution images, but smaller versions that are close enough to get most of the editing job done. Lightroom Classic works entirely with local copies of your images, and expects them to be there all the time. If you're not aware, RAW image files are _large_. The images I work with are regularly 30-35mb per image; fancier cameras get much larger! This adds up to several hundreds of gigabytes of images over the years. I'm currently at about 25000 images taking up 550GB of storage. Keeping that much storage online all the time kinda sucks. 
+Lightroom Classic has a cloud sync feature, but it only synchronizes specific images that you select, and only what Adobe calls "Smart Previews", which are not full resolution images, but smaller versions that are close enough to get most of the editing job done. Lightroom Classic works entirely with local copies of your images, and expects them to be there all the time. If you're not aware, RAW image files are _large_. The images I work with are regularly 30-35mb per image; fancier cameras get much larger! This adds up to several hundreds of gigabytes of images over the years. I'm currently at about 25000 images taking up 550GB of storage. Keeping that much storage online all the time kinda sucks.
 
 Lightroom CC instead takes advantage of ubiquitous internet connectivity and prefers to keep _all_ of your images on their cloud servers instead, and only pull down images to work with temporarily while you're editing them. It keeps a small cache of full size RAWs and swaps them in and out pretty seamlessly.
 
-I eventually decided to take the plunge because I wanted to take advantage of the cloud features of the new platform (mainly, to have solid synchronization between my PC and my phone). 
+I eventually decided to take the plunge because I wanted to take advantage of the cloud features of the new platform (mainly, to have solid synchronization between my PC and my phone).
 
 ### Organization is key
 
@@ -41,6 +41,7 @@ Each of these kinds of objects have an ID associated with them which is how you 
 So for my simple purposes, I just need a single album containing the images I want to synchronize, and then ask the API for the image IDs within that Album, then ask the API for an image stream for each of the images to pull them.
 
 ### Abusing enumerables for fun and profit
+
 If I were to do this process synchronously, I would either need a bunch of temporary storage (probably in memory), or I would need a lot of time. Neither of these are conducive to a serverless environment where those are the exact two aspects that push the price up.
 
 I decided I would take advantage of a really (in my opinion) underused feature of C#: enumerables and deferred execution.
@@ -54,6 +55,7 @@ _I last wrote about enumerables in 2017 in an internal blog at Entelect, which I
 ### Recap: IEnumerable and IAsyncEnumerable
 
 If you aren't well versed in deferred execution, here's a TL;DR verison:
+
 - C# has a language keyword called `yield`
 - Using `yield` causes the compiler to rewrite your code into a state machine
 - The state machine can return something and remember the "position" in your code, so it can pick up where it left off next time it is called
@@ -149,6 +151,7 @@ await foreach (var batch in imageInfos.Buffer(10))
     }
 }
 ```
+
 _some code has been omitted for brevity_
 
 You can see here that I'm using `await foreach` on the results of my `GetImageList` call shown earlier.
@@ -161,7 +164,7 @@ Within this loop, the actual code goes and pulls the rendered image from Lightro
 
 The important part is that none of the consuming code _actually_ cares what is going on under the hood. It just knows that it may or may not get another _thing_, and that _thing_ is its only input. It is all it needs to care about.
 
-I also don't have all of my source data in memory at any given point. It is only in scope as and when it is needed. 
+I also don't have all of my source data in memory at any given point. It is only in scope as and when it is needed.
 
 I see this as a modern, language integrated method of constraining your peak memory usage (or at least, that's what I've used it for in most cases!).
 
