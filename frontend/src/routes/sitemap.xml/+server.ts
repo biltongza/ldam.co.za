@@ -7,13 +7,13 @@ import type { RequestHandler } from '@sveltejs/kit';
 import fs from 'fs';
 import { glob } from 'glob';
 
-export const GET: RequestHandler = async function () {
+export const GET: RequestHandler = async function ({ fetch }) {
   const headers = {
     'Cache-Control': 'max-age=0, s-maxage=3600',
     'Content-Type': 'application/xml'
   };
 
-  const manifest = await getManifest();
+  const manifest = await getManifest(fetch);
 
   const routes = {
     about: 'src/routes/about/+page.svelte',
