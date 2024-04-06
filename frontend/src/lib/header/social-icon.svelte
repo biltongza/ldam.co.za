@@ -5,38 +5,27 @@
   export let href: string;
 </script>
 
-<sl-button variant="default" {href} target="_blank" {label}>
-  <sl-icon slot="prefix" name={icon} library="default" />
-  {text}
-</sl-button>
+<a {href} target="_blank" rel="noopener">
+  <sl-icon name={icon} library="default" />
+  <span>{text}</span>
+</a>
 
 <style lang="scss">
-  sl-button {
-    &::part(base) {
-      border-radius: unset;
-      background-color: unset;
-      color: unset;
-      border: none;
-      padding: unset;
-      min-height: unset;
-      line-height: unset;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      //font-size: 16px;
-
-      &:hover {
-        color: var(--sl-color-primary-600);
-      }
+  a {
+    line-height: 16px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    &:hover {
+      color: var(--sl-color-primary-600);
     }
-  }
-
-  sl-button::part(label) {
-    font-family: 'Recursive', monospace;
-    line-height: unset;
-    display: none;
-    @media screen and (max-width: 550px) {
-      display: unset;
+    & > span {
+      font-family: 'Recursive', monospace;
+      display: none;
+      @media screen and (max-width: 550px) {
+        display: unset;
+      }
     }
   }
 </style>
