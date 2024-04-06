@@ -2,5 +2,5 @@ namespace ldam.co.za.lib.Lightroom;
 
 public class AssetResponse : BaseResponse
 {
-    public Asset Asset { get; set; }
+    public required Asset Asset { get; set; }
 }
