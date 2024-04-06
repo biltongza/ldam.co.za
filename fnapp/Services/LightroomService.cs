@@ -14,11 +14,11 @@ public interface ILightroomService
 public class LightroomService : ILightroomService
 {
     private readonly ILightroomClient lightroomClient;
-    private readonly Lazy<CatalogResponse> catalog;
+    private readonly Lazy<string> catalogId;
     public LightroomService(ILightroomClient lightroomClient)
     {
         this.lightroomClient = lightroomClient;
-        catalog = new Lazy<CatalogResponse>(() => lightroomClient.GetCatalog().GetAwaiter().GetResult());
+        catalogId = new Lazy<string>(() => lightroomClient.GetCatalogId().GetAwaiter().GetResult());
     }
 
     public async IAsyncEnumerable<AlbumInfo> GetAlbums([EnumeratorCancellation] CancellationToken cancellationToken = default)
@@ -27,7 +27,7 @@ public class LightroomService : ILightroomService
         do
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var albumsResponse = await lightroomClient.GetAlbums(this.catalog.Value.Id, after, cancellationToken);
+            var albumsResponse = await lightroomClient.GetAlbums(this.catalogId.Value, after, cancellationToken);
             Link? next = null;
             albumsResponse.Links?.TryGetValue("next", out next);
             var afterHref = next?.Href;
@@ -56,7 +56,7 @@ public class LightroomService : ILightroomService
         do
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var albumAssetResponse = await lightroomClient.GetAlbumAssets(this.catalog.Value.Id, albumId, after, cancellationToken);
+            var albumAssetResponse = await lightroomClient.GetAlbumAssets(this.catalogId.Value, albumId, after, cancellationToken);
             Link? next = null;
             albumAssetResponse.Links?.TryGetValue("next", out next);
             var afterHref = next?.Href;
@@ -91,7 +91,7 @@ public class LightroomService : ILightroomService
 
     public async Task<Stream> GetImageStream(string assetId, string size, CancellationToken cancellationToken = default)
     {
-        var stream = await lightroomClient.GetImageStream(this.catalog.Value.Id, assetId, size, cancellationToken);
+        var stream = await lightroomClient.GetImageStream(this.catalogId.Value, assetId, size, cancellationToken);
 
         return stream;
     }

@@ -47,20 +47,12 @@ public class LightroomClient : ILightroomClient, IDisposable
         GC.SuppressFinalize(this);
     }
 
-    public async Task<CatalogResponse> GetCatalog(CancellationToken cancellationToken = default)
+    public async Task<string> GetCatalogId(CancellationToken cancellationToken = default)
     {
         var request = await PrepareRequest(HttpMethod.Get, "v2/catalog");
         var response = await httpClient.SendAsync(request, cancellationToken: cancellationToken);
         var result = await HandleResponse<CatalogResponse>(response);
-        return result;
-    }
-
-    public async Task<HealthResponse> GetHealth(CancellationToken cancellationToken = default)
-    {
-        var request = await PrepareRequest(HttpMethod.Get, "v2/health");
-        var response = await httpClient.SendAsync(request, cancellationToken: cancellationToken);
-        var result = await HandleResponse<HealthResponse>(response);
-        return result;
+        return result.Id;
     }
 
     public async Task<AlbumsResponse> GetAlbums(string catalogId, string? after = null, CancellationToken cancellationToken = default)
