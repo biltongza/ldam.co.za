@@ -91,11 +91,11 @@ public class LightroomClient : ILightroomClient, IDisposable
         return result;
     }
 
-    public async Task<AssetResponse> GetAsset(string catalogId, string assetId, CancellationToken cancellationToken = default)
+    public async Task<Asset> GetAsset(string catalogId, string assetId, CancellationToken cancellationToken = default)
     {
         var request = await PrepareRequest(HttpMethod.Get, $"v2/catalogs/{catalogId}/assets/{assetId}");
         var response = await httpClient.SendAsync(request, cancellationToken: cancellationToken);
-        var result = await HandleResponse<AssetResponse>(response);
+        var result = await HandleResponse<Asset>(response);
         return result;
     }
 
@@ -103,7 +103,7 @@ public class LightroomClient : ILightroomClient, IDisposable
     {
         var asset = await GetAsset(catalogId, assetId, cancellationToken);
 
-        var href = asset.Links[$"/rels/rendition_type/{size}"]?.Href;
+        var href = asset.Links?[$"/rels/rendition_type/{size}"]?.Href;
         if (string.IsNullOrWhiteSpace(href))
         {
             throw new InvalidOperationException($"Size {size} is not available");
