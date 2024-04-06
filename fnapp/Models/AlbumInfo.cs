@@ -1,8 +1,8 @@
 public class AlbumInfo
 {
-    public string Id { get; set; }
-    public string Title { get; set; }
+    public required string Id { get; init; }
+    public required string Title { get; set; }
     public DateTime Created { get; set; }
     public DateTime Updated { get; set; }
-    public string ParentId { get; set; }
+    public string? ParentId { get; set; }
 }

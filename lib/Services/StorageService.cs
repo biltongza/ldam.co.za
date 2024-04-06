@@ -9,7 +9,7 @@ namespace ldam.co.za.lib.Services;
 
 public interface IStorageService
 {
-    Task Store(string name, Stream stream, string contentType = null, CancellationToken cancellationToken = default);
+    Task Store(string name, Stream stream, string? contentType = null, CancellationToken cancellationToken = default);
     Task<Stream> Get(string name);
     Task DeleteBlobsStartingWith(string startsWith, CancellationToken cancellationToken = default);
 }
@@ -25,7 +25,7 @@ public class StorageService : IStorageService
         this.blobContainerClient = blobServiceClient.GetBlobContainerClient(options.Value.BlobContainer);
     }
 
-    public async Task Store(string name, Stream stream, string contentType = null, CancellationToken cancellationToken = default)
+    public async Task Store(string name, Stream stream, string? contentType = null, CancellationToken cancellationToken = default)
     {
         this.logger.LogInformation("Storing blob with name {name} and content type {contentType}", name, contentType);
         var blobClient = this.blobContainerClient.GetBlobClient(name);

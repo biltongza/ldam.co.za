@@ -14,16 +14,16 @@ public class CdnService : ICdnService
     public CdnService(ArmClient armClient, IOptions<FunctionAppAzureResourceOptions> options)
     {
         var endpointResourceIdentifier = CdnEndpointResource.CreateResourceIdentifier(
-            options.Value.CdnSubscriptionId, 
-            options.Value.CdnResourceGroup, 
-            options.Value.CdnProfileName, 
+            options.Value.CdnSubscriptionId,
+            options.Value.CdnResourceGroup,
+            options.Value.CdnProfileName,
             options.Value.CdnEndpointName
         );
         this.cdnEndpoint = armClient.GetCdnEndpointResource(endpointResourceIdentifier);
     }
 
-    public async Task ClearCache(string path, CancellationToken cancellationToken = default)
+    public async Task ClearCache(string? path, CancellationToken cancellationToken = default)
     {
-        await cdnEndpoint.PurgeContentAsync(Azure.WaitUntil.Completed, new PurgeContent(new [] { path ?? "/*"}), cancellationToken: cancellationToken);
+        await cdnEndpoint.PurgeContentAsync(Azure.WaitUntil.Completed, new PurgeContent([path ?? "/*"]), cancellationToken: cancellationToken);
     }
 }

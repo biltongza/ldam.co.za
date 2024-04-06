@@ -49,8 +49,12 @@ public class RefreshTokenService
         await lightroomTokenService.UpdateAccessToken();
     }
 
-    private bool IsTokenStillValid(string token)
+    private bool IsTokenStillValid(string? token)
     {
+        if (token is null)
+        {
+            return false;
+        }
         var jwt = handler.ReadJwtToken(token);
         var now = clock.Now();
         var created_at = long.Parse(jwt.Claims.Single(x => x.Type == "created_at").Value);

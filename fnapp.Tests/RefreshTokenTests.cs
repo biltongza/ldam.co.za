@@ -1,9 +1,5 @@
-
-using System;
-using System.Threading.Tasks;
 using ldam.co.za.fnapp.Services;
 using ldam.co.za.lib.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -28,10 +24,15 @@ public class RefreshTokenTests
     {
         mockOptions.SetupGet(x => x.Value).Returns(new FunctionAppLightroomOptions
         {
-            RefreshTokenWindowMinutes = refreshWindowMinutes.ToString()
+            RefreshTokenWindowMinutes = refreshWindowMinutes.ToString(),
+            PortfolioAlbumId = "testalbum1",
+            SizesToSync = "2048",
+            CollectionsContainerAlbumId = "testCollection1",
+            BaseUrl = new Uri("/"),
+            ClientId = string.Empty,
         });
-        mockSecretService.Setup(x => x.GetSecret(lib.Constants.KeyVault.LightroomAccessToken)).Returns(Task.FromResult(testAccessToken));
-        mockSecretService.Setup(x => x.GetSecret(lib.Constants.KeyVault.LightroomRefreshToken)).Returns(Task.FromResult(testRefreshToken));
+        mockSecretService.Setup(x => x.GetSecret(lib.Constants.KeyVault.LightroomAccessToken)).Returns(Task.FromResult<string?>(testAccessToken));
+        mockSecretService.Setup(x => x.GetSecret(lib.Constants.KeyVault.LightroomRefreshToken)).Returns(Task.FromResult<string?>(testRefreshToken));
         refreshTokenService = new RefreshTokenService(
             mockSecretService.Object,
             mockClock.Object,

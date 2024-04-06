@@ -1,6 +1,5 @@
 using AspNet.Security.OAuth.AdobeIO;
 using ldam.co.za.lib.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -18,7 +17,11 @@ public class LightroomTokenService : ILightroomTokenService
     private readonly IOptions<FunctionAppLightroomOptions> options;
     private readonly ILogger logger;
 
-    public LightroomTokenService(IHttpClientFactory httpClientFactory, ISecretService secretService, IOptions<FunctionAppLightroomOptions> options, ILogger<LightroomTokenService> logger)
+    public LightroomTokenService(
+        IHttpClientFactory httpClientFactory,
+        ISecretService secretService,
+        IOptions<FunctionAppLightroomOptions> options,
+        ILogger<LightroomTokenService> logger)
     {
         this.httpClientFactory = httpClientFactory;
         this.secretService = secretService;
@@ -28,8 +31,8 @@ public class LightroomTokenService : ILightroomTokenService
 
     public async Task UpdateAccessToken()
     {
-        var refreshToken = await secretService.GetSecret(lib.Constants.KeyVault.LightroomRefreshToken);
-        var clientSecret = await secretService.GetSecret(lib.Constants.KeyVault.LightroomClientSecret);
+        var refreshToken = await secretService.GetSecret(lib.Constants.KeyVault.LightroomRefreshToken) ?? throw new InvalidOperationException("Refresh token is null!");
+        var clientSecret = await secretService.GetSecret(lib.Constants.KeyVault.LightroomClientSecret) ?? throw new InvalidOperationException("Client secret is null!");
 
         var pairs = new Dictionary<string, string>()
             {

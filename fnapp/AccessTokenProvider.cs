@@ -13,24 +13,27 @@ public class AccessTokenProvider : IAccessTokenProvider
     private readonly JwtSecurityTokenHandler handler = new();
     private readonly ILogger logger;
 
-    public AccessTokenProvider(ISecretService secretService, IMemoryCache memoryCache, ILogger<AccessTokenProvider> logger)
+    public AccessTokenProvider(
+        ISecretService secretService,
+        IMemoryCache memoryCache,
+        ILogger<AccessTokenProvider> logger)
     {
         this.secretService = secretService;
         this.memoryCache = memoryCache;
         this.logger = logger;
     }
 
-    public async Task<string> GetAccessToken()
+    public async Task<string?> GetAccessToken()
     {
         return await GetToken(lib.Constants.KeyVault.LightroomAccessToken);
     }
 
-    public async Task<string> GetRefreshToken()
+    public async Task<string?> GetRefreshToken()
     {
         return await GetToken(lib.Constants.KeyVault.LightroomRefreshToken);
     }
 
-    private async Task<string> GetToken(string key)
+    private async Task<string?> GetToken(string key)
     {
         if (!memoryCache.TryGetValue<string>(key, out var accessToken))
         {

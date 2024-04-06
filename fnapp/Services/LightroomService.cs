@@ -1,5 +1,4 @@
 using System.Runtime.CompilerServices;
-using ldam.co.za.lib;
 using ldam.co.za.lib.Lightroom;
 using ImageInfo = ldam.co.za.lib.ImageInfo;
 
@@ -22,18 +21,18 @@ public class LightroomService : ILightroomService
         catalog = new Lazy<CatalogResponse>(() => lightroomClient.GetCatalog().GetAwaiter().GetResult());
     }
 
-    public async IAsyncEnumerable<AlbumInfo> GetAlbums([EnumeratorCancellation]CancellationToken cancellationToken = default)
+    public async IAsyncEnumerable<AlbumInfo> GetAlbums([EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        string after = null;
+        string? after = null;
         do
         {
             cancellationToken.ThrowIfCancellationRequested();
             var albumsResponse = await lightroomClient.GetAlbums(this.catalog.Value.Id, after, cancellationToken);
-            Link next = null;
+            Link? next = null;
             albumsResponse.Links?.TryGetValue("next", out next);
             var afterHref = next?.Href;
 
-            after = !string.IsNullOrWhiteSpace(afterHref) ? afterHref[afterHref.IndexOf('=')..] : null;
+            after = string.IsNullOrWhiteSpace(afterHref) ? null : afterHref[afterHref.IndexOf('=')..];
 
             foreach (var albumResponse in albumsResponse.Resources.Where(x => x.Subtype == "collection"))
             {
@@ -53,15 +52,15 @@ public class LightroomService : ILightroomService
     }
     public async IAsyncEnumerable<ImageInfo> GetImageList(string albumId, [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
-        string after = null;
+        string? after = null;
         do
         {
             cancellationToken.ThrowIfCancellationRequested();
             var albumAssetResponse = await lightroomClient.GetAlbumAssets(this.catalog.Value.Id, albumId, after, cancellationToken);
-            Link next = null;
+            Link? next = null;
             albumAssetResponse.Links?.TryGetValue("next", out next);
             var afterHref = next?.Href;
-            after = !string.IsNullOrWhiteSpace(afterHref) ? afterHref[afterHref.IndexOf('=')..] : null;
+            after = string.IsNullOrWhiteSpace(afterHref) ? null : afterHref[afterHref.IndexOf('=')..];
             foreach (var asset in albumAssetResponse.Resources)
             {
                 cancellationToken.ThrowIfCancellationRequested();

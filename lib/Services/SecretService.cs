@@ -7,7 +7,7 @@ namespace ldam.co.za.lib.Services;
 
 public interface ISecretService
 {
-    Task<string> GetSecret(string key);
+    Task<string?> GetSecret(string key);
     Task SetSecret(string key, string value);
 }
 public class SecretService : ISecretService
@@ -18,7 +18,7 @@ public class SecretService : ISecretService
         this.secretClient = new SecretClient(options.Value.KeyVaultUri, credential);
     }
 
-    public async Task<string> GetSecret(string key)
+    public async Task<string?> GetSecret(string key)
     {
         var secretResponse = await secretClient.GetSecretAsync(key);
         return secretResponse?.Value?.Value;

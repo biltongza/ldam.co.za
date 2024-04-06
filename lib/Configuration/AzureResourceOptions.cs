@@ -1,7 +1,7 @@
 namespace ldam.co.za.lib.Configuration;
 public class AzureResourceOptions
 {
-    public Uri KeyVaultUri { get; init; }
-    public Uri BlobStorageUri { get; init; }
-    public string BlobContainer { get; init; }
+    public required Uri KeyVaultUri { get; init; }
+    public required Uri BlobStorageUri { get; init; }
+    public required string BlobContainer { get; init; }
 }

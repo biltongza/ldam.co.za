@@ -29,7 +29,7 @@ public class LightroomClient : ILightroomClient, IDisposable
         return request;
     }
 
-    protected static async Task<T> HandleResponse<T>(HttpResponseMessage response, bool stripWhile = true)
+    protected static async Task<T> HandleResponse<T>(HttpResponseMessage response, bool stripWhile = true) where T : class
     {
         response.EnsureSuccessStatusCode();
         var content = await response.Content.ReadAsStringAsync();
@@ -37,8 +37,8 @@ public class LightroomClient : ILightroomClient, IDisposable
         {
             content = WhileRegex.Replace(content, "");
         }
-        var result = (T)JsonSerializer.Deserialize(content, typeof(T), LightroomSerializerContext.Default);
-        return result;
+        var result = JsonSerializer.Deserialize(content, typeof(T), LightroomSerializerContext.Default) as T;
+        return result!;
     }
 
     public void Dispose()
@@ -63,7 +63,7 @@ public class LightroomClient : ILightroomClient, IDisposable
         return result;
     }
 
-    public async Task<AlbumsResponse> GetAlbums(string catalogId, string after = null, CancellationToken cancellationToken = default)
+    public async Task<AlbumsResponse> GetAlbums(string catalogId, string? after = null, CancellationToken cancellationToken = default)
     {
         var builder = new StringBuilder();
         builder.Append("v2/catalogs/");
@@ -80,7 +80,7 @@ public class LightroomClient : ILightroomClient, IDisposable
         return result;
     }
 
-    public async Task<AlbumAssetResponse> GetAlbumAssets(string catalogId, string albumId, string after = null, CancellationToken cancellationToken = default)
+    public async Task<AlbumAssetResponse> GetAlbumAssets(string catalogId, string albumId, string? after = null, CancellationToken cancellationToken = default)
     {
         var builder = new StringBuilder();
         builder.Append("v2/catalogs/");

@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 using ldam.co.za.fnapp.Services;
 using ldam.co.za.lib;
 using ldam.co.za.lib.Services;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -31,8 +25,11 @@ public class ImageSyncTests
             PortfolioAlbumId = "testalbum1",
             SizesToSync = "2048",
             CollectionsContainerAlbumId = "testCollection1",
+            BaseUrl = new Uri("/"),
+            ClientId = string.Empty,
+            RefreshTokenWindowMinutes = string.Empty,
         });
-        mockMetadataService.Setup(x => x.MapAdobeMetadataToManifestMetadata(It.IsAny<ImageInfo>())).Returns(new ImageMetadata());
+        mockMetadataService.Setup(x => x.MapAdobeMetadataToManifestMetadata(It.IsAny<ImageInfo>())).Returns(new ImageMetadata() { Id = string.Empty, });
         syncService = new SyncService(
             mockLightroomService.Object,
             mockOptions.Object,
@@ -80,7 +77,7 @@ public class ImageSyncTests
             LastModified = new DateTime(2021, 8, 8),
             Albums = new List<Album>
                 {
-                    new Album { Id = "testalbum1", Images = manifestImages},
+                    new Album { Id = "testalbum1", Title = "testalbum1", Images = manifestImages},
                 }
         };
 
@@ -129,7 +126,7 @@ public class ImageSyncTests
             LastModified = new DateTime(2021, 8, 8),
             Albums = new List<Album>
                 {
-                    new Album { Id = "testalbum1", Images = manifestImages},
+                    new Album { Id = "testalbum1", Title = "testalbum1", Images = manifestImages},
                 }
         };
 
@@ -179,7 +176,7 @@ public class ImageSyncTests
             LastModified = new DateTime(2021, 8, 8),
             Albums = new List<Album>
                 {
-                    new Album { Id = "testalbum1", Images = manifestImages},
+                    new Album { Id = "testalbum1", Title = "testalbum1", Images = manifestImages},
                 }
         };
 
@@ -219,6 +216,7 @@ public class ImageSyncTests
                     new AlbumInfo
                     {
                         Id = "testalbum1",
+                        Title = "testalbum1",
                     }
                 }.ToAsyncEnumerable());
 
@@ -234,7 +232,7 @@ public class ImageSyncTests
             .Setup(x => x.Get(ManifestName))
             .Returns(Task.FromResult(serialisedManifest));
 
-        Manifest manifest = null;
+        Manifest? manifest = null;
 
         mockStorageService
             .Setup(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
@@ -273,8 +271,8 @@ public class ImageSyncTests
             LastModified = new DateTime(2021, 8, 8),
             Albums = new List<Album>
                 {
-                    new Album { Id = "testalbum1", Images = manifestImages },
-                    new Album { Id = "testalbum2", Images = manifestImagesToRemove },
+                    new Album { Id = "testalbum1", Title = "testalbum1", Images = manifestImages },
+                    new Album { Id = "testalbum2", Title = "testalbum2", Images = manifestImagesToRemove },
                 }
         };
 

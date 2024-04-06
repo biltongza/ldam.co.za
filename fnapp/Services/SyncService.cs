@@ -92,7 +92,7 @@ public class SyncService
 
     private async Task<(Manifest, bool)> GetOrCreateManifest(string manifestName, bool forceCreate)
     {
-        Manifest manifest;
+        Manifest? manifest;
         bool didCreate = false;
         using var manifestStream = await storageService.Get(manifestName);
         if (manifestStream == Stream.Null || forceCreate)
@@ -102,16 +102,16 @@ public class SyncService
         }
         else
         {
-            manifest = await JsonSerializer.DeserializeAsync(manifestStream, typeof(Manifest), ManifestSerializerContext.Default) as Manifest;
+            manifest = await JsonSerializer.DeserializeAsync(manifestStream, typeof(Manifest), context: ManifestSerializerContext.Default) as Manifest;
         }
 
-        return (manifest, didCreate);
+        return (manifest!, didCreate);
     }
 
     private async Task<bool> CreateOrUpdateCollection(Manifest manifest, AlbumInfo collection, string[] sizesToSync, string portfolioAlbumId, CancellationToken cancellationToken = default)
     {
         var collectionAdded = false;
-        Album manifestCollection;
+        Album? manifestCollection;
         lock (manifest.Albums)
         {
             manifestCollection = manifest.Albums.FirstOrDefault(x => collection.Id.Equals(x.Id));
@@ -138,7 +138,7 @@ public class SyncService
 
     private async Task RemoveCollection(Manifest manifest, string albumIdToRemove, CancellationToken cancellationToken)
     {
-        Album album = null;
+        Album? album = null;
         lock (manifest.Albums)
         {
             album = manifest.Albums.Single(x => x.Id.Equals(albumIdToRemove));
