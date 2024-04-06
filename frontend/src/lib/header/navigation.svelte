@@ -58,7 +58,7 @@
       list-style: none;
       display: flex;
       flex-direction: row;
-      align-items: baseline;
+      align-items: center;
       gap: var(--sl-spacing-medium);
       padding-inline-start: 0;
       margin: 0;
@@ -68,6 +68,7 @@
         overflow: hidden;
         transition: height 0.5s ease-in;
         flex-direction: column;
+        align-items: start;
         margin-top: 32px;
         margin-bottom: 32px;
         &.expanded {
