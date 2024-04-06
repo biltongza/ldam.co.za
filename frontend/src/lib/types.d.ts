@@ -23,10 +23,8 @@ export interface ImageMetadata {
   iso: string;
   lens: string;
   title: string;
-  caption: string;
+  caption?: string;
   lastModified: string;
-  width: number;
-  height: number;
   aspectRatio: string;
 }
 

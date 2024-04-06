@@ -1,8 +1,7 @@
 namespace ldam.co.za.lib;
 public class ImageInfo
 {
-    public string AssetId { get; set; }
-    public string FileName { get; set; }
+    public required string AssetId { get; set; }
     public long FileSize { get; set; }
     public DateTime CaptureDate { get; set; }
     public string Make { get; set; }

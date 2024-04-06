@@ -39,7 +39,6 @@ public class MetadataService : IMetadataService
 
         var metadata = new ImageMetadata
         {
-            CameraMake = imageInfo.Make,
             CameraModel = imageInfo.Model,
             Caption = imageInfo.Caption,
             CaptureDate = imageInfo.CaptureDate,
@@ -51,9 +50,8 @@ public class MetadataService : IMetadataService
             Lens = imageInfo.Lens,
             ShutterSpeed = exposureTime,
             Title = imageInfo.Title,
-            Width = imageInfo.Width,
-            Height = imageInfo.Height,
             AspectRatio = $"{imageInfo.Width / gcd}:{imageInfo.Height / gcd}",
+            Hrefs = new Dictionary<string, string>(),
         };
 
         return metadata;

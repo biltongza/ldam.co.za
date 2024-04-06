@@ -69,7 +69,6 @@ public class LightroomService : ILightroomService
                 yield return new ImageInfo
                 {
                     AssetId = asset.Asset.Id,
-                    FileName = asset.Asset.Payload.ImportSource.FileName,
                     CaptureDate = asset.Asset.Payload.CaptureDate,
                     FileSize = asset.Asset.Payload.ImportSource.FileSize,
                     ShutterSpeed = asset.Asset.Payload.Xmp.Exif.ExposureTime,

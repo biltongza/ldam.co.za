@@ -29,7 +29,7 @@ public class ImageSyncTests
             ClientId = string.Empty,
             RefreshTokenWindowMinutes = string.Empty,
         });
-        mockMetadataService.Setup(x => x.MapAdobeMetadataToManifestMetadata(It.IsAny<ImageInfo>())).Returns(new ImageMetadata() { Id = string.Empty, });
+        mockMetadataService.Setup(x => x.MapAdobeMetadataToManifestMetadata(It.IsAny<ImageInfo>())).Returns(EmptyImageMetadata());
         syncService = new SyncService(
             mockLightroomService.Object,
             mockOptions.Object,
@@ -40,6 +40,23 @@ public class ImageSyncTests
             mockWebpEncoderService.Object
         );
     }
+
+    static ImageMetadata EmptyImageMetadata(string? id = null) => new ImageMetadata
+    {
+        Id = id ?? string.Empty,
+        AspectRatio = string.Empty,
+        CameraModel = string.Empty,
+        Caption = string.Empty,
+        CaptureDate = default,
+        FNumber = string.Empty,
+        FocalLength = string.Empty,
+        Hrefs = new Dictionary<string, string>(),
+        ISO = string.Empty,
+        LastModified = default,
+        Lens = string.Empty,
+        ShutterSpeed = string.Empty,
+        Title = string.Empty,
+    };
 
     [Fact]
     public async Task ShouldCreateManifestIfItDoesNotExist()
@@ -64,7 +81,7 @@ public class ImageSyncTests
     {
         var manifestImages = new Dictionary<string, ImageMetadata>
             {
-                { "image1",  new ImageMetadata { Id = "image1" } },
+                { "image1",  EmptyImageMetadata("image1") },
             };
 
         var adobeImages = new List<ImageInfo>
@@ -112,7 +129,7 @@ public class ImageSyncTests
     {
         var manifestImages = new Dictionary<string, ImageMetadata>
             {
-                { "image1",  new ImageMetadata { Id = "image1" } },
+                { "image1",  EmptyImageMetadata("image1") },
             };
 
         var adobeImages = new List<ImageInfo>
@@ -166,7 +183,7 @@ public class ImageSyncTests
     {
         var manifestImages = new Dictionary<string, ImageMetadata>
             {
-                { "image1",  new ImageMetadata { Id = "image1" } },
+                { "image1",  EmptyImageMetadata("image1") },
             };
 
         var adobeImages = new List<ImageInfo>();
@@ -253,17 +270,17 @@ public class ImageSyncTests
     {
         var manifestImages = new Dictionary<string, ImageMetadata>
             {
-                { "image1", new ImageMetadata { Id = "image1" } },
+                { "image1", EmptyImageMetadata("image1") },
             };
 
         var manifestImagesToRemove = new Dictionary<string, ImageMetadata>
             {
-                { "image2", new ImageMetadata { Id = "image2"}},
+                { "image2", EmptyImageMetadata("image2")},
             };
 
         var adobeImages = new List<ImageInfo>
             {
-                new ImageInfo { AssetId = "image1", Width = 1, Height = 1, ShutterSpeed = new int[2] {1,1}, FNumber = new int[2] {1,1}, CaptureDate = default },
+                new ImageInfo { AssetId = "image1", Width = 1, Height = 1, ShutterSpeed = [1,1], FNumber = [1,1], CaptureDate = default },
             };
 
         var mockManifest = new Manifest
