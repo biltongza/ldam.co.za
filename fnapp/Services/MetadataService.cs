@@ -30,12 +30,20 @@ public class MetadataService : IMetadataService
     {
         var gcd = GreatestCommonDenominator(imageInfo.Width, imageInfo.Height);
 
-        var exposureTimeArray = imageInfo.ShutterSpeed;
-        var exposureNumerator = exposureTimeArray[0];
-        var exposureDivisor = exposureTimeArray[1];
-        var exposureTime = exposureNumerator == 1 && exposureDivisor > 1 ? $"1/{exposureDivisor}s" : $"{exposureNumerator / exposureDivisor}s";
-        var apertureArray = imageInfo.FNumber;
-        var aperture = decimal.Divide(apertureArray[0], apertureArray[1]);
+        string? exposureTime = null;
+        decimal? aperture = null;
+        if (imageInfo.ShutterSpeed is not null)
+        {
+            var exposureTimeArray = imageInfo.ShutterSpeed;
+            var exposureNumerator = exposureTimeArray[0];
+            var exposureDivisor = exposureTimeArray[1];
+            exposureTime = exposureNumerator == 1 && exposureDivisor > 1 ? $"1/{exposureDivisor}s" : $"{exposureNumerator / exposureDivisor}s";
+        }
+        if (imageInfo.FNumber is not null)
+        {
+            var apertureArray = imageInfo.FNumber;
+            aperture = decimal.Divide(apertureArray[0], apertureArray[1]);
+        }
 
         var metadata = new ImageMetadata
         {
@@ -45,7 +53,7 @@ public class MetadataService : IMetadataService
             FNumber = $"f/{aperture}",
             FocalLength = $"{imageInfo.FocalLength}mm",
             Id = imageInfo.AssetId,
-            ISO = imageInfo.ISO.ToString(),
+            ISO = imageInfo.ISO?.ToString(),
             LastModified = imageInfo.LastModified,
             Lens = imageInfo.Lens,
             ShutterSpeed = exposureTime,
@@ -64,15 +72,22 @@ public class MetadataService : IMetadataService
         image.Metadata.ExifProfile = new ExifProfile();
         image.Metadata.ExifProfile.SetValue(ExifTag.Artist, "Logan Dam");
         image.Metadata.ExifProfile.SetValue(ExifTag.Copyright, $"This work is licensed under CC BY-NC 4.0. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/4.0/");
-        image.Metadata.ExifProfile.SetValue(ExifTag.FNumber, new Rational((uint)imageInfo.FNumber[0], (uint)imageInfo.FNumber[1]));
-        image.Metadata.ExifProfile.SetValue(ExifTag.ISOSpeedRatings, new[] { (ushort)imageInfo.ISO });
-        image.Metadata.ExifProfile.SetValue(ExifTag.ExposureTime, new Rational((uint)imageInfo.ShutterSpeed[0], (uint)imageInfo.ShutterSpeed[1]));
-        image.Metadata.ExifProfile.SetValue(ExifTag.FocalLength, new Rational((uint)imageInfo.FocalLength, 1));
-        image.Metadata.ExifProfile.SetValue(ExifTag.Make, imageInfo.Make);
-        image.Metadata.ExifProfile.SetValue(ExifTag.Model, imageInfo.Model);
-        image.Metadata.ExifProfile.SetValue(ExifTag.LensModel, imageInfo.Lens);
+        if (imageInfo.FNumber is not null)
+        {
+            image.Metadata.ExifProfile.SetValue(ExifTag.FNumber, new Rational((uint)imageInfo.FNumber[0], (uint)imageInfo.FNumber[1]));
+            image.Metadata.ExifProfile.SetValue(ExifTag.ApertureValue, new Rational((uint)imageInfo.FNumber[0], (uint)imageInfo.FNumber[1]));
+        }
+        if (imageInfo.ISO is not null)
+            image.Metadata.ExifProfile.SetValue(ExifTag.ISOSpeedRatings, [(ushort)imageInfo.ISO]);
+        if (imageInfo.ShutterSpeed is not null)
+            image.Metadata.ExifProfile.SetValue(ExifTag.ExposureTime, new Rational((uint)imageInfo.ShutterSpeed[0], (uint)imageInfo.ShutterSpeed[1]));
+        if (imageInfo.FocalLength is not null)
+            image.Metadata.ExifProfile.SetValue(ExifTag.FocalLength, new Rational((uint)imageInfo.FocalLength, 1));
+        if (imageInfo.Model is not null)
+            image.Metadata.ExifProfile.SetValue(ExifTag.Model, imageInfo.Model);
+        if (imageInfo.Lens is not null)
+            image.Metadata.ExifProfile.SetValue(ExifTag.LensModel, imageInfo.Lens);
         image.Metadata.ExifProfile.SetValue(ExifTag.DateTimeOriginal, imageInfo.CaptureDate.ToString(ExifDateFormat));
-        image.Metadata.ExifProfile.SetValue(ExifTag.ApertureValue, new Rational((uint)imageInfo.FNumber[0], (uint)imageInfo.FNumber[1]));
         image.Metadata.IptcProfile = new IptcProfile();
         image.Metadata.IptcProfile.SetValue(IptcTag.CopyrightNotice, "This work is licensed under CC BY-NC 4.0. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/4.0/");
         image.Metadata.IptcProfile.SetValue(IptcTag.Credit, "Logan Dam");

@@ -64,22 +64,19 @@ public class LightroomService : ILightroomService
             foreach (var asset in albumAssetResponse.Resources)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                var make = asset.Asset.Payload.Xmp.Tiff.Make;
-                var model = asset.Asset.Payload.Xmp.Tiff.Model;
+                var model = asset.Asset.Payload.Xmp?.Tiff?.Model;
                 yield return new ImageInfo
                 {
                     AssetId = asset.Asset.Id,
                     CaptureDate = asset.Asset.Payload.CaptureDate,
-                    FileSize = asset.Asset.Payload.ImportSource.FileSize,
-                    ShutterSpeed = asset.Asset.Payload.Xmp.Exif.ExposureTime,
-                    FNumber = asset.Asset.Payload.Xmp.Exif.FNumber,
-                    FocalLength = asset.Asset.Payload.Xmp.Exif.FocalLength.First(),
-                    ISO = asset.Asset.Payload.Xmp.Exif.ISOSpeedRatings,
-                    Lens = asset.Asset.Payload.Xmp.Aux.Lens,
-                    Make = make,
+                    ShutterSpeed = asset.Asset.Payload.Xmp?.Exif?.ExposureTime,
+                    FNumber = asset.Asset.Payload.Xmp?.Exif?.FNumber,
+                    FocalLength = asset.Asset.Payload.Xmp?.Exif?.FocalLength?.FirstOrDefault(),
+                    ISO = asset.Asset.Payload.Xmp?.Exif?.ISOSpeedRatings,
+                    Lens = asset.Asset.Payload.Xmp?.Aux?.Lens,
                     Model = model,
-                    Title = asset.Asset.Payload.Xmp.Dc.Title,
-                    Caption = asset.Asset.Payload.Xmp.Dc.Description,
+                    Title = asset.Asset.Payload.Xmp?.Dc?.Title,
+                    Caption = asset.Asset.Payload.Xmp?.Dc?.Description,
                     LastModified = DateTime.Parse(asset.Asset.Updated),
                     Width = asset.Asset.Payload.Develop.CroppedWidth,
                     Height = asset.Asset.Payload.Develop.CroppedHeight,
