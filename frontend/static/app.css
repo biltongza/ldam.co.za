@@ -17,6 +17,15 @@ body {
   text-decoration: none;
 }
 
+.footer {
+  position: sticky;
+  top: 100vh;
+}
+
+#svelte {
+  min-height: 100vh;
+}
+
 a,
 a:visited {
   color: inherit;
