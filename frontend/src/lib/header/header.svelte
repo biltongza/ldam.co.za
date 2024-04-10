@@ -4,7 +4,7 @@
 </script>
 
 <header class="header">
-  <a class="brand h-card" href={website}><h1>Logan Dam</h1></a>
+  <a class="brand h-card" href={website} rel="author"><h1>Logan Dam</h1></a>
   <Navigation />
 </header>
 
