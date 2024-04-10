@@ -22,7 +22,9 @@
 
 <article class="h-entry">
   <h2 class="p-name">{post.metadata.title}</h2>
-  <p class="date dt-published">{dayjs(post.metadata.date).format(DateFormat)}</p>
+  <time class="date dt-published" datetime={dayjs(post.metadata.date).format()}
+    >{dayjs(post.metadata.date).format(DateFormat)}</time
+  >
   <p>
     {#each post.metadata.tags as tag}
       <sl-badge variant="primary" class="p-category" pill>{tag}</sl-badge>
