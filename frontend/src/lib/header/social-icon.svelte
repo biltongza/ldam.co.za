@@ -5,7 +5,7 @@
   export let href: string;
 </script>
 
-<a {href} target="_blank" rel="noopener" aria-label={label}>
+<a {href} target="_blank" rel="me" aria-label={label}>
   <sl-icon name={icon} library="default" />
   <span>{text}</span>
 </a>
