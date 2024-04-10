@@ -1,9 +1,10 @@
 <script lang="ts">
+  import { website } from '$lib/info';
   import Navigation from './navigation.svelte';
 </script>
 
 <header class="header">
-  <a class="brand" href="/"><h1>Logan Dam</h1></a>
+  <a class="brand h-card" href={website}><h1>Logan Dam</h1></a>
   <Navigation />
 </header>
 
