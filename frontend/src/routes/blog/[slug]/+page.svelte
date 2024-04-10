@@ -22,6 +22,7 @@
 
 <article class="h-entry">
   <h2 class="p-name">{post.metadata.title}</h2>
+  <p></p>
   <time class="date dt-published" datetime={dayjs(post.metadata.date).format()}
     >{dayjs(post.metadata.date).format(DateFormat)}</time
   >
