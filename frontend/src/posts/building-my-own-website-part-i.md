@@ -8,7 +8,7 @@ tags:
   - azure
 ---
 
-### The problem
+# The problem
 
 I've had my own website since October 2016. I never really thought much of it, I just wanted somewhere to put my photography that wasn't social media so I could have full resolution versions more easily available.
 
@@ -18,7 +18,7 @@ I used [Squarespace](https://www.squarespace.com/), since their templates were v
 
 Fast forward to 2021, I haven't updated my site in months, because getting my photos out of [Lightroom](https://www.adobe.com/africa/products/photoshop-lightroom.html) and into Squarespace is just a chore (their image uploader didn't handle bulk uploads with large images particularly well, nevermind having to manually export photos). Me being the developer I am, I decided I would look for a way to automate it. Also, I've grown and realised that photography is not my only skill, and my portfolio should reflect my software engineering abilities too.
 
-### Investigation
+# Investigation
 
 My first thought was to try automate the upload process, since that was the part I was having trouble with, but Squarespace don't offer a public API to upload images, so that idea was a no go. That was the first time I thought about making my own site, but it did nothing to satiate my desire to automate things.
 
@@ -32,7 +32,7 @@ Adobe exposes a means to:
 
 _(this is all much more than I expected Adobe to provide, given that I've not seen any public integrations with Lightroom)_
 
-### Prototyping
+# Prototyping
 
 Now that I knew that there was some possibility of automating part of my workflow, it was time to start experimenting to see how it all worked together.
 
@@ -46,7 +46,7 @@ I had a pretty grandiose idea that I'd be able to build a nice little client lib
 
 I decided to hand roll my own solution instead (which you can see [here](https://github.com/biltongza/ldam.co.za/tree/master/lib/Lightroom)) by observing what the API responded with, and cherry picking the bits that I was interested in.
 
-### Build
+# Build
 
 Once I understood the API integration, I needed to figure out some architecture. I had a means to get information and images from Adobe, and I needed some way to show it to people.
 
@@ -68,7 +68,7 @@ As I alluded to before, I wanted to try out Blazor WebAssembly. While it was _co
 
 It all worked just fine on a desktop browser, with a nice fast internet connection, _but_ my initial bundle was 3MB, which is larger than the initial bundle of the entire transactional website I work on at my current client. _For a simple photography portfolio!_ It also took upwards of 20 seconds for Blazor to boot on my phone (a OnePlus Nord), even with AOT compilation and trimming enabled.
 
-### Rebuild
+# Rebuild
 
 That just wasn't acceptable for me, so I searched for an alternative. My current day to day work is Angular, so that was out. I've used React on a side project (that I would love to talk about here one day!) and I'm not the biggest fan of it. I then found Svelte, and decided it was different enough and yet still in the same sort of paradigm of "web frameworks" that I'd be comfortable with to give it a try.
 
@@ -78,7 +78,7 @@ Since then, I've taken a bit of an interest in SEO, and while Google [does index
 
 Svelte encourages the use of SSR, and paired with the Azure Static Web App supporting Azure Functions for an "API" and a [community made adapter](https://github.com/geoffrich/svelte-adapter-azure-swa), that is probably how you are reading this (unless you are from the future and I've changed my mind!).
 
-### Wrapping up
+# Wrapping up
 
 If you've got this far, congratulations! It took me a lot longer to get here than I expected, but I am glad you are with me.
 

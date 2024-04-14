@@ -60,7 +60,7 @@ First, we need to update our .csproj file. We need to make the following changes
 - Check which bindings you are using, and update them as [detailed in the guide](https://learn.microsoft.com/en-us/azure/azure-functions/migrate-dotnet-to-isolated-model?tabs=net8#package-references). In my case I am using timers, so I need to add reference to `Microsoft.Azure.Functions.Worker.Extensions.Timer`.
 - Remove and replace any package starting with `Microsoft.Azure.WebJobs.*`
 
-## Add a Program.cs file
+## 2. Add a Program.cs file
 
 Since we're no longer running in the Azure Functions host, we must provide our own `Main` method in the `Program.cs` file. Follow the MS guide [here](https://learn.microsoft.com/en-us/azure/azure-functions/migrate-dotnet-to-isolated-model?tabs=net8#programcs-file).
 
@@ -149,11 +149,11 @@ var host = new HostBuilder()
 host.Run();
 ```
 
-## Remove the Startup.cs file
+## 3. Remove the Startup.cs file
 
 Once the code from the `FunctionsStartup` class has been migrated to the `Program.cs` file, it should be safe to delete it.
 
-## Update function signatures
+## 4. Update function signatures
 
 The isolated worker model brings with it some changes to some types and so we need to update our function signatures accordingly. This step will differ depending on what function bindings you have, so I will only document what is required for my project. The details are well documented [here](https://learn.microsoft.com/en-us/azure/azure-functions/migrate-dotnet-to-isolated-model?tabs=net8#function-signature-changes).
 
@@ -238,7 +238,7 @@ Simply change the value for `FUNCTIONS_WORKER_RUNTIME` from `dotnet` to `dotnet-
 
 **NB: After deploying the isolated worker changes, don't forget to update the `FUNCTIONS_WORKER_RUNTIME` setting in your FunctionApp configuration in the Azure Portal!**
 
-### Test
+## 5. Test
 
 With those changes made, my project builds. It's time to test it!
 

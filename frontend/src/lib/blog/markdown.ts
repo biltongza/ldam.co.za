@@ -1,5 +1,6 @@
 import type { BlogMetadata } from '$lib/types';
 import dayjs from 'dayjs';
+import type { Nodes } from 'hast';
 import yaml from 'js-yaml';
 import type { Root } from 'mdast';
 import rehypeExternalLinks from 'rehype-external-links';
@@ -8,7 +9,7 @@ import rehypeStringify from 'rehype-stringify';
 import remarkFrontmatter from 'remark-frontmatter';
 import remarkGfm from 'remark-gfm';
 import remarkParse from 'remark-parse';
-import remark2rehype from 'remark-rehype';
+import remarkRehype from 'remark-rehype';
 import remarkUnwrapImages from 'remark-unwrap-images';
 import * as vfile from 'to-vfile';
 import { unified } from 'unified';
@@ -16,7 +17,20 @@ import { unified } from 'unified';
 const remarkParser = unified().use(remarkParse).use(remarkGfm).use(remarkFrontmatter, ['yaml']);
 
 const rehypeConverter = unified()
-  .use(remark2rehype)
+  .use(remarkRehype, {
+    handlers: {
+      heading: (state, node) => {
+        const result: Nodes = {
+          type: 'element',
+          tagName: 'h' + (node.depth + 2),
+          properties: {},
+          children: state.all(node)
+        };
+        state.patch(node, result);
+        return state.applyData(node, result);
+      }
+    }
+  })
   .use(remarkUnwrapImages)
   .use(rehypeHighlight)
   .use(rehypeExternalLinks, { rel: ['nofollow', 'noopener'] })

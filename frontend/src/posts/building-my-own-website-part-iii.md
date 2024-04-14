@@ -10,13 +10,13 @@ tags:
   - adobe
 ---
 
-### Syncing images
+# Syncing images
 
 As I've alluded to before, I'm quite lazy. This entire ordeal started as a way for me to be lazy about uploading images (truthfully there's been some scope creep since then 🥲).
 
 This post will be a bit of a deep dive on how the image synchronization process works.
 
-### Lightroom History
+# Lightroom History
 
 If you're not familiar with Lightroom, it is Adobe's image editing and organization solution. There are two versions: Lightroom Classic, and Lightroom CC. Lightroom Classic has been around for ages, [originally introduced back in 2007](https://en.wikipedia.org/wiki/Adobe_Lightroom#Version_1.0) and is still updated [to this day](<https://en.wikipedia.org/wiki/Adobe_Lightroom#Adobe_Lightroom_Classic_CC_(version_8.0+)>). Lightroom CC (aka just Lightroom these days) is a ground-up cloud-based rewrite of Lightroom (it also has a mobile version!).
 
@@ -28,7 +28,7 @@ Lightroom CC instead takes advantage of ubiquitous internet connectivity and pre
 
 I eventually decided to take the plunge because I wanted to take advantage of the cloud features of the new platform (mainly, to have solid synchronization between my PC and my phone).
 
-### Organization is key
+# Organization is key
 
 Since all my images are now synchronized to Adobe, and Adobe exposes an API to interact with their services, all I need to do is make sure they're organized in a way that makes it simple to interact with.
 
@@ -40,7 +40,7 @@ Each of these kinds of objects have an ID associated with them which is how you 
 
 So for my simple purposes, I just need a single album containing the images I want to synchronize, and then ask the API for the image IDs within that Album, then ask the API for an image stream for each of the images to pull them.
 
-### Abusing enumerables for fun and profit
+# Abusing enumerables for fun and profit
 
 If I were to do this process synchronously, I would either need a bunch of temporary storage (probably in memory), or I would need a lot of time. Neither of these are conducive to a serverless environment where those are the exact two aspects that push the price up.
 
@@ -52,7 +52,7 @@ Entity Framework has been teaching us this for years, because it exposes all of 
 
 _I last wrote about enumerables in 2017 in an internal blog at Entelect, which I should definitely get published on here..._
 
-### Recap: IEnumerable and IAsyncEnumerable
+# Recap: IEnumerable and IAsyncEnumerable
 
 If you aren't well versed in deferred execution, here's a TL;DR verison:
 
@@ -76,7 +76,7 @@ In other words, `yield` and `foreach` go together like butter on toast.
 
 `IAsyncEnumerable` does exactly the same thing, but brings `async` support with it, so you can do `await foreach` on them.
 
-### Putting it all together
+# Putting it all together
 
 Getting this all to work needs every processing step to be aware of it. The nice part of all of this being on GitHub is I can just link to the source to show you an example 😊
 
@@ -160,7 +160,7 @@ This isn't a strictly clean implementation, but I think it is representative of 
 
 Within this loop, the actual code goes and pulls the rendered image from Lightroom, updates the in-memory copy of the image manifest, then stores the image to a storage account (which has an Azure CDN endpoint sitting on it). Job done!
 
-### What's the point?
+# What's the point?
 
 The important part is that none of the consuming code _actually_ cares what is going on under the hood. It just knows that it may or may not get another _thing_, and that _thing_ is its only input. It is all it needs to care about.
 
@@ -168,13 +168,13 @@ I also don't have all of my source data in memory at any given point. It is only
 
 I see this as a modern, language integrated method of constraining your peak memory usage (or at least, that's what I've used it for in most cases!).
 
-### But what about buffering?
+# But what about buffering?
 
 You can see quite clearly in my previous example that it is entirely possible to still do things in batches or do buffering by taking this approach. Buffering is generally A Good Thing™️. It's making use of any temporary storage you have to speed up access to resources you know you are going to need soon, and doing things iteratively seems to imply that you trade that off for the ease of working with a single item at a time. This does not have to be the case.
 
 You still have ways of controlling how your data is accessed. I've used this technique to implement a fairly trivial wrapper over ADO.NET to instead "stream" records from the database through the application's processing. The end location for the data was right back in the database, and doing single item inserts via ADO.NET is painfully slow (_because overheads add up_). The limiting factor at the time was memory usage, we were regularly bumping up against 32 bit .NET Framework's 2GB limit and crashing with OOMs. Pulling 30,000 records 100+ field records from a database into a `DataSet`, combining them with binary image data, and then writing the results out into a single blob all at once simply didn't work. So I used enumerables to instead break it into 500 record chunks (which was configurable), and split out the blobs like that, batching them together to write them back into the database in chunks. I then changed the consuming application to expect the blobs to be split out, and recombine them when writing out the final product.
 
-### Caveats
+# Caveats
 
 Of course, this design is not without its problems. As I mentioned before, doing stuff iteratively causes overheads to start to build up, and it can take a bit of trial and error to figure out the correct "tuning" of batch sizes, and those batch sizes might not transfer to other environments.
 
