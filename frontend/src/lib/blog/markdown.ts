@@ -61,7 +61,7 @@ export async function processMetadata(
     filename,
     fileRead: fileRead - start,
     parse: parsed - fileRead,
-    total: end - parsed
+    total: end - start
   });
   return {
     metadata,
@@ -83,7 +83,8 @@ export async function process(
   log?.('markdown.ts process', {
     parse: parsed - start,
     convert: converted - parsed,
-    render: rendered - converted
+    render: rendered - converted,
+    total: rendered - start
   });
   return { metadata, content };
 }
