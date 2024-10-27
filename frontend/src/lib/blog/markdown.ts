@@ -11,7 +11,7 @@ import remarkGfm from 'remark-gfm';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import remarkUnwrapImages from 'remark-unwrap-images';
-import * as vfile from 'to-vfile';
+import { read } from 'to-vfile';
 import { unified } from 'unified';
 
 const remarkParser = unified().use(remarkParse).use(remarkGfm).use(remarkFrontmatter, ['yaml']);
@@ -41,7 +41,7 @@ export async function processMetadata(
   log?: (...args: unknown[]) => void
 ): Promise<{ metadata: BlogMetadata; tree: Root }> {
   const start = Date.now();
-  const file = await vfile.read(filename);
+  const file = await read(filename);
   const fileRead = Date.now();
   const remarkTree = remarkParser.parse(file);
   const parsed = Date.now();
