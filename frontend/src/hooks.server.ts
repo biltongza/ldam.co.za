@@ -1,13 +1,15 @@
-import type { RequestEvent } from '@sveltejs/kit';
-
 export function handleError({ error, event }) {
   try {
     if (
       event?.platform?.context?.log?.error &&
       typeof event.platform.context.log.error === 'function'
     ) {
-      const details = getSimpleRequestDetails(event);
-      event.platform.context.log.error({ error, details });
+      event.platform.context.log.info('SvelteKit Error', {
+        method: event.request.method,
+        url: event.url.href,
+        route: event.route.id,
+        error
+      });
     }
   } catch (err) {
     console.error(err);
@@ -19,28 +21,24 @@ export function handleError({ error, event }) {
 }
 
 export async function handle({ event, resolve }) {
+  const start = Date.now();
   const response = await resolve(event);
+  const end = Date.now();
   try {
     if (
       event?.platform?.context?.log?.info &&
       typeof event.platform.context.log.info === 'function'
     ) {
-      const simpleRequest = getSimpleRequestDetails(event);
-      const simpleResponse = getSimpleResponseDetails(response);
-      event.platform.context.log.info({ request: simpleRequest, response: simpleResponse });
+      event.platform.context.log.info('SvelteKit Event', {
+        method: event.request.method,
+        url: event.url.href,
+        route: event.route.id,
+        duration: end - start,
+        status: response.status
+      });
     }
   } catch (err) {
     console.error(err);
   }
   return response;
-}
-
-function getSimpleRequestDetails(event: RequestEvent) {
-  const { method, url, referrer, headers } = event.request;
-  return { method, url, referrer, headers: Object.fromEntries(headers.entries()) };
-}
-
-function getSimpleResponseDetails(response: Response) {
-  const { status, headers } = response;
-  return { status, headers: Object.fromEntries(headers.entries()) };
 }
