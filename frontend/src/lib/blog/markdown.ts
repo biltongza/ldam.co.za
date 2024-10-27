@@ -37,10 +37,14 @@ const rehypeConverter = unified()
   .use(rehypeStringify);
 
 export async function processMetadata(
-  filename: string
+  filename: string,
+  log?: (...args: unknown[]) => void
 ): Promise<{ metadata: BlogMetadata; tree: Root }> {
+  const start = Date.now();
   const file = await vfile.read(filename);
+  const fileRead = Date.now();
   const remarkTree = remarkParser.parse(file);
+  const parsed = Date.now();
   const slug = filename.slice(filename.lastIndexOf('/') + 1, -3);
   let metadata: BlogMetadata = null;
   if (remarkTree.children.length > 0 && remarkTree.children[0].type == 'yaml') {
@@ -52,6 +56,13 @@ export async function processMetadata(
   if (!metadata) {
     throw new Error(`No Frontmatter in file ${filename}`);
   }
+  const end = Date.now();
+  log?.('markdown.ts processMetadata', {
+    filename,
+    fileRead: fileRead - start,
+    parse: parsed - fileRead,
+    total: end - parsed
+  });
   return {
     metadata,
     tree: remarkTree
@@ -59,10 +70,20 @@ export async function processMetadata(
 }
 
 export async function process(
-  filename: string
+  filename: string,
+  log?: (...args: unknown[]) => void
 ): Promise<{ metadata: BlogMetadata; content: string }> {
-  const { metadata, tree } = await processMetadata(filename);
+  const start = Date.now();
+  const { metadata, tree } = await processMetadata(filename, log);
+  const parsed = Date.now();
   const rehypeTree = await rehypeConverter.run(tree);
+  const converted = Date.now();
   const content = rehypeConverter.stringify(rehypeTree);
+  const rendered = Date.now();
+  log?.('markdown.ts process', {
+    parse: parsed - start,
+    convert: converted - parsed,
+    render: rendered - converted
+  });
   return { metadata, content };
 }
