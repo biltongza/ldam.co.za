@@ -1,18 +1,20 @@
+import type { RequestEvent } from '@sveltejs/kit';
+
 export function handleError({ error, event }) {
+  const deets = extractUsefulDetails(event);
+  console.error('handleError', error, deets);
   try {
     if (
       event?.platform?.context?.log?.error &&
       typeof event.platform.context.log.error === 'function'
     ) {
       event.platform.context.log.info('SvelteKit Error', {
-        method: event.request.method,
-        url: event.url.href,
-        route: event.route.id,
+        ...deets,
         error
       });
     }
   } catch (err) {
-    console.error(err);
+    console.error('handleError => logging failed!', err);
   }
 
   return {
@@ -30,9 +32,7 @@ export async function handle({ event, resolve }) {
       typeof event.platform.context.log.info === 'function'
     ) {
       event.platform.context.log.info('SvelteKit Event', {
-        method: event.request.method,
-        url: event.url.href,
-        route: event.route.id,
+        ...extractUsefulDetails(event),
         duration: end - start,
         status: response.status
       });
@@ -41,4 +41,12 @@ export async function handle({ event, resolve }) {
     console.error(err);
   }
   return response;
+}
+
+function extractUsefulDetails(event: RequestEvent) {
+  return {
+    method: event.request.method,
+    url: event.url.href,
+    route: event.route.id
+  };
 }

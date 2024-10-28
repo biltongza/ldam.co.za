@@ -3,12 +3,14 @@ import { website } from '$lib/info';
 import type { RequestHandler } from '@sveltejs/kit';
 import dayjs from 'dayjs';
 
+export const prerender = true;
+
 export const GET: RequestHandler = async function ({ platform }) {
   const headers = {
     'Cache-Control': 'max-age=0, s-maxage=3600',
     'Content-Type': 'application/xml'
   };
-  const posts = await getBlogPosts(platform.context.log.info);
+  const posts = await getBlogPosts(platform?.context?.log?.info);
   const rss = `<?xml version="1.0" encoding="UTF-8" ?>
     <rss xmlns:dc="https://purl.org/dc/elements/1.1/" 
             xmlns:content="https://purl.org/rss/1.0/modules/content/" 

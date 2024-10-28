@@ -20,7 +20,13 @@ const config = {
             "default-src 'self'; img-src cdn.ldam.co.za; style-src cdn.jsdelivr.net fonts.googleapis.com; script-src az416426.vo.msecnd.net cdn.jsdelivr.net"
         }
       }
-    })
+    }),
+    prerender: {
+      handleHttpError: (details) => {
+        throw details;
+      },
+      origin: 'http://localhost:4280'
+    }
   }
 };
 

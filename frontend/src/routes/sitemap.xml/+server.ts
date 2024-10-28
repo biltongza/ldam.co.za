@@ -7,6 +7,8 @@ import type { RequestHandler } from '@sveltejs/kit';
 import fs from 'fs';
 import { glob } from 'glob';
 
+export const prerender = true;
+
 export const GET: RequestHandler = async function ({ fetch }) {
   const headers = {
     'Cache-Control': 'max-age=0, s-maxage=3600',
