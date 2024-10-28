@@ -2,20 +2,19 @@
   import { base } from '$app/paths';
   import { DateFormat } from '$lib/__consts';
   import dayjs from 'dayjs';
-  import type { PageData } from './$types';
-  export let data: PageData;
-
-  export let { posts } = data;
+  let { data } = $props();
 </script>
 
 <div>
-  <p class="info">{posts.length} posts.</p>
-  {#each posts as post}
+  <p class="info">{data.posts.length} posts.</p>
+  {#each data.posts as post}
     <div class="post">
       <a href={`${base}/blog/${post.slug}`}>
         <h2 class="title">{post.title}</h2>
       </a>
-      <p class="date"><sl-icon name="calendar-event" />{dayjs(post.date).format(DateFormat)}</p>
+      <p class="date">
+        <sl-icon name="calendar-event"></sl-icon>{dayjs(post.date).format(DateFormat)}
+      </p>
       <p>
         {#each post.tags as tag}
           <sl-badge variant="primary" pill>{tag}</sl-badge>

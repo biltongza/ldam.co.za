@@ -76,13 +76,13 @@
         data-iframe-height="270"
         data-share-badge-id="34a1f527-c255-4aba-a7cf-02489df0e272"
         data-share-badge-host="https://www.credly.com"
-      />
+></div>
       <div
         data-iframe-width="150"
         data-iframe-height="270"
         data-share-badge-id="8b11351f-ac21-4194-a667-1cf559428d97"
         data-share-badge-host="https://www.credly.com"
-      />
+></div>
       <script
         type="text/javascript"
         async

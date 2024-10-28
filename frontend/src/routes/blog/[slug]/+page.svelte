@@ -3,9 +3,8 @@
   import { metaStore, titleStore } from '$lib/stores';
   import dayjs from 'dayjs';
   import { onDestroy } from 'svelte';
-  import type { PageData } from './$types';
-  export let data: PageData;
-  export let { post } = data;
+  let { data } = $props();
+  let { post } = data;
 
   titleStore.set(post.metadata.title);
   metaStore.set({

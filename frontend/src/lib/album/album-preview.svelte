@@ -1,8 +1,12 @@
 <script lang="ts">
 	import type { Album, ImageMetadata } from '$lib/types';
 	import Thumbnail from './thumbnail.svelte';
-	export let album: Album;
-	export let numberOfImages: number = Number.MAX_SAFE_INTEGER;
+	interface Props {
+		album: Album;
+		numberOfImages?: number;
+	}
+
+	let { album, numberOfImages = Number.MAX_SAFE_INTEGER }: Props = $props();
 
 	const entries = Object.entries(album.images).map(([, meta]) => meta);
 	const images = entries

@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script module lang="ts">
   import { defaultMetadata } from '$lib/__consts';
   import Footer from '$lib/footer/footer.svelte';
   import Header from '$lib/header/header.svelte';
@@ -8,13 +8,24 @@
 </script>
 
 <script lang="ts">
-  export let pageTitle: string;
-  export let metas: { key: string; value: string }[];
-  $: pageTitle = `${$titleStore ? $titleStore + ' - ' : ''}Logan Dam - Software Engineer, Photographer`;
-  $: metas = Object.entries({ ...defaultMetadata, ...$metaStore }).map(([key, value]) => ({
-    key,
-    value
-  }));
+  import { run } from 'svelte/legacy';
+
+  interface Props {
+    pageTitle: string;
+    metas: { key: string; value: string }[];
+    children?: import('svelte').Snippet;
+  }
+
+  let { pageTitle = $bindable(), metas = $bindable(), children }: Props = $props();
+  run(() => {
+    pageTitle = `${$titleStore ? $titleStore + ' - ' : ''}Logan Dam - Software Engineer, Photographer`;
+  });
+  run(() => {
+    metas = Object.entries({ ...defaultMetadata, ...$metaStore }).map(([key, value]) => ({
+      key,
+      value
+    }));
+  });
 </script>
 
 <svelte:head>
@@ -29,7 +40,7 @@
 
 <Header />
 <main class="content">
-  <slot />
+  {@render children?.()}
 </main>
 <Footer />
 

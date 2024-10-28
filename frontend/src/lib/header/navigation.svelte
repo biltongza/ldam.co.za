@@ -24,7 +24,7 @@
     },
     { text: 'Twitter', label: 'twitter', href: 'https://twitter.com/TheBiltong', icon: 'twitter-x' }
   ];
-  let expanded = false;
+  let expanded = $state(false);
 </script>
 
 <nav>
@@ -42,8 +42,8 @@
   <sl-icon-button
     class={`menu-button ${expanded ? 'expanded' : ''}`}
     name="chevron-double-down"
-    on:click={() => (expanded = !expanded)}
-  />
+    onclick={() => (expanded = !expanded)}
+></sl-icon-button>
 </nav>
 
 <style lang="scss">
