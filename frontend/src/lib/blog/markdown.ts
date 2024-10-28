@@ -6,11 +6,11 @@ import type { Root } from 'mdast';
 import rehypeExternalLinks from 'rehype-external-links';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeStringify from 'rehype-stringify';
+import rehypeUnwrapImages from 'rehype-unwrap-images';
 import remarkFrontmatter from 'remark-frontmatter';
 import remarkGfm from 'remark-gfm';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
-import remarkUnwrapImages from 'remark-unwrap-images';
 import { read } from 'to-vfile';
 import { unified } from 'unified';
 
@@ -31,7 +31,7 @@ const rehypeConverter = unified()
       }
     }
   })
-  .use(remarkUnwrapImages)
+  .use(rehypeUnwrapImages)
   .use(rehypeHighlight)
   .use(rehypeExternalLinks, { rel: ['nofollow', 'noopener'] })
   .use(rehypeStringify);
