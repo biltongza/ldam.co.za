@@ -6,24 +6,14 @@
 </script>
 
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
-  interface Props {
-    pageTitle: string;
-    metas: { key: string; value: string }[];
-    children?: import('svelte').Snippet;
-  }
-
-  let { pageTitle = $bindable(), metas = $bindable(), children }: Props = $props();
-  run(() => {
-    pageTitle = `${$titleStore ? $titleStore + ' - ' : ''}Logan Dam - Software Engineer, Photographer`;
-  });
-  run(() => {
-    metas = Object.entries({ ...defaultMetadata, ...$metaStore }).map(([key, value]) => ({
+  let { children } = $props();
+  let pageTitle = $derived(`${$titleStore ? $titleStore + ' - ' : ''}Logan Dam - Software Engineer, Photographer`);
+  
+  let metas = $derived(Object.entries({ ...defaultMetadata, ...$metaStore }).map(([key, value]) => ({
       key,
       value
-    }));
-  });
+    })));
+  
 </script>
 
 <svelte:head>
