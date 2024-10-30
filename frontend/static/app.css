@@ -37,7 +37,7 @@ a:hover {
   color: var(--sl-color-primary-600);
 }
 
-.blog p > img {
+.blog .h-entry .e-content img {
   object-fit: contain;
   max-width: 100%;
 }
