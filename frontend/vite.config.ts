@@ -1,6 +1,5 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { exec } from 'child_process';
-import Unfonts from 'unplugin-fonts/vite';
 import { promisify } from 'util';
 import { defineConfig } from 'vite';
 
@@ -19,20 +18,7 @@ console.log(`VITE CONFIG: commit hash`, version);
 console.log(`VITE CONFIG: commit time`, lastmod);
 
 export default defineConfig({
-  plugins: [
-    sveltekit(),
-    Unfonts({
-      google: {
-        preconnect: true,
-        families: [
-          {
-            name: 'Recursive',
-            styles: 'CASL,CRSV,MONO@0..1,0,0..1'
-          }
-        ]
-      }
-    })
-  ],
+  plugins: [sveltekit()],
   server: {
     port: 5000
   },

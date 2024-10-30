@@ -3,8 +3,6 @@
   import Footer from '$lib/footer/footer.svelte';
   import Header from '$lib/header/header.svelte';
   import { metaStore, titleStore } from '$lib/stores';
-  import 'unfonts.css';
-  import { links } from 'unplugin-fonts/head';
 </script>
 
 <script lang="ts">
@@ -29,9 +27,6 @@
 </script>
 
 <svelte:head>
-  {#each links as link}
-    <link {...link?.attrs || {}} />
-  {/each}
   <title>{pageTitle}</title>
   {#each metas as m (m.key)}
     <meta property={m.key} content={m.value} />

@@ -6,12 +6,7 @@
     href: string;
   }
 
-  let {
-    text,
-    label,
-    icon,
-    href
-  }: Props = $props();
+  let { text, label, icon, href }: Props = $props();
 </script>
 
 <a {href} target="_blank" rel="me" aria-label={label}>
@@ -30,7 +25,7 @@
       color: var(--sl-color-primary-600);
     }
     & > span {
-      font-family: 'Recursive', monospace;
+      font-family: monospace;
       display: none;
       @media screen and (max-width: 550px) {
         display: unset;

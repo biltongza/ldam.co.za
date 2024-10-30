@@ -1,7 +1,6 @@
-@import 'typography.css';
 html,
 body {
-  font-family: 'Recursive', monospace;
+  font-family: monospace;
   background-color: var(--sl-color-neutral-50);
   line-height: 1.5;
   display: flex;
