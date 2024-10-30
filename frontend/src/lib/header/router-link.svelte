@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
-
+  
   import { page } from '$app/stores';
   interface Props {
     path: string;
@@ -8,12 +7,10 @@
   }
 
   let { path, children }: Props = $props();
-  let matches = $state(false);
-  run(() => {
-    const routeSegments = path?.split('/') || [];
-    const activeRouteSegments = $page.url.pathname?.split('/') || [];
-    matches = routeSegments.every((segment, index) => activeRouteSegments[index] === segment);
-  });
+  let routeSegments = path?.split('/') || [];
+  let activeRouteSegments = $derived($page.url.pathname?.split('/') || []);
+  let matches = $derived(routeSegments.every((segment, index) => activeRouteSegments[index] === segment));
+  
 </script>
 
 <a href={path} class:active={matches}>{@render children?.()}</a>
