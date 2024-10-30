@@ -15,7 +15,6 @@
 
   h1 {
     text-transform: uppercase;
-    font-size: 100%;
   }
 
   .header {
@@ -26,15 +25,10 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    //align-items: baseline;
 
     @media only screen and (min-width: 1224px) {
       padding-left: var(--sl-spacing-2x-large);
       padding-right: var(--sl-spacing-2x-large);
     }
-  }
-
-  .brand {
-    font-size: var(--sl-font-size-x-large);
   }
 </style>

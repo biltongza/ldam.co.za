@@ -43,7 +43,7 @@
     class={`menu-button ${expanded ? 'expanded' : ''}`}
     name="chevron-double-down"
     onclick={() => (expanded = !expanded)}
-></sl-icon-button>
+  ></sl-icon-button>
 </nav>
 
 <style lang="scss">
@@ -52,7 +52,7 @@
     flex-direction: row;
     align-items: flex-start;
     margin-inline-end: var(--sl-spacing-medium);
-    padding-top: var(--sl-spacing-large);
+    padding-top: var(--sl-spacing-x-large);
 
     ul {
       list-style: none;
@@ -70,9 +70,9 @@
         flex-direction: column;
         align-items: start;
         margin-top: 32px;
-        margin-bottom: 32px;
+        //margin-bottom: 32px;
         &.expanded {
-          height: 300px;
+          height: 260px;
           transition: height 0.5s ease-out;
         }
       }
