@@ -1,7 +1,6 @@
 {
   "extends": "./.svelte-kit/tsconfig.json",
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "types": ["unplugin-fonts/client"]
+    "allowSyntheticDefaultImports": true
   }
 }
