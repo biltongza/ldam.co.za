@@ -1,29 +1,40 @@
-using Azure.ResourceManager;
-using Azure.ResourceManager.Cdn;
-using Azure.ResourceManager.Cdn.Models;
+using System.Net.Http.Json;
+using ldam.co.za.lib.Services;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 public interface ICdnService
 {
-    Task ClearCache(string path, CancellationToken cancellationToken = default);
+    Task ClearCache(CancellationToken cancellationToken = default);
 }
 
 public class CdnService : ICdnService
 {
-    private readonly CdnEndpointResource cdnEndpoint;
-    public CdnService(ArmClient armClient, IOptions<FunctionAppAzureResourceOptions> options)
+    private readonly HttpClient httpClient;
+    private readonly CdnOptions cdnOptions;
+    private readonly ILogger logger;
+    public CdnService(
+        IOptions<CdnOptions> options,
+        IHttpClientFactory httpClientFactory,
+        ISecretService secretService,
+        ILogger<CdnService> logger)
     {
-        var endpointResourceIdentifier = CdnEndpointResource.CreateResourceIdentifier(
-            options.Value.CdnSubscriptionId,
-            options.Value.CdnResourceGroup,
-            options.Value.CdnProfileName,
-            options.Value.CdnEndpointName
-        );
-        this.cdnEndpoint = armClient.GetCdnEndpointResource(endpointResourceIdentifier);
+        this.httpClient = httpClientFactory.CreateClient("cloudflare");
+        httpClient.BaseAddress = new Uri("https://api.cloudflare.com/");
+        var apiKey = secretService.GetSecret("CloudflareApiKey").GetAwaiter().GetResult(); // naughty
+        httpClient.DefaultRequestHeaders.Add("X-Auth-Key", apiKey);
+        httpClient.DefaultRequestHeaders.Add("X-Auth-Email", options.Value.Email);
+        this.cdnOptions = options.Value;
+        this.logger = logger;
     }
 
-    public async Task ClearCache(string? path, CancellationToken cancellationToken = default)
+    public async Task ClearCache(CancellationToken cancellationToken = default)
     {
-        await cdnEndpoint.PurgeContentAsync(Azure.WaitUntil.Completed, new PurgeContent([path ?? "/*"]), cancellationToken: cancellationToken);
+        var body = new { purge_everything = true };
+        logger.LogInformation("Purging {CloudflareZone}", cdnOptions.ZoneId);
+        var res = await httpClient.PostAsJsonAsync($"/client/v4/zones/{cdnOptions.ZoneId}/purge_cache", body, cancellationToken);
+        var resBody = await res.Content.ReadAsStringAsync(cancellationToken);
+        logger.LogInformation("Status = {Status} Body = {Body}", res.StatusCode, resBody);
+        res.EnsureSuccessStatusCode();
     }
 }

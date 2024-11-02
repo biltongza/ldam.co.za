@@ -85,7 +85,7 @@ public class SyncService
             await storageService.Store(ManifestName, serializedStream, JsonMimeType, cancellationToken);
             logger.LogInformation("Manifest {manifestName} updated", ManifestName);
             logger.LogInformation("Purging CDN cache");
-            await cdnService.ClearCache("/*", cancellationToken);
+            await cdnService.ClearCache(cancellationToken);
             logger.LogInformation("CDN cache purged");
         }
     }

@@ -1,6 +1,5 @@
 using Azure.Core;
 using Azure.Identity;
-using Azure.ResourceManager;
 using ldam.co.za.fnapp;
 using ldam.co.za.fnapp.Services;
 using ldam.co.za.lib.Configuration;
@@ -26,7 +25,9 @@ var host = new HostBuilder()
             {
                 AllowAutoRedirect = true,
             })
-            .RedactLoggedHeaders(new string[] { "Authorization", "X-API-KEY" });
+            .RedactLoggedHeaders(["Authorization", "X-API-KEY"]);
+        services.AddHttpClient("cloudflare")
+            .RedactLoggedHeaders(["X-Auth-Key"]);
 
         services.AddTransient<ILightroomClient, LightroomClient>();
         services.AddTransient<ILightroomService, LightroomService>();
@@ -44,14 +45,13 @@ var host = new HostBuilder()
 #endif
                     new ManagedIdentityCredential()
                 ));
-        services.AddSingleton<ArmClient>();
         services.AddTransient<ICdnService, CdnService>();
 
         var config = context.Configuration;
-        services.Configure<FunctionAppAzureResourceOptions>(config.GetSection("Azure"));
         services.Configure<AzureResourceOptions>(config.GetSection("Azure"));
         services.Configure<FunctionAppLightroomOptions>(config.GetSection("Lightroom"));
         services.Configure<LightroomOptions>(config.GetSection("Lightroom"));
+        services.Configure<CdnOptions>(config.GetSection("Cdn"));
     })
     .Build();
 
