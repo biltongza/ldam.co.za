@@ -1,5 +1,5 @@
 import { base } from '$app/paths';
-export const StorageBaseUrl = 'https://cdn.ldam.co.za/portfolio';
+export const StorageBaseUrl = 'https://cdncf.ldam.co.za/portfolio';
 export const MaxDimensionNormalDensity = 320;
 export const ThumbnailHrefNormalDensity = 'thumbnail2x';
 export const MaxDimensionHighDensity = 640;
