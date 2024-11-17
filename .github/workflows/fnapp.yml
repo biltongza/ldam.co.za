@@ -10,7 +10,7 @@ on:
       - fnapp.Tests/**
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,21 +28,10 @@ jobs:
         run: dotnet test --no-build --verbosity normal
         working-directory: ./fnapp.Tests
       - name: Publish
-        run: dotnet publish --no-build -c Release /p:WebPublishMethod=Package /p:PackageLocation=./fnapp-build /p:PackageAsSingleFile=true
-      - uses: actions/upload-artifact@v4
-        with:
-          name: fnapp
-          path: ./fnapp/fnapp-build
-  deploy:
-    needs: build
-    runs-on: windows-latest
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: fnapp
+        run: dotnet publish --no-build -c Release -o ./fnapp-build
       - name: deploy fnapp
         uses: Azure/functions-action@v1.5.2
         with:
           app-name: fnapp
-          package: .
+          package: ./fnapp-build
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
