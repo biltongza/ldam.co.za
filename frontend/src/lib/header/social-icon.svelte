@@ -9,7 +9,7 @@
   let { text, label, icon, href }: Props = $props();
 </script>
 
-<a {href} target="_blank" rel="me" aria-label={label}>
+<a {href} target="_blank" rel="me" aria-label={label} class="url">
   <sl-icon name={icon} library="default"></sl-icon>
   <span>{text}</span>
 </a>
