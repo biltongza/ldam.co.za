@@ -8,13 +8,11 @@
   "[css]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "css.validate": false,
-  "less.validate": false,
-  "scss.validate": false,
   "editor.codeActionsOnSave": {
     "source.organizeImports": "explicit"
   },
   "[svelte]": {
     "editor.defaultFormatter": "svelte.svelte-vscode"
-  }
+  },
+  "eslint.validate": ["javascript", "typescript", "svelte"]
 }

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-interface */
 /// <reference types="@sveltejs/kit" />
 /// <reference types="svelte-adapter-azure-swa" />
 import type { Manifest } from '$lib/types';
