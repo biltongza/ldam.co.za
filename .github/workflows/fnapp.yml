@@ -34,5 +34,5 @@ jobs:
         uses: Azure/functions-action@v1.5.2
         with:
           app-name: fnapp
-          package: ./fnapp-build
+          package: ./fnapp/fnapp-build
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
