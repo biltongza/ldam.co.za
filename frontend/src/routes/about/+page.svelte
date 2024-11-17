@@ -71,23 +71,21 @@
   <div class="secondary">
     <img src="/Selfie.jpg" class="selfie" alt="Portrait of Logan Dam" />
     <div class="badges">
-      <div
-        data-iframe-width="150"
-        data-iframe-height="270"
-        data-share-badge-id="34a1f527-c255-4aba-a7cf-02489df0e272"
-        data-share-badge-host="https://www.credly.com"
-></div>
-      <div
-        data-iframe-width="150"
-        data-iframe-height="270"
-        data-share-badge-id="8b11351f-ac21-4194-a667-1cf559428d97"
-        data-share-badge-host="https://www.credly.com"
-></div>
-      <script
-        type="text/javascript"
-        async
-        src="//cdn.credly.com/assets/utilities/embed.js"
-      ></script>
+      <h4>Certifications</h4>
+      <ul>
+        <li>
+          <a
+            href="https://learn.microsoft.com/api/credentials/share/en-za/00907371/17D60AFEA820962E?sharingId=298B2EB93A7F01AA"
+            rel="noopener nofollow">Microsoft Certified: Azure Developer Associate (AZ-204)</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://learn.microsoft.com/api/credentials/share/en-za/00907371/2E5E1FDAE0A1D073?sharingId=298B2EB93A7F01AA"
+            rel="noopener nofollow">Microsoft Certified: DevOps Engineer Expert (AZ-400)</a
+          >
+        </li>
+      </ul>
     </div>
   </div>
 </div>
@@ -120,6 +118,11 @@
     text-align: center;
   }
   .badges {
-    display: inline-block;
+    display: block;
+    text-align: initial;
+
+    & ul li {
+      margin-bottom: var(--sl-spacing-medium);
+    }
   }
 </style>
