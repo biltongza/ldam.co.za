@@ -28,6 +28,7 @@ jobs:
         run: dotnet test --no-build --verbosity normal
         working-directory: ./fnapp.Tests
       - name: Publish
+        working-directory: ./fnapp
         run: dotnet publish --no-build -c Release -o ./fnapp-build
       - name: deploy fnapp
         uses: Azure/functions-action@v1.5.2
