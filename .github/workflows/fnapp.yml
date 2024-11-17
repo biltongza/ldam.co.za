@@ -22,11 +22,13 @@ jobs:
         run: dotnet restore
         working-directory: ./fnapp
       - name: Build
-        run: dotnet build --no-restore -c Release -o fnapp-build
+        run: dotnet build --no-restore -c Release
         working-directory: ./fnapp
       - name: Test
         run: dotnet test --no-build --verbosity normal
         working-directory: ./fnapp.Tests
+      - name: Publish
+        run: dotnet publish --no-build -c Release /p:WebPublishMethod=Package /p:PackageLocation=./fnapp-build /p:PackageAsSingleFile=true
       - uses: actions/upload-artifact@v4
         with:
           name: fnapp
