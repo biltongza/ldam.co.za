@@ -121,7 +121,7 @@ public class ImageSyncTests
         await syncService.Synchronize(false);
 
         mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
-        mockCdnService.Verify(x => x.ClearCache(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Never);
+        mockCdnService.Verify(x => x.ClearCache(It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
@@ -175,7 +175,7 @@ public class ImageSyncTests
         await syncService.Synchronize(false);
 
         mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
-        mockCdnService.Verify(x => x.ClearCache(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+        mockCdnService.Verify(x => x.ClearCache(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -220,7 +220,7 @@ public class ImageSyncTests
         await syncService.Synchronize(false);
 
         mockStorageService.Verify(x => x.DeleteBlobsStartingWith("image1", It.IsAny<CancellationToken>()), Times.Once);
-        mockCdnService.Verify(x => x.ClearCache(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+        mockCdnService.Verify(x => x.ClearCache(It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -328,7 +328,7 @@ public class ImageSyncTests
 
         mockStorageService.Verify(x => x.Store(ManifestName, It.IsAny<Stream>(), It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
         mockStorageService.Verify(x => x.DeleteBlobsStartingWith("image2", It.IsAny<CancellationToken>()), Times.Once);
-        mockCdnService.Verify(x => x.ClearCache(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
+        mockCdnService.Verify(x => x.ClearCache(It.IsAny<CancellationToken>()), Times.Once);
     }
 }
 
