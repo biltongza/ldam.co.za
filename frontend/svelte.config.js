@@ -1,11 +1,11 @@
 import azure from 'svelte-adapter-azure-swa';
-import preprocess from 'svelte-preprocess';
+import { sveltePreprocess } from 'svelte-preprocess';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   // Consult https://github.com/sveltejs/svelte-preprocess
   // for more information about preprocessors
-  preprocess: preprocess(),
+  preprocess: sveltePreprocess(),
 
   kit: {
     adapter: azure({
@@ -26,6 +26,13 @@ const config = {
         throw details;
       },
       origin: 'http://localhost:4280'
+    }
+  },
+  compilerOptions: {
+    warningFilter: (warning) => {
+      if (warning.code === 'a11y_click_events_have_key_events') return false;
+      if (warning.code === 'a11y_no_static_element_interactions') return false;
+      return true;
     }
   }
 };
