@@ -1,11 +1,45 @@
 <script lang="ts">
-  import { metaStore, titleStore } from '$lib/stores';
-  import { onDestroy } from 'svelte';
+  import { HighResHref, HighResMaxDimension, StorageBaseUrl } from '$lib/__consts.js';
+  import { usePageMetadata, useTitle } from '$lib/stores.svelte.js';
+  import { onMount } from 'svelte';
   let { data } = $props();
-  let { src, metadata, date } = data;
-  onDestroy(() => {
-    titleStore.set(undefined);
-    metaStore.set(undefined);
+  let { metadata } = $derived(data);
+
+  const title = useTitle();
+  const pageMetadata = usePageMetadata();
+
+  const href = $derived(metadata.hrefs[HighResHref]);
+  const src = $derived(`${StorageBaseUrl}/${href}.jpg`);
+
+  const date = $derived(new Date(metadata.captureDate));
+
+  onMount(() => {
+    title.value = metadata.title;
+
+    const [widthRatio, heightRatio] = metadata.aspectRatio.split(':').map((x) => Number(x));
+    const width =
+      widthRatio > heightRatio
+        ? HighResMaxDimension
+        : (widthRatio / heightRatio) * HighResMaxDimension;
+    const height =
+      heightRatio > widthRatio
+        ? HighResMaxDimension
+        : (heightRatio / widthRatio) * HighResMaxDimension;
+    pageMetadata.push({
+      'twitter:card': 'summary_large_image',
+      'og:type': 'article',
+      'og:image': src,
+      'og:title': metadata.title,
+      'og:description': 'Photography by Logan Dam',
+      'og:image:width': width.toString(),
+      'og:image:height': height.toString(),
+      'og:image:alt': metadata.caption
+    });
+
+    return () => {
+      title.value = undefined;
+      pageMetadata.clear();
+    };
   });
 </script>
 

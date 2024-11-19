@@ -1,21 +1,26 @@
 <script lang="ts">
   import { DateFormat } from '$lib/__consts';
-  import { metaStore, titleStore } from '$lib/stores';
+  import { usePageMetadata, useTitle } from '$lib/stores.svelte.js';
   import dayjs from 'dayjs';
-  import { onDestroy } from 'svelte';
+  import { onMount } from 'svelte';
   let { data } = $props();
   let { post } = data;
+  const title = useTitle();
+  const metadata = usePageMetadata();
 
-  titleStore.set(post.metadata.title);
-  metaStore.set({
-    'og:type': 'article',
-    'og:title': post.metadata.title,
-    'og:description': post.metadata.excerpt
-  });
+  onMount(() => {
+    title.value = post.metadata.title;
 
-  onDestroy(() => {
-    titleStore.set(undefined);
-    metaStore.set(undefined);
+    metadata.push({
+      'og:type': 'article',
+      'og:title': post.metadata.title,
+      'og:description': post.metadata.excerpt
+    });
+
+    return () => {
+      title.value = undefined;
+      metadata.clear();
+    };
   });
 </script>
 
