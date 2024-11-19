@@ -1,17 +1,26 @@
-<script module lang="ts">
-  import { defaultMetadata } from '$lib/__consts';
+<script lang="ts">
+  import { page } from '$app/stores';
   import Footer from '$lib/footer/footer.svelte';
   import Header from '$lib/header/header.svelte';
   import { usePageMetadata, useTitle } from '$lib/stores.svelte';
-</script>
 
-<script lang="ts">
   let { children } = $props();
+
   const title = useTitle();
   const metadata = usePageMetadata();
+
   let pageTitle = $derived(
     `${title.value ? title.value + ' - ' : ''}Logan Dam - Software Engineer, Photographer`
   );
+
+  let defaultMetadata = $derived({
+    'og:title': 'Logan Dam - Software Engineer, Photographer',
+    'og:type': 'website',
+    'og:description': "Logan Dam's portfolio of photography and code.",
+    'og:image': 'https://ldam.co.za/favicon-310.png',
+    'og:locale': 'en_ZA',
+    'og:url': $page.url.toString()
+  });
 
   let metas = $derived(
     Object.entries({ ...defaultMetadata, ...metadata.value }).map(([key, value]) => ({
