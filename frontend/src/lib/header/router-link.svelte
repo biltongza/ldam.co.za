@@ -1,5 +1,4 @@
 <script lang="ts">
-  
   import { page } from '$app/stores';
   interface Props {
     path: string;
@@ -7,10 +6,11 @@
   }
 
   let { path, children }: Props = $props();
-  let routeSegments = path?.split('/') || [];
+  let routeSegments = $derived(path?.split('/') || []);
   let activeRouteSegments = $derived($page.url.pathname?.split('/') || []);
-  let matches = $derived(routeSegments.every((segment, index) => activeRouteSegments[index] === segment));
-  
+  let matches = $derived(
+    routeSegments.every((segment, index) => activeRouteSegments[index] === segment)
+  );
 </script>
 
 <a href={path} class:active={matches}>{@render children?.()}</a>
