@@ -2,18 +2,19 @@
   import { defaultMetadata } from '$lib/__consts';
   import Footer from '$lib/footer/footer.svelte';
   import Header from '$lib/header/header.svelte';
-  import { metaStore, useTitle } from '$lib/stores.svelte';
+  import { usePageMetadata, useTitle } from '$lib/stores.svelte';
 </script>
 
 <script lang="ts">
   let { children } = $props();
-  let title = useTitle();
+  const title = useTitle();
+  const metadata = usePageMetadata();
   let pageTitle = $derived(
     `${title.value ? title.value + ' - ' : ''}Logan Dam - Software Engineer, Photographer`
   );
 
   let metas = $derived(
-    Object.entries({ ...defaultMetadata, ...$metaStore }).map(([key, value]) => ({
+    Object.entries({ ...defaultMetadata, ...metadata.value }).map(([key, value]) => ({
       key,
       value
     }))

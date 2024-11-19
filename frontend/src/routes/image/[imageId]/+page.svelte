@@ -25,7 +25,7 @@
       heightRatio > widthRatio
         ? HighResMaxDimension
         : (heightRatio / widthRatio) * HighResMaxDimension;
-    pageMetadata.push({
+    pageMetadata.set({
       'twitter:card': 'summary_large_image',
       'og:type': 'article',
       'og:image': src,

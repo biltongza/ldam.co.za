@@ -11,7 +11,7 @@
   onMount(() => {
     title.value = post.metadata.title;
 
-    metadata.push({
+    metadata.set({
       'og:type': 'article',
       'og:title': post.metadata.title,
       'og:description': post.metadata.excerpt

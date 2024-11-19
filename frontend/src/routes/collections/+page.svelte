@@ -9,7 +9,7 @@
 
   onMount(() => {
     title.value = 'Collections';
-    metadata.push({
+    metadata.set({
       'twitter:card': 'summary',
       'og:type': 'article',
       'og:title': 'Collections',

@@ -1,8 +1,5 @@
-import { writable } from 'svelte/store';
-import { defaultMetadata } from './__consts';
-
 let title: string = $state<string | undefined>(undefined);
-let meta: Record<string, string> = $state(defaultMetadata);
+let meta: Record<string, string> = $state({});
 
 export function useTitle() {
   return {
@@ -23,16 +20,11 @@ export function usePageMetadata() {
     },
 
     clear() {
-      meta = defaultMetadata;
+      meta = {};
     },
 
-    push(metas: Record<string, string>) {
-      meta = {
-        ...meta,
-        ...metas
-      };
+    set(newMeta: Record<string, string>) {
+      meta = newMeta;
     }
   };
 }
-
-export const metaStore = writable<{ [key: string]: string }>(defaultMetadata);
