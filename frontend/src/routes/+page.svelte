@@ -6,6 +6,6 @@
 
 <div>
   <div class="album-list">
-    <AlbumPreview album={data.portfolio} />
+    <AlbumPreview album={data.portfolio} showHeader={false} />
   </div>
 </div>
