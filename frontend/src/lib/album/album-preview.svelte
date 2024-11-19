@@ -3,20 +3,23 @@
   import Thumbnail from './thumbnail.svelte';
   interface Props {
     album: Album;
+    showHeader?: boolean;
     numberOfImages?: number;
   }
 
-  let { album, numberOfImages = Number.MAX_SAFE_INTEGER }: Props = $props();
+  let { album, showHeader = true, numberOfImages = Number.MAX_SAFE_INTEGER }: Props = $props();
 
-  const entries = Object.entries(album.images).map(([, meta]) => meta);
-  const images = entries
-    .sort((meta1, meta2) => {
-      const a = new Date(meta1.captureDate).valueOf();
-      const b = new Date(meta2.captureDate).valueOf();
+  let entries = $derived(Object.entries(album.images).map(([, meta]) => meta));
+  let images = $derived(
+    entries
+      .sort((meta1, meta2) => {
+        const a = new Date(meta1.captureDate).valueOf();
+        const b = new Date(meta2.captureDate).valueOf();
 
-      return Number(b > a) - Number(b < a);
-    })
-    .slice(0, numberOfImages);
+        return Number(b > a) - Number(b < a);
+      })
+      .slice(0, numberOfImages)
+  );
 
   function getClassList(image: ImageMetadata): string {
     const parts = image.aspectRatio.split(':').map((part) => +part);
@@ -26,7 +29,9 @@
 </script>
 
 <section class="album-container">
-  <h2>{album.title}</h2>
+  {#if showHeader}
+    <h2>{album.title}</h2>
+  {/if}
   <div class="thumbnails">
     {#each images as image (image.id)}
       <div class={getClassList(image)}>
