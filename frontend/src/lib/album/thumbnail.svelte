@@ -25,6 +25,7 @@
   let srcSets = $derived(
     Object.entries(thumbnailSizes).flatMap(([sizeKey, maxWidth]) =>
       Object.entries(formats).map(([extension, mime]) => ({
+        key: `${image.id}|${sizeKey}|${extension}`,
         srcSet: `${StorageBaseUrl}/${image.hrefs[sizeKey]}.${extension} ${maxWidth}`,
         mime
       }))
@@ -34,7 +35,7 @@
 
 <a href={imageRoute}>
   <picture>
-    {#each srcSets as srcset}
+    {#each srcSets as srcset (srcset.key)}
       <source srcset={srcset.srcSet} type={srcset.mime} />
     {/each}
     <img {src} class="thumbnail-image" loading="lazy" alt="" />
