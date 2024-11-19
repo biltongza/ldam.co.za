@@ -39,7 +39,7 @@
     "remark-rehype": "^11.1.1",
     "rimraf": "^5.0.10",
     "sass": "^1.81.0",
-    "svelte": "^5.2.2",
+    "svelte": "^5.2.4",
     "svelte-adapter-azure-swa": "^0.20.1",
     "svelte-check": "^4.0.9",
     "svelte-eslint-parser": "^0.43.0",
