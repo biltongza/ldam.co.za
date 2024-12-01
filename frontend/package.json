@@ -15,8 +15,8 @@
     "@azure/functions": "^3.5.1",
     "@azure/static-web-apps-cli": "^2.0.1",
     "@microsoft/applicationinsights-web": "^3.3.4",
-    "@sveltejs/kit": "^2.8.5",
-    "@sveltejs/vite-plugin-svelte": "^4.0.1",
+    "@sveltejs/kit": "^2.9.0",
+    "@sveltejs/vite-plugin-svelte": "^5.0.1",
     "@types/glob": "^8.1.0",
     "@types/js-yaml": "^4.0.9",
     "@types/mdast": "^4.0.4",
@@ -49,7 +49,7 @@
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.16.0",
     "unified": "^11.0.5",
-    "vite": "^5.4.11"
+    "vite": "^6.0.1"
   },
   "type": "module",
   "engines": {
