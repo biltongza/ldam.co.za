@@ -20,7 +20,7 @@ console.log(`VITE CONFIG: commit time`, lastmod);
 export default defineConfig({
   plugins: [sveltekit()],
   server: {
-    port: 5000
+    port: 5050
   },
   define: {
     __VERSION__: version,
