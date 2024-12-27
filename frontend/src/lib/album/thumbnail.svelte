@@ -43,10 +43,9 @@
 </a>
 
 <style>
-  a {
+  a,
+  picture {
     display: block;
-    width: 100%;
-    height: 100%;
   }
   .thumbnail-image {
     width: 100%;

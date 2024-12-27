@@ -53,7 +53,6 @@
     place-items: center;
     justify-content: center;
     grid-auto-flow: dense;
-    grid-auto-rows: minmax(var(--thumbnail-size), max-content);
   }
 
   .thumbnail.span-col {
