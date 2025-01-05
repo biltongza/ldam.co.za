@@ -23,15 +23,29 @@
     }
   ];
   let target = $state(15);
+  let firstLoad = $state(true);
   let carriageNumber: number = $state();
+  let terms: number[] = $derived(getTerms(carriageNumber));
 
-  let terms: number[] = $derived(
-    (carriageNumber || '')
-      .toString()
-      .split('')
-      .map((c) => +c)
-  );
-  let options: string[][] = $derived.by(() => {
+  let options: string[][] = $derived(getOptions(target, terms));
+
+  $effect(() => {
+    while (firstLoad && !options.length) {
+      let n = getRandomCarriageNumber();
+      let t = getTerms(n);
+      if (getOptions(target, t).length) {
+        carriageNumber = n;
+        firstLoad = false;
+        break;
+      }
+    }
+  });
+
+  function getRandomCarriageNumber() {
+    return Math.floor(Math.random() * (999999 - 100000 + 1) + 100000);
+  }
+
+  function getOptions(target: number, terms: number[]): string[][] {
     const ret = [];
     const stack: [{ terms: number[]; ops: (string | number)[] }] = [{ terms, ops: [terms[0]] }];
     while (stack.length) {
@@ -55,7 +69,14 @@
     }
 
     return ret;
-  });
+  }
+
+  function getTerms(n: number) {
+    return (n || '')
+      .toString()
+      .split('')
+      .map((c) => +c);
+  }
 </script>
 
 <section class="container">
