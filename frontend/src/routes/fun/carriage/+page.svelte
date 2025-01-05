@@ -77,6 +77,16 @@
       .split('')
       .map((c) => +c);
   }
+
+  function carriageNumberInputHandler(event: Event & { target: HTMLInputElement }) {
+    const v = Number(event.target.value);
+    if (v <= 999999) {
+      carriageNumber = v;
+    } else {
+      event.preventDefault();
+      event.target.value = event.target.value.substring(0, event.target.value.length - 1);
+    }
+  }
 </script>
 
 <section class="container">
@@ -96,7 +106,7 @@
     class="form-input"
     type="number"
     value={carriageNumber}
-    oninput={(e) => (carriageNumber = Number(e.target.value))}
+    oninput={carriageNumberInputHandler}
     label="Carriage Number"
     placeholder="Enter a number"
     inputmode="numeric"
@@ -104,8 +114,8 @@
   >
 
   <section class="options">
+    <h3>Options</h3>
     {#if options.length}
-      <h3>Options</h3>
       <ul class="option-list">
         {#each options as option}
           <li class="option">
@@ -119,6 +129,8 @@
           </li>
         {/each}
       </ul>
+    {:else}
+      <p>No options available :(</p>
     {/if}
   </section>
   <section class="about">
