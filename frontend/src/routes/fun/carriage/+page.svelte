@@ -67,6 +67,7 @@
     oninput={(e) => (target = Number(e.target.value))}
     label="Target"
     placeholder="Enter a number"
+    inputmode="numeric"
     size="large"><sl-icon name="bullseye" slot="prefix"></sl-icon></sl-input
   >
 
@@ -77,6 +78,7 @@
     oninput={(e) => (carriageNumber = Number(e.target.value))}
     label="Carriage Number"
     placeholder="Enter a number"
+    inputmode="numeric"
     size="large"><sl-icon name="train-front" slot="prefix"></sl-icon></sl-input
   >
 
