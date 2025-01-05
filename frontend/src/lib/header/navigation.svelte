@@ -5,7 +5,8 @@
   const routes = [
     { label: 'About', path: '/about' },
     { label: 'Collections', path: '/collections' },
-    { label: 'Blog', path: '/blog' }
+    { label: 'Blog', path: '/blog' },
+    { label: 'Fun', path: '/fun' }
   ];
 
   const socials = [
@@ -72,7 +73,7 @@
         margin-top: 32px;
         //margin-bottom: 32px;
         &.expanded {
-          height: 260px;
+          height: 300px;
           transition: height 0.5s ease-out;
         }
       }
