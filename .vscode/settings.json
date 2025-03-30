@@ -14,5 +14,10 @@
   "[svelte]": {
     "editor.defaultFormatter": "svelte.svelte-vscode"
   },
-  "eslint.validate": ["javascript", "typescript", "svelte"]
+  "eslint.validate": ["javascript", "typescript", "svelte"],
+  "files.exclude": {
+    "__azurite*": true,
+    "__blobstorage__": true,
+    "__queuestorage__": true
+  }
 }
