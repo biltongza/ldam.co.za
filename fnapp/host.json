@@ -1,18 +1,30 @@
 {
-    "version": "2.0",
-    "logging": {
-        "applicationInsights": {
-            "samplingExcludedTypes": "Request",
-            "samplingSettings": {
-                "isEnabled": true
-            },
-            "snapshotConfiguration": {
-                "isEnabled": false
-            }
-        },
-        "logLevel": {
-            "default": "Information"
-        }
+  "version": "2.0",
+  "logging": {
+    "applicationInsights": {
+      "samplingExcludedTypes": "Request",
+      "samplingSettings": {
+        "isEnabled": true
+      },
+      "snapshotConfiguration": {
+        "isEnabled": false
+      }
     },
-    "functionTimeout": "00:10:00"
+    "logLevel": {
+      "default": "Information",
+      "Host.Triggers.DurableTask": "Warning"
+    }
+  },
+  "extensions": {
+    "durableTask": {
+      "useGracefulShutdown": true,
+      "maxConcurrentOrchestratorFunctions": 10,
+      "maxConcurrentActivityFunctions": 10,
+      "storageProvider": {
+        "type": "Netherite",
+        "partitionCount": 1
+      }
+    }
+  },
+  "functionTimeout": "00:10:00"
 }
