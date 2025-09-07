@@ -392,6 +392,6 @@ function CallDivide(): number {
 
 Admittedly, we still rely on the calling code being _somewhat_ responsible, but at least we gave them the opportunity to be responsible! And if something _really_ goes wrong that our code definitely can't handle, we have no chance of getting caught up in it with a catch block.
 
-Unfortunately for us though, we chose Typescript, which at the time of writing, doesn't have _pattern matching_\*, which would help us turn this up to eleven. Stay tuned for [Part II](./result-pattern-part-ii.md), where we'll have a look at some other languages.
+Unfortunately for us though, we chose Typescript, which at the time of writing, doesn't have _pattern matching_\*, which would help us turn this up to eleven. Stay tuned for [Part II](./result-pattern-part-ii), where we'll have a look at some other languages.
 
 _\*it does have type guards, but that's just a little different_

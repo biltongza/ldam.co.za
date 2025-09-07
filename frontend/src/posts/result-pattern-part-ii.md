@@ -9,7 +9,7 @@ tags:
 
 # Catching up
 
-In [Part I](./result-pattern-part-i.md) we introduced the Result pattern and showed how it can help us be more expressive to help the _people_ working with our code to understand our intent.
+In [Part I](./result-pattern-part-i) we introduced the Result pattern and showed how it can help us be more expressive to help the _people_ working with our code to understand our intent.
 
 In this Part II I'd like to show some other languages that handle this pattern in interesting ways.
 
