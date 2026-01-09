@@ -4,11 +4,8 @@ export function handleError({ error, event }) {
   const deets = extractUsefulDetails(event);
   console.error('handleError', error, deets);
   try {
-    if (
-      event?.platform?.context?.log?.error &&
-      typeof event.platform.context.log.error === 'function'
-    ) {
-      event.platform.context.log.info('SvelteKit Error', {
+    if (event?.platform?.context?.error && typeof event.platform.context.error === 'function') {
+      event.platform.context.error('SvelteKit Error', {
         ...deets,
         error
       });
@@ -27,11 +24,8 @@ export async function handle({ event, resolve }) {
   const response = await resolve(event);
   const end = Date.now();
   try {
-    if (
-      event?.platform?.context?.log?.info &&
-      typeof event.platform.context.log.info === 'function'
-    ) {
-      event.platform.context.log.info('SvelteKit Event', {
+    if (event?.platform?.context?.info && typeof event.platform.context.info === 'function') {
+      event.platform.context.info('SvelteKit Event', {
         ...extractUsefulDetails(event),
         duration: end - start,
         status: response.status
