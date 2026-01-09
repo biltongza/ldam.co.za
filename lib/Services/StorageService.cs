@@ -53,7 +53,7 @@ public class StorageService : IStorageService
     public async Task DeleteBlobsStartingWith(string startsWith, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("Deleting blobs starting with {startsWith}", startsWith);
-        var blobs = this.blobContainerClient.GetBlobsAsync(prefix: startsWith, cancellationToken: cancellationToken);
+        var blobs = this.blobContainerClient.GetBlobsAsync(new GetBlobsOptions { Prefix = startsWith }, cancellationToken: cancellationToken);
         await foreach (var blob in blobs)
         {
             logger.LogInformation("Deleting blob {name}", blob.Name);
