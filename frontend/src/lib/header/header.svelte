@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { website } from '$lib/info';
+  import { resolve } from '$app/paths';
   import Navigation from './navigation.svelte';
 </script>
 
 <header class="header">
-  <a class="brand h-card p-author" href={website} rel="author"><h1>Logan Dam</h1></a>
+  <a class="brand h-card p-author" href={resolve('/')} rel="author"><h1>Logan Dam</h1></a>
   <Navigation />
 </header>
 
