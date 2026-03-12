@@ -33,7 +33,8 @@ export default ts.config(
   {
     rules: {
       'svelte/valid-compile': ['error', { ignoreWarnings: true }],
-      'svelte/no-at-html-tags': ['off']
+      'svelte/no-at-html-tags': ['off'],
+      'svelte/no-navigation-without-resolve': 'off'
     }
   }
 );
