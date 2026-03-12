@@ -11,7 +11,7 @@ const config = {
     adapter: azure({
       customStaticWebAppConfig: {
         platform: {
-          apiRuntime: 'node:20'
+          apiRuntime: 'node:22'
         },
         globalHeaders: {
           'X-Content-Type-Options': 'nosniff',
