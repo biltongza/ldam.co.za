@@ -4,7 +4,7 @@
   import dayjs from 'dayjs';
   import { onMount } from 'svelte';
   let { data } = $props();
-  let { post } = data;
+  let { post } = $derived(data);
   const title = useTitle();
   const metadata = usePageMetadata();
 
