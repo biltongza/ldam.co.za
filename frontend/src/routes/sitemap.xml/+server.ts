@@ -20,7 +20,9 @@ export const GET: RequestHandler = async function ({ fetch }) {
   const routes = {
     about: 'src/routes/about/+page.svelte',
     collections: 'src/routes/collections/+page.svelte',
-    blog: 'src/routes/blog/+page.svelte'
+    blog: 'src/routes/blog/+page.svelte',
+    fun: 'src/routes/fun/+page.svelte',
+    friends: 'src/routes/friends/+page.svelte'
   };
   const files = Object.entries(routes).map(([route, path]) => {
     const lastModified = metadata.find((x) => x.path === path).lastModified;
