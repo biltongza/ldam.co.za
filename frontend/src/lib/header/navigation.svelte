@@ -31,10 +31,10 @@
 <nav>
   <ul class={expanded ? 'expanded' : ''}>
     <li><RouterLink path="/">Home</RouterLink></li>
-    {#each routes as { label, path }}
+    {#each routes as { label, path } (path)}
       <li><RouterLink {path}>{label}</RouterLink></li>
     {/each}
-    {#each socials as { text, label, href, icon }}
+    {#each socials as { text, label, href, icon } (href)}
       <li>
         <SocialIcon {text} {label} {href} {icon} />
       </li>
