@@ -1,19 +1,21 @@
 <script lang="ts">
-  import { page } from '$app/stores';
+  import { resolve } from '$app/paths';
+  import { page } from '$app/state';
+  import type { Pathname } from '$app/types';
   interface Props {
-    path: string;
+    path: Pathname;
     children?: import('svelte').Snippet;
   }
 
   let { path, children }: Props = $props();
   let routeSegments = $derived(path?.split('/') || []);
-  let activeRouteSegments = $derived($page.url.pathname?.split('/') || []);
+  let activeRouteSegments = $derived(page.url.pathname?.split('/') || []);
   let matches = $derived(
     routeSegments.every((segment, index) => activeRouteSegments[index] === segment)
   );
 </script>
 
-<a href={path} class:active={matches}>{@render children?.()}</a>
+<a href={resolve(path)} class:active={matches}>{@render children?.()}</a>
 
 <style>
   a.active {

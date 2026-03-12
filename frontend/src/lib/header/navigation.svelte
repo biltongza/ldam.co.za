@@ -1,8 +1,9 @@
 <script lang="ts">
+  import type { Pathname } from '$app/types';
   import RouterLink from './router-link.svelte';
   import SocialIcon from './social-icon.svelte';
 
-  const routes = [
+  const routes: { label: string; path: Pathname }[] = [
     { label: 'About', path: '/about' },
     { label: 'Collections', path: '/collections' },
     { label: 'Blog', path: '/blog' },

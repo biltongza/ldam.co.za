@@ -31,7 +31,7 @@
     >{dayjs(post.metadata.date).format(DateFormat)}</time
   >
   <p>
-    {#each post.metadata.tags as tag}
+    {#each post.metadata.tags as tag (tag)}
       <sl-badge variant="primary" class="p-category" pill>{tag}</sl-badge>
     {/each}
   </p>
