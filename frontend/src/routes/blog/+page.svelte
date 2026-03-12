@@ -7,7 +7,7 @@
 
 <div>
   <p class="info">{data.posts.length} posts.</p>
-  {#each data.posts as post}
+  {#each data.posts as post (post.slug)}
     <div class="post">
       <a href={`${base}/blog/${post.slug}`}>
         <h2 class="title">{post.title}</h2>
@@ -16,7 +16,7 @@
         <sl-icon name="calendar-event"></sl-icon>{dayjs(post.date).format(DateFormat)}
       </p>
       <p>
-        {#each post.tags as tag}
+        {#each post.tags as tag (tag)}
           <sl-badge variant="primary" pill>{tag}</sl-badge>
         {/each}
       </p>
