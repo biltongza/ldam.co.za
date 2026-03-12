@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { base } from '$app/paths';
+  import { resolve } from '$app/paths';
   import { DateFormat } from '$lib/__consts';
   import dayjs from 'dayjs';
   let { data } = $props();
@@ -9,7 +9,7 @@
   <p class="info">{data.posts.length} posts.</p>
   {#each data.posts as post (post.slug)}
     <div class="post">
-      <a href={`${base}/blog/${post.slug}`}>
+      <a href={resolve('/blog/[slug]', { slug: post.slug })}>
         <h2 class="title">{post.title}</h2>
       </a>
       <p class="date">
