@@ -40,3 +40,10 @@ export interface Manifest {
   lastModified: Date;
   albums: Album[];
 }
+
+export interface FriendSite {
+  domain: string;
+  title: string;
+  name: string;
+  blurb: string;
+}
