@@ -9,7 +9,7 @@ tags:
 
 # TL;DR
 
-If you're here from Google and just want to know how to add a project reference to another project without Aspire trying to orchestrate it, add the `IsAspireProjectResource` property to the `ProjectReference`, like so:
+If you're here from Google and just want to know how to add a project reference to an Aspire AppHost as a normal reference (without Aspire trying to orchestrate it), add the `IsAspireProjectResource` property to the `ProjectReference`, like so:
 
 ```xml
 <ItemGroup>
