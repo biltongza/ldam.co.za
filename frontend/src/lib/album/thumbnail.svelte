@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { resolve } from '$app/paths';
   import { StorageBaseUrl, ThumbnailHrefNormalDensity } from '$lib/__consts';
   import type { ImageMetadata } from '$lib/types';
 
@@ -20,7 +21,7 @@
 
   let { image }: Props = $props();
 
-  let imageRoute: string = $derived(`/image/${image.id}`);
+  let imageRoute: string = $derived(resolve(`/image/[imageId]`, {imageId: image.id}));
   let src: string = $derived(`${StorageBaseUrl}/${image.hrefs[ThumbnailHrefNormalDensity]}.webp`);
   let srcSets = $derived(
     Object.entries(thumbnailSizes).flatMap(([sizeKey, maxWidth]) =>
