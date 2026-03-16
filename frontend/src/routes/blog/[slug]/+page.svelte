@@ -44,4 +44,8 @@
   .date {
     font-size: var(--sl-font-size-small);
   }
+  :global(p code) {
+    background-color: #fff;
+    padding: 2px 3px 2px 3px;
+  }
 </style>

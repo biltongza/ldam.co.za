@@ -50,6 +50,7 @@ h3 {
   display: flex;
 }
 
-pre > code {
+pre > code,
+p > code {
   font-size: 12px;
 }
