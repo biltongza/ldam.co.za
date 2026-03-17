@@ -15,9 +15,9 @@
     <a href="https://webring.nabeelvalley.co.za"><em>Webring</em></a>
 
     <ul class="links">
-        <li><a href="https://webring.nabeelvalley.co.za/previous" class="svelte-ol6up6">Previous</a></li>
-        <li><a href="https://webring.nabeelvalley.co.za/random" class="svelte-ol6up6">Random</a></li>
-        <li><a href="https://webring.nabeelvalley.co.za/next" class="svelte-ol6up6">Next</a></li>
+        <li><a href="https://webring.nabeelvalley.co.za/previous">Previous</a></li>
+        <li><a href="https://webring.nabeelvalley.co.za/random">Random</a></li>
+        <li><a href="https://webring.nabeelvalley.co.za/next">Next</a></li>
     </ul>
   </div>
   <div class="version"><span>{appver}</span>&nbsp;|<span>&nbsp;{lastmod}</span></div>
