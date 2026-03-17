@@ -15,9 +15,9 @@
     <a href="https://webring.nabeelvalley.co.za"><em>Webring</em></a>
 
     <ul class="links">
-      <a href="https://webring.nabeelvalley.co.za/previous">Previous</a>
-      <a href="https://webring.nabeelvalley.co.za/random">Random</a>
-      <a href="https://webring.nabeelvalley.co.za/next">Next</a>
+        <li><a href="https://webring.nabeelvalley.co.za/previous">Previous</a></li>
+        <li><a href="https://webring.nabeelvalley.co.za/random">Random</a></li>
+        <li><a href="https://webring.nabeelvalley.co.za/next">Next</a></li>
     </ul>
   </div>
   <div class="version"><span>{appver}</span>&nbsp;|<span>&nbsp;{lastmod}</span></div>
@@ -41,7 +41,9 @@
     display: inline;
   }
   .webring .links {
-    display: inline;
+    display: inline-flex;
     padding-left: 0;
+    gap: 0.5em;
+    list-style: none;
   }
 </style>
