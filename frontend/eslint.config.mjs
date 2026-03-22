@@ -3,18 +3,18 @@
 import eslint from '@eslint/js';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import eslintPluginSvelte from 'eslint-plugin-svelte';
+import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import svelteParser from 'svelte-eslint-parser';
-import ts from 'typescript-eslint';
-
-export default ts.config(
+import tseslint from 'typescript-eslint';
+export default defineConfig(
   {
     ignores: ['build', 'node_modules', '.svelte-kit']
   },
   eslint.configs.recommended,
-  ...ts.configs.recommended,
-  ...eslintPluginSvelte.configs['flat/recommended'],
-  ...eslintPluginSvelte.configs['flat/prettier'],
+  tseslint.configs.recommended,
+  eslintPluginSvelte.configs['flat/recommended'],
+  eslintPluginSvelte.configs['flat/prettier'],
   eslintConfigPrettier,
   {
     files: ['*.{svelte,svelte.ts}', '**/*.{svelte,svelte.ts}'],
@@ -26,7 +26,7 @@ export default ts.config(
       },
       parser: svelteParser,
       parserOptions: {
-        parser: ts.parser
+        parser: tseslint.parser
       }
     }
   },
