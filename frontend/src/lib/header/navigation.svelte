@@ -8,7 +8,8 @@
     { label: 'Collections', path: '/collections' },
     { label: 'Blog', path: '/blog' },
     { label: 'Fun', path: '/fun' },
-    { label: 'Friends', path: '/friends' }
+    { label: 'Friends', path: '/friends' },
+    { label: 'Resume', path: '/resume' }
   ];
 
   const socials = [

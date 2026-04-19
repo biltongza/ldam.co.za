@@ -14,9 +14,12 @@ import remarkRehype from 'remark-rehype';
 import { read } from 'to-vfile';
 import { unified } from 'unified';
 
-const remarkParser = unified().use(remarkParse).use(remarkGfm).use(remarkFrontmatter, ['yaml']);
+export const remarkParser = unified()
+  .use(remarkParse)
+  .use(remarkGfm)
+  .use(remarkFrontmatter, ['yaml']);
 
-const rehypeConverter = unified()
+export const rehypeConverter = unified()
   .use(remarkRehype, {
     handlers: {
       heading: (state, node) => {
